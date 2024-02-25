@@ -1,3 +1,4 @@
+import Menu from './Menu.js';
 import Player from './Player.js';
 import Router from './Router.js';
 import View from './View.js';
@@ -5,9 +6,10 @@ import * as PIXI from 'pixi.js';
 
 export default class GameView extends View {
 	#app;
-	#pauseButton;
-	#menuButton;
 	#players = [];
+	#pauseButton;
+	#pauseMenu;
+	#gameOverMenu;
 
 	/**
 	 * Crée une nouvelle vue de jeu.
@@ -21,8 +23,11 @@ export default class GameView extends View {
 		});
 		this.#pauseButton = element.querySelector('button#pauseGame');
 		this.#pauseButton.addEventListener('click', () => this.togglePause());
-		this.#menuButton = element.querySelector('button#mainMenu');
-		this.#menuButton.addEventListener('click', () => Router.navigate('/'));
+		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
+		this.#pauseMenu.onResume(() => this.togglePause());
+		this.#pauseMenu.onMainMenu(() => Router.navigate('/'));
+		this.#gameOverMenu = new Menu(element.querySelector('.menu#gameOver'));
+		this.#gameOverMenu.onMainMenu(() => Router.navigate('/'));
 		this.element.appendChild(this.#app.view);
 		this.#init();
 	}
@@ -153,6 +158,7 @@ export default class GameView extends View {
 	 */
 	pause() {
 		this.element.classList.add('paused');
+		this.#pauseMenu.show();
 		this.#app.ticker.stop();
 	}
 
@@ -161,6 +167,7 @@ export default class GameView extends View {
 	 */
 	resume() {
 		this.element.classList.remove('paused');
+		this.#pauseMenu.hide();
 		this.#app.ticker.start();
 	}
 

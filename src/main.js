@@ -21,8 +21,15 @@ window.onpopstate = () => Router.navigate(document.location.pathname, true);
 const player = new Player();
 gameView.addPlayer(player);
 
+const CONTROL_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+const PAUSE_KEYS = ['Escape', 'P', 'p'];
+
 document.addEventListener('keydown', event => {
-	player.press(event.key);
+	if (CONTROL_KEYS.includes(event.key)) {
+		player.press(event.key);
+	} else if (PAUSE_KEYS.includes(event.key)) {
+		gameView.togglePause();
+	}
 });
 
 document.addEventListener('keyup', event => {
