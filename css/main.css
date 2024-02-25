@@ -24,3 +24,21 @@ canvas#ui {
 .viewContainer > div.active {
     display: block;
 }
+
+.viewContainer > .game > button {
+    position: fixed;
+}
+
+.viewContainer > .game > .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.viewContainer > .game.paused > .overlay {
+    display: block;
+}
