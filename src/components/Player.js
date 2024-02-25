@@ -5,8 +5,12 @@ import Projectile from './Projectile.js';
  * Représente un joueur.
  */
 export default class Player extends PIXI.Sprite {
+	#score = 0;
+	#life = 3;
 	#moving = { up: false, down: false, left: false, right: false };
 	onShoot;
+	onScoreChange;
+	onLifeChange;
 
 	constructor() {
 		super(PIXI.Texture.from('/images/player.png'));
@@ -15,6 +19,35 @@ export default class Player extends PIXI.Sprite {
 
 	get moving() {
 		return this.#moving;
+	}
+
+	getScore() {
+		return this.#score;
+	}
+
+	getLife() {
+		return this.#life;
+	}
+
+	setLife(value) {
+		this.#life = value;
+		if (this.onLifeChange) {
+			this.onLifeChange(this.#life);
+		}
+	}
+
+	incrementScore() {
+		this.#score++;
+		if (this.onScoreChange) {
+			this.onScoreChange(this.#score);
+		}
+	}
+
+	decrementLife() {
+		this.#life--;
+		if (this.onLifeChange) {
+			this.onLifeChange(this.#life);
+		}
 	}
 
 	/**

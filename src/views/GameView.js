@@ -1,8 +1,9 @@
+import Ennemy from '../components/Ennemy.js';
 import Menu from '../components/Menu.js';
 import Player from '../components/Player.js';
 import Projectile from '../components/Projectile.js';
 import Router from '../Router.js';
-import { isOutOfScreen } from './utils.js';
+import { areColliding, isOutOfScreen } from './utils.js';
 import View from './View.js';
 import * as PIXI from 'pixi.js';
 
@@ -11,8 +12,12 @@ export default class GameView extends View {
 	#currentPlayer;
 	#secondPlayer;
 	#pauseButton;
+	#athScore;
+	#athLife;
 	#pauseMenu;
 	#gameOverMenu;
+	#ennemies = [];
+	#projectiles = [];
 
 	/**
 	 * Crée une nouvelle vue de jeu.
@@ -24,10 +29,13 @@ export default class GameView extends View {
 			background: '#1099bb',
 			resizeTo: window,
 		});
-		this.#app.stage.interactive = true;
-		window.addEventListener('resize', () => this.#resize());
-		this.#pauseButton = element.querySelector('button#pauseGame');
+		this.#app.stage.eventMode = 'auto';
+		window.onresize = () => this.#resize();
+		const ath = element.querySelector('.ath');
+		this.#pauseButton = ath.querySelector('button#pauseGame');
 		this.#pauseButton.addEventListener('click', () => this.togglePause());
+		this.#athScore = ath.querySelector('.playerInfos .score');
+		this.#athLife = ath.querySelector('.playerInfos .life');
 		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
 		this.#pauseMenu.onResume(() => this.togglePause());
 		this.#pauseMenu.onMainMenu(() => Router.navigate('/'));
@@ -38,17 +46,54 @@ export default class GameView extends View {
 		this.#init();
 	}
 
+	#addProjectile(projectile) {
+		this.#projectiles.push(projectile);
+		this.#app.stage.addChild(projectile);
+	}
+
+	#removeProjectile(projectile) {
+		this.#projectiles = this.#projectiles.filter(p => p !== projectile);
+		this.#app.stage.removeChild(projectile);
+	}
+
+	#addEnnemy(ennemy) {
+		this.#ennemies.push(ennemy);
+		this.#app.stage.addChild(ennemy);
+	}
+
+	#removeEnnemy(ennemy) {
+		this.#ennemies = this.#ennemies.filter(e => e !== ennemy);
+		this.#app.stage.removeChild(ennemy);
+	}
+
+	#onLifeChange(life) {
+		this.#athLife.innerText = `Vies : ${life}`;
+		if (life <= 0) {
+			this.#app.ticker.stop();
+			this.element.classList.add('gameOver');
+			this.#gameOverMenu.show();
+		}
+	}
+
+	#onScoreChange(score) {
+		this.#athScore.innerText = `Score : ${score}`;
+	}
+
 	/**
 	 * Ajoute le joueur contrôlé à la scène.
 	 * @param {Player} player
 	 */
 	set currentPlayer(player) {
+		console.log('set currentPlayer');
 		if (this.#currentPlayer) this.#app.stage.removeChild(this.#currentPlayer);
 		this.#currentPlayer = player;
-		this.#app.stage.addChild(this.#currentPlayer);
 		this.#currentPlayer.onShoot = projectile => {
-			this.#app.stage.addChild(projectile);
+			this.#addProjectile(projectile);
 		};
+		this.#currentPlayer.onScoreChange = score => this.#onScoreChange(score);
+		this.#currentPlayer.onLifeChange = life => this.#onLifeChange(life);
+		this.#athLife.innerText = `Vies : ${this.#currentPlayer.getLife()}`;
+		this.#athScore.innerText = `Score : ${this.#currentPlayer.getScore()}`;
 	}
 
 	/**
@@ -72,6 +117,7 @@ export default class GameView extends View {
 	show() {
 		super.show();
 		if (this.paused) this.resume();
+		this.#init();
 	}
 
 	hide() {
@@ -115,7 +161,34 @@ export default class GameView extends View {
 				if (child.moving.down) {
 					child.y += 5;
 				}
+			} else if (child instanceof Ennemy) {
+				if (areColliding(child, this.#currentPlayer)) {
+					this.#removeEnnemy(child);
+					this.#currentPlayer.decrementLife();
+				}
+				if (child.moving.left) {
+					child.x -= 5;
+				}
+				if (child.moving.right) {
+					child.x += 5;
+				}
+				if (child.moving.up) {
+					child.y -= 5;
+				}
+				if (child.moving.down) {
+					child.y += 5;
+				}
 			}
+		});
+
+		this.#projectiles.forEach(projectile => {
+			this.#ennemies.forEach(ennemy => {
+				if (areColliding(projectile, ennemy)) {
+					this.#removeProjectile(projectile);
+					this.#removeEnnemy(ennemy);
+					this.#currentPlayer.incrementScore();
+				}
+			});
 		});
 	}
 
@@ -123,13 +196,17 @@ export default class GameView extends View {
 	 * Initialise le jeu.
 	 */
 	#init() {
+		this.element.classList.remove('gameOver');
 		this.#app.stage.removeChildren();
 		const background = PIXI.Sprite.from('/images/background.jpg');
 		background.width = this.#app.screen.width;
 		background.height = this.#app.screen.height;
 		this.#app.stage.addChild(background);
+		if (this.#currentPlayer) this.#app.stage.addChild(this.#currentPlayer);
+		if (this.#secondPlayer) this.#app.stage.addChild(this.#secondPlayer);
 
 		this.#app.ticker.add(() => this.#tickEvent());
+		this.#app.ticker.add(() => this.#generateEnnemy());
 	}
 
 	/**
@@ -219,5 +296,19 @@ export default class GameView extends View {
 		const { clientX, clientY } = event;
 		this.#currentPlayer.x = clientX;
 		this.#currentPlayer.y = clientY;
+	}
+
+	#generateEnnemy() {
+		if (this.paused) return;
+		const random = Math.random();
+		if (random < 0.01) {
+			const ennemy = new Ennemy();
+			ennemy.position.set(
+				this.#app.screen.width,
+				Math.random() * this.#app.screen.height
+			);
+			this.#addEnnemy(ennemy);
+			ennemy.move('left');
+		}
 	}
 }

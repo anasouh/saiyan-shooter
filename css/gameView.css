@@ -24,7 +24,7 @@
     animation: fadeIn 0.25s;
 }
 
-.viewContainer > .game.paused > .overlay {
+.viewContainer > .game.paused > .overlay, .viewContainer > .game.gameOver > .overlay {
     display: flex;
 }
 
@@ -51,6 +51,6 @@
     box-sizing: border-box;
 }
 
-.viewContainer > .game.paused .ath {
+.viewContainer > .game.paused .ath, .viewContainer > .game.gameOver .ath {
     display: none;
 }

@@ -14,10 +14,6 @@ const routes = [
 	{ path: '/game', view: gameView, title: 'Jeu' },
 	{ path: '/credits', view: creditsView, title: 'Crédits' },
 ];
-Router.routes = routes;
-
-Router.navigate(window.location.pathname, true);
-window.onpopstate = () => Router.navigate(document.location.pathname, true);
 
 const player = new Player();
 gameView.currentPlayer = player;
@@ -40,3 +36,8 @@ document.addEventListener('keyup', event => {
 		player.shoot();
 	}
 });
+
+Router.routes = routes;
+
+Router.navigate(window.location.pathname, true);
+window.onpopstate = () => Router.navigate(document.location.pathname, true);
