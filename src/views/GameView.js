@@ -30,6 +30,8 @@ export default class GameView extends View {
 			resizeTo: window,
 		});
 		this.#app.stage.eventMode = 'auto';
+		this.#app.ticker.add(() => this.#tickEvent());
+		this.#app.ticker.add(() => this.#generateEnnemy());
 		window.onresize = () => this.#resize();
 		const ath = element.querySelector('.ath');
 		this.#pauseButton = ath.querySelector('button#pauseGame');
@@ -83,7 +85,6 @@ export default class GameView extends View {
 	 * @param {Player} player
 	 */
 	set currentPlayer(player) {
-		console.log('set currentPlayer');
 		if (this.#currentPlayer) this.#app.stage.removeChild(this.#currentPlayer);
 		this.#currentPlayer = player;
 		this.#currentPlayer.onShoot = projectile => {
@@ -129,6 +130,7 @@ export default class GameView extends View {
 	}
 
 	#tickEvent() {
+		if (this.paused) return;
 		this.#app.stage.children.forEach(child => {
 			if (child instanceof Player) {
 				if (child.moving.left) {
@@ -192,6 +194,8 @@ export default class GameView extends View {
 	}
 
 	#clear() {
+		this.#app.ticker.remove(this.#tickEvent);
+		this.#app.ticker.remove(this.#generateEnnemy);
 		this.#app.stage.removeChildren();
 		this.#ennemies = [];
 		this.#projectiles = [];
@@ -212,9 +216,6 @@ export default class GameView extends View {
 			this.#currentPlayer.reset();
 		}
 		if (this.#secondPlayer) this.#app.stage.addChild(this.#secondPlayer);
-
-		this.#app.ticker.add(() => this.#tickEvent());
-		this.#app.ticker.add(() => this.#generateEnnemy());
 	}
 
 	/**
