@@ -1,4 +1,4 @@
-import View from './View.js';
+import View from '../views/View.js';
 
 export default class Menu extends View {
 	#resumeButton;

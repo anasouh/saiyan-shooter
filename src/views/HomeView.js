@@ -1,4 +1,4 @@
-import Router from './Router.js';
+import Router from '../Router.js';
 import View from './View.js';
 
 export default class HomeView extends View {

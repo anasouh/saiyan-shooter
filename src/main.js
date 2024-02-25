@@ -1,8 +1,9 @@
-import HomeView from './HomeView.js';
+import HomeView from './views/HomeView.js';
 import Router from './Router.js';
-import View from './View.js';
-import GameView from './GameView.js';
-import Player from './Player.js';
+import View from './views/View.js';
+import GameView from './views/GameView.js';
+import Player from './components/Player.js';
+import { CONTROL_KEYS, PAUSE_KEYS } from './settings/keys.js';
 
 const homeView = new HomeView(document.querySelector('.home'));
 const gameView = new GameView(document.querySelector('.game'));
@@ -21,17 +22,16 @@ window.onpopstate = () => Router.navigate(document.location.pathname, true);
 const player = new Player();
 gameView.addPlayer(player);
 
-const CONTROL_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
-const PAUSE_KEYS = ['Escape', 'P', 'p'];
-
 document.addEventListener('keydown', event => {
-	if (CONTROL_KEYS.includes(event.key)) {
-		player.press(event.key);
-	} else if (PAUSE_KEYS.includes(event.key)) {
+	const key = event.key.toUpperCase();
+	if (CONTROL_KEYS.includes(key)) {
+		player.press(key);
+	} else if (PAUSE_KEYS.includes(key)) {
 		gameView.togglePause();
 	}
 });
 
 document.addEventListener('keyup', event => {
-	player.release(event.key);
+	const key = event.key.toUpperCase();
+	player.release(key);
 });
