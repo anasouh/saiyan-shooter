@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body canvas.fullPage {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+canvas#main {
+    z-index: 1;
+}
+
+canvas#ui {
+    z-index: 2;
+}
+
+.viewContainer > div {
+    display: none;
+}
+
+.viewContainer > div.active {
+    display: block;
+}
