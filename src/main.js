@@ -1,20 +1,18 @@
 import HomeView from './HomeView.js';
 import Router from './Router.js';
 import View from './View.js';
+import Screen from './Screen.js';
 
 const canvasList = document.querySelectorAll(
 	'section.viewContainer > div canvas'
 );
+const screens = Array.from(canvasList).map(canvas => new Screen(canvas));
 
-function resizeCanvas(canvas) {
-	if (canvas.classList.contains('fullPage')) {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-	}
-}
-
-canvasList.forEach(canvas => resizeCanvas(canvas));
-window.addEventListener('resize', resizeCanvas);
+window.addEventListener('resize', event => {
+	screens.forEach(screen => {
+		screen.fillScreen();
+	});
+});
 
 const homeView = new HomeView(document.querySelector('.home'));
 const gameView = new View(document.querySelector('.game'));
