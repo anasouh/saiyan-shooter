@@ -71,7 +71,6 @@ export default class GameView extends View {
 		if (life <= 0) {
 			this.#app.ticker.stop();
 			this.element.classList.add('gameOver');
-			this.#gameOverMenu.show();
 		}
 	}
 
@@ -192,17 +191,26 @@ export default class GameView extends View {
 		});
 	}
 
+	#clear() {
+		this.#app.stage.removeChildren();
+		this.#ennemies = [];
+		this.#projectiles = [];
+	}
+
 	/**
 	 * Initialise le jeu.
 	 */
 	#init() {
 		this.element.classList.remove('gameOver');
-		this.#app.stage.removeChildren();
+		this.#clear();
 		const background = PIXI.Sprite.from('/images/background.jpg');
 		background.width = this.#app.screen.width;
 		background.height = this.#app.screen.height;
 		this.#app.stage.addChild(background);
-		if (this.#currentPlayer) this.#app.stage.addChild(this.#currentPlayer);
+		if (this.#currentPlayer) {
+			this.#app.stage.addChild(this.#currentPlayer);
+			this.#currentPlayer.reset();
+		}
 		if (this.#secondPlayer) this.#app.stage.addChild(this.#secondPlayer);
 
 		this.#app.ticker.add(() => this.#tickEvent());
@@ -223,7 +231,6 @@ export default class GameView extends View {
 	 */
 	pause() {
 		this.element.classList.add('paused');
-		this.#pauseMenu.show();
 		this.#app.ticker.stop();
 		this.#app.stage.interactive = false;
 	}
@@ -233,7 +240,6 @@ export default class GameView extends View {
 	 */
 	resume() {
 		this.element.classList.remove('paused');
-		this.#pauseMenu.hide();
 		this.#app.ticker.start();
 		this.#app.stage.interactive = true;
 	}

@@ -24,8 +24,12 @@
     animation: fadeIn 0.25s;
 }
 
-.viewContainer > .game.paused > .overlay, .viewContainer > .game.gameOver > .overlay {
+.viewContainer > .game.paused > .overlay, 
+.viewContainer > .game.gameOver > .overlay,
+.viewContainer > .game.paused > .overlay > .menu#pause,
+.viewContainer > .game.gameOver > .overlay > .menu#gameOver {
     display: flex;
+    flex-direction: column;
 }
 
 .viewContainer > .game > .overlay > .menu {
@@ -33,11 +37,6 @@
     padding: 20px;
     background-color: var(--surface-color);
     border-radius: var(--border-radius);
-}
-
-.viewContainer > .game > .overlay > .menu.active {
-    display: flex;
-    flex-direction: column;
 }
 
 .viewContainer > .game .ath {

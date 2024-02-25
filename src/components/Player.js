@@ -1,12 +1,15 @@
 import * as PIXI from 'pixi.js';
 import Projectile from './Projectile.js';
 
+const LIFE = 3;
+const SCORE = 0;
+
 /**
  * Représente un joueur.
  */
 export default class Player extends PIXI.Sprite {
-	#score = 0;
-	#life = 3;
+	#score = SCORE;
+	#life = LIFE;
 	#moving = { up: false, down: false, left: false, right: false };
 	onShoot;
 	onScoreChange;
@@ -48,6 +51,13 @@ export default class Player extends PIXI.Sprite {
 		if (this.onLifeChange) {
 			this.onLifeChange(this.#life);
 		}
+	}
+
+	reset() {
+		this.#score = SCORE;
+		this.#life = LIFE;
+		if (this.onScoreChange) this.onScoreChange(this.#score);
+		if (this.onLifeChange) this.onLifeChange(this.#life);
 	}
 
 	/**
