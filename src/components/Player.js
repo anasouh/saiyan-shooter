@@ -1,10 +1,12 @@
 import * as PIXI from 'pixi.js';
+import Projectile from './Projectile.js';
 
 /**
  * Représente un joueur.
  */
 export default class Player extends PIXI.Sprite {
 	#moving = { up: false, down: false, left: false, right: false };
+	onShoot;
 
 	constructor() {
 		super(PIXI.Texture.from('/images/player.png'));
@@ -73,5 +75,17 @@ export default class Player extends PIXI.Sprite {
 	move(x, y) {
 		this.x += x;
 		this.y += y;
+	}
+
+	/**
+	 * Fait tirer le joueur.
+	 */
+	shoot() {
+		const projectile = new Projectile();
+		projectile.position = this.position;
+		projectile.move('right');
+		if (this.onShoot) {
+			this.onShoot(projectile);
+		}
 	}
 }

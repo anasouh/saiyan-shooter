@@ -3,7 +3,7 @@ import Router from './Router.js';
 import View from './views/View.js';
 import GameView from './views/GameView.js';
 import Player from './components/Player.js';
-import { CONTROL_KEYS, PAUSE_KEYS } from './settings/keys.js';
+import { CONTROL_KEYS, PAUSE_KEYS, SHOOT_KEYS } from './settings/keys.js';
 
 const homeView = new HomeView(document.querySelector('.home'));
 const gameView = new GameView(document.querySelector('.game'));
@@ -21,6 +21,7 @@ window.onpopstate = () => Router.navigate(document.location.pathname, true);
 
 const player = new Player();
 gameView.currentPlayer = player;
+gameView.onClick = () => player.shoot();
 
 document.addEventListener('keydown', event => {
 	const key = event.key.toUpperCase();
@@ -33,5 +34,9 @@ document.addEventListener('keydown', event => {
 
 document.addEventListener('keyup', event => {
 	const key = event.key.toUpperCase();
-	player.release(key);
+	if (CONTROL_KEYS.includes(key)) {
+		player.release(key);
+	} else if (SHOOT_KEYS.includes(key)) {
+		player.shoot();
+	}
 });

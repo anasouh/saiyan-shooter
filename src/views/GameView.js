@@ -1,6 +1,8 @@
 import Menu from '../components/Menu.js';
 import Player from '../components/Player.js';
+import Projectile from '../components/Projectile.js';
 import Router from '../Router.js';
+import { isOutOfScreen } from './utils.js';
 import View from './View.js';
 import * as PIXI from 'pixi.js';
 
@@ -32,7 +34,6 @@ export default class GameView extends View {
 		this.#gameOverMenu = new Menu(element.querySelector('.menu#gameOver'));
 		this.#gameOverMenu.onMainMenu(() => Router.navigate('/'));
 		this.element.appendChild(this.#app.view);
-		this.#app.view.onclick = () => console.log('click');
 		this.#app.view.onmousemove = event => this.#handleMouseMove(event);
 		this.#init();
 	}
@@ -45,6 +46,9 @@ export default class GameView extends View {
 		if (this.#currentPlayer) this.#app.stage.removeChild(this.#currentPlayer);
 		this.#currentPlayer = player;
 		this.#app.stage.addChild(this.#currentPlayer);
+		this.#currentPlayer.onShoot = projectile => {
+			this.#app.stage.addChild(projectile);
+		};
 	}
 
 	/**
@@ -55,6 +59,14 @@ export default class GameView extends View {
 		if (this.#secondPlayer) this.#app.stage.removeChild(this.#secondPlayer);
 		this.#secondPlayer = player;
 		this.#app.stage.addChild(this.#secondPlayer);
+	}
+
+	/**
+	 * Définit la fonction à appeler lorsqu'un clic est effectué sur la scène.
+	 * @param {function} callback
+	 */
+	set onClick(callback) {
+		this.#app.view.onclick = callback;
 	}
 
 	show() {
@@ -72,18 +84,39 @@ export default class GameView extends View {
 	}
 
 	#tickEvent() {
-		if (this.#currentPlayer.moving.left) {
-			this.movePlayer(this.#currentPlayer, -5, 0);
-		}
-		if (this.#currentPlayer.moving.right) {
-			this.movePlayer(this.#currentPlayer, 5, 0);
-		}
-		if (this.#currentPlayer.moving.up) {
-			this.movePlayer(this.#currentPlayer, 0, -5);
-		}
-		if (this.#currentPlayer.moving.down) {
-			this.movePlayer(this.#currentPlayer, 0, 5);
-		}
+		this.#app.stage.children.forEach(child => {
+			if (child instanceof Player) {
+				if (child.moving.left) {
+					this.movePlayer(child, -5, 0);
+				}
+				if (child.moving.right) {
+					this.movePlayer(child, 5, 0);
+				}
+				if (child.moving.up) {
+					this.movePlayer(child, 0, -5);
+				}
+				if (child.moving.down) {
+					this.movePlayer(child, 0, 5);
+				}
+			} else if (child instanceof Projectile) {
+				if (isOutOfScreen(this.#app.screen, child)) {
+					this.#app.stage.removeChild(child);
+					return;
+				}
+				if (child.moving.left) {
+					child.x -= 5;
+				}
+				if (child.moving.right) {
+					child.x += 5;
+				}
+				if (child.moving.up) {
+					child.y -= 5;
+				}
+				if (child.moving.down) {
+					child.y += 5;
+				}
+			}
+		});
 	}
 
 	/**
@@ -91,6 +124,10 @@ export default class GameView extends View {
 	 */
 	#init() {
 		this.#app.stage.removeChildren();
+		const background = PIXI.Sprite.from('/images/background.jpg');
+		background.width = this.#app.screen.width;
+		background.height = this.#app.screen.height;
+		this.#app.stage.addChild(background);
 
 		this.#app.ticker.add(() => this.#tickEvent());
 	}
