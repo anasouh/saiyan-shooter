@@ -21,6 +21,7 @@ export default class GameView extends View {
 			background: '#1099bb',
 			resizeTo: window,
 		});
+		this.#app.stage.interactive = true;
 		window.addEventListener('resize', () => this.#resize());
 		this.#pauseButton = element.querySelector('button#pauseGame');
 		this.#pauseButton.addEventListener('click', () => this.togglePause());
@@ -30,6 +31,8 @@ export default class GameView extends View {
 		this.#gameOverMenu = new Menu(element.querySelector('.menu#gameOver'));
 		this.#gameOverMenu.onMainMenu(() => Router.navigate('/'));
 		this.element.appendChild(this.#app.view);
+		this.#app.view.onclick = () => console.log('click');
+		this.#app.view.onmousemove = event => this.#handleMouseMove(event);
 		this.#init();
 	}
 
@@ -63,75 +66,8 @@ export default class GameView extends View {
 	#init() {
 		// holder to store the aliens
 		this.#app.stage.removeChildren();
-		const aliens = [];
-
-		const totalDudes = 50;
-
-		for (let i = 0; i < totalDudes; i++) {
-			// create a new Sprite that uses the image name that we just generated as its source
-			const dude = PIXI.Sprite.from(this.#randomSprite());
-
-			// set the anchor point so the texture is centered on the sprite
-			dude.anchor.set(0.5);
-
-			// set a random scale for the dude - no point them all being the same size!
-			dude.scale.set(0.8 + Math.random() * 0.3);
-
-			// finally lets set the dude to be at a random position..
-			dude.x = Math.random() * this.#app.screen.width;
-			dude.y = Math.random() * this.#app.screen.height;
-
-			dude.tint = Math.random() * 0xffffff;
-
-			// create some extra properties that will control movement :
-			// create a random direction in radians. This is a number between 0 and PI*2 which is the equivalent of 0 - 360 degrees
-			dude.direction = Math.random() * Math.PI * 2;
-
-			// this number will be used to modify the direction of the dude over time
-			dude.turningSpeed = Math.random() - 0.8;
-
-			// create a random speed for the dude between 2 - 4
-			dude.speed = 2 + Math.random() * 2;
-
-			// finally we push the dude into the aliens array so it it can be easily accessed later
-			aliens.push(dude);
-
-			this.#app.stage.addChild(dude);
-		}
-
-		// create a bounding box for the little dudes
-		const dudeBoundsPadding = 100;
-		const dudeBounds = new PIXI.Rectangle(
-			-dudeBoundsPadding,
-			-dudeBoundsPadding,
-			this.#app.screen.width + dudeBoundsPadding * 2,
-			this.#app.screen.height + dudeBoundsPadding * 2
-		);
 
 		this.#app.ticker.add(() => {
-			// iterate through the dudes and update their position
-			for (let i = 0; i < aliens.length; i++) {
-				const dude = aliens[i];
-
-				dude.direction += dude.turningSpeed * 0.01;
-				dude.x += Math.sin(dude.direction) * dude.speed;
-				dude.y += Math.cos(dude.direction) * dude.speed;
-				dude.rotation = -dude.direction - Math.PI / 2;
-
-				// wrap the dudes by testing their bounds...
-				if (dude.x < dudeBounds.x) {
-					dude.x += dudeBounds.width;
-				} else if (dude.x > dudeBounds.x + dudeBounds.width) {
-					dude.x -= dudeBounds.width;
-				}
-
-				if (dude.y < dudeBounds.y) {
-					dude.y += dudeBounds.height;
-				} else if (dude.y > dudeBounds.y + dudeBounds.height) {
-					dude.y -= dudeBounds.height;
-				}
-			}
-
 			this.#players.forEach(player => {
 				if (player.moving.left) {
 					this.movePlayer(player, -5, 0);
@@ -165,6 +101,7 @@ export default class GameView extends View {
 		this.element.classList.add('paused');
 		this.#pauseMenu.show();
 		this.#app.ticker.stop();
+		this.#app.stage.interactive = false;
 	}
 
 	/**
@@ -174,6 +111,7 @@ export default class GameView extends View {
 		this.element.classList.remove('paused');
 		this.#pauseMenu.hide();
 		this.#app.ticker.start();
+		this.#app.stage.interactive = true;
 	}
 
 	/**
@@ -250,5 +188,13 @@ export default class GameView extends View {
 				player.position.y = this.#app.screen.height - playerHalfHeight;
 			}
 		}
+	}
+
+	#handleMouseMove(event) {
+		const { clientX, clientY } = event;
+		this.#players.forEach(player => {
+			player.x = clientX;
+			player.y = clientY;
+		});
 	}
 }

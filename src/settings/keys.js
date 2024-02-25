@@ -10,3 +10,5 @@ export const CONTROL_KEYS = [
 ];
 
 export const PAUSE_KEYS = ['Escape', 'P', 'p'];
+
+export const SHOOT_KEYS = [' '];
