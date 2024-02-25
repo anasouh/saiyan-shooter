@@ -3,6 +3,10 @@ import Projectile from './Projectile.js';
 
 const LIFE = 3;
 const SCORE = 0;
+const SPRITE = '/images/player.png';
+export const SHOOTING_SPRITE = '/images/player_shooting.png';
+export const RELOADING_SPRITE = '/images/player_reloading.png';
+export const ANIMATION_TIME = 200;
 
 /**
  * Représente un joueur.
@@ -16,7 +20,7 @@ export default class Player extends PIXI.Sprite {
 	onLifeChange;
 
 	constructor() {
-		super(PIXI.Texture.from('/images/player.png'));
+		super(PIXI.Texture.from(SPRITE));
 		this.anchor.set(0.5);
 	}
 
@@ -127,8 +131,17 @@ export default class Player extends PIXI.Sprite {
 		const projectile = new Projectile();
 		projectile.position = this.position;
 		projectile.move('right');
+		this.texture = PIXI.Texture.from(SHOOTING_SPRITE);
 		if (this.onShoot) {
 			this.onShoot(projectile);
 		}
+		setTimeout(
+			() => (this.texture = PIXI.Texture.from(SPRITE)),
+			ANIMATION_TIME
+		);
+	}
+
+	changeTexture(texture = SPRITE) {
+		this.texture = PIXI.Texture.from(texture);
 	}
 }

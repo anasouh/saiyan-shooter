@@ -1,8 +1,9 @@
 import Ennemy from '../components/Ennemy.js';
 import Menu from '../components/Menu.js';
-import Player from '../components/Player.js';
+import Player, { RELOADING_SPRITE } from '../components/Player.js';
 import Projectile from '../components/Projectile.js';
 import Router from '../Router.js';
+import { SHOOT_KEYS } from '../settings/keys.js';
 import { areColliding, isOutOfScreen } from './utils.js';
 import View from './View.js';
 import * as PIXI from 'pixi.js';
@@ -94,6 +95,8 @@ export default class GameView extends View {
 		this.#currentPlayer.onLifeChange = life => this.#onLifeChange(life);
 		this.#athLife.innerText = `Vies : ${this.#currentPlayer.getLife()}`;
 		this.#athScore.innerText = `Score : ${this.#currentPlayer.getScore()}`;
+		this.#app.view.onmousedown = () =>
+			this.#currentPlayer.changeTexture(RELOADING_SPRITE);
 	}
 
 	/**
@@ -225,6 +228,10 @@ export default class GameView extends View {
 	 */
 	get paused() {
 		return !this.#app.ticker.started;
+	}
+
+	shootKeyDown() {
+		this.#currentPlayer.changeTexture(RELOADING_SPRITE);
 	}
 
 	/**

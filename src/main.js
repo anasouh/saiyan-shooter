@@ -25,6 +25,8 @@ document.addEventListener('keydown', event => {
 		player.press(key);
 	} else if (PAUSE_KEYS.includes(key)) {
 		gameView.togglePause();
+	} else if (SHOOT_KEYS.includes(key)) {
+		gameView.shootKeyDown();
 	}
 });
 
