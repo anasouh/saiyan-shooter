@@ -1,0 +1,40 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Chromium Debug",
+			"type": "chrome",
+			"request": "launch",
+			"url": "http://localhost:8000",
+			"webRoot": "${workspaceFolder}",
+			"runtimeExecutable": "/bin/chromium"
+		},
+		{
+			"name": "Chrome Debug",
+			"type": "chrome",
+			"request": "launch",
+			"url": "http://localhost:8000",
+			"webRoot": "${workspaceFolder}"
+		},
+		{
+			"name": "Firefox Debug",
+			"type": "firefox",
+			"request": "launch",
+			"reAttach": true,
+			"port": 8008,
+			"timeout": 25,
+			"url": "http://localhost:8000",
+			"webRoot": "${workspaceFolder}",
+			"pathMappings": [
+				{
+					"url": "webpack://jsae/src",
+					"path": "${workspaceFolder}/src"
+				},
+				{ "url": "http://localhost:8000/build", "path": null }
+			]
+		},
+	]
+}
