@@ -1,6 +1,5 @@
-import Element from './Element.js';
+import Player from './Player.js';
 import Router from './Router.js';
-import Screen from './Screen.js';
 import View from './View.js';
 import * as PIXI from 'pixi.js';
 
@@ -8,7 +7,12 @@ export default class GameView extends View {
 	#app;
 	#pauseButton;
 	#menuButton;
+	#players = [];
 
+	/**
+	 * Crée une nouvelle vue de jeu.
+	 * @param {HTMLElement} element La balise HTML à associer à la vue.
+	 */
 	constructor(element) {
 		super(element);
 		this.#app = new PIXI.Application({
@@ -20,7 +24,7 @@ export default class GameView extends View {
 		this.#menuButton = element.querySelector('button#mainMenu');
 		this.#menuButton.addEventListener('click', () => Router.navigate('/'));
 		this.element.appendChild(this.#app.view);
-		this.init();
+		this.#init();
 	}
 
 	show() {
@@ -33,7 +37,7 @@ export default class GameView extends View {
 		this.pause();
 	}
 
-	randomSprite() {
+	#randomSprite() {
 		const sprites = [
 			'https://risibank.fr/cache/medias/0/22/2266/226637/thumb.png',
 			'https://risibank.fr/cache/medias/0/13/1366/136617/thumb.png',
@@ -43,7 +47,10 @@ export default class GameView extends View {
 		return sprites[Math.floor(Math.random() * sprites.length)];
 	}
 
-	init() {
+	/**
+	 * Initialise le jeu.
+	 */
+	#init() {
 		// holder to store the aliens
 		this.#app.stage.removeChildren();
 		const aliens = [];
@@ -52,7 +59,7 @@ export default class GameView extends View {
 
 		for (let i = 0; i < totalDudes; i++) {
 			// create a new Sprite that uses the image name that we just generated as its source
-			const dude = PIXI.Sprite.from(this.randomSprite());
+			const dude = PIXI.Sprite.from(this.#randomSprite());
 
 			// set the anchor point so the texture is centered on the sprite
 			dude.anchor.set(0.5);
@@ -114,23 +121,52 @@ export default class GameView extends View {
 					dude.y -= dudeBounds.height;
 				}
 			}
+
+			this.#players.forEach(player => {
+				if (player.keyPressed.ArrowLeft) {
+					this.movePlayer(player, -5, 0);
+				}
+				if (player.keyPressed.ArrowRight) {
+					this.movePlayer(player, 5, 0);
+				}
+				if (player.keyPressed.ArrowUp) {
+					this.movePlayer(player, 0, -5);
+				}
+				if (player.keyPressed.ArrowDown) {
+					this.movePlayer(player, 0, 5);
+				}
+			});
 		});
 	}
 
+	/**
+	 * Retourne vrai si le jeu est en pause, faux sinon.
+	 * @returns {boolean}
+	 * @readonly
+	 */
 	get paused() {
 		return !this.#app.ticker.started;
 	}
 
+	/**
+	 * Met en pause le jeu.
+	 */
 	pause() {
 		this.element.classList.add('paused');
 		this.#app.ticker.stop();
 	}
 
+	/**
+	 * Reprend le jeu.
+	 */
 	resume() {
 		this.element.classList.remove('paused');
 		this.#app.ticker.start();
 	}
 
+	/**
+	 * Met en pause ou reprend le jeu, selon l'état actuel du jeu.
+	 */
 	togglePause() {
 		if (this.#app.ticker.started) {
 			this.pause();
@@ -138,6 +174,69 @@ export default class GameView extends View {
 		} else {
 			this.resume();
 			this.#pauseButton.innerText = 'Pause';
+		}
+	}
+
+	/**
+	 * Ajoute un joueur à la scène.
+	 * @param {Player} player
+	 */
+	addPlayer(player) {
+		this.#players.push(player);
+		player.anchor.set(0.5);
+		player.x = this.#app.screen.width / 2;
+		player.y = this.#app.screen.height / 2;
+		player.scale.set(0.5);
+		this.#app.stage.addChild(player);
+	}
+
+	/**
+	 * Supprime un joueur de la scène.
+	 * @param {Player} player
+	 */
+	removePlayer(player) {
+		this.#players = this.#players.filter(p => p !== player);
+		this.#app.stage.removeChild(player);
+	}
+
+	/**
+	 * Déplace le joueur dans la scène, en vérifiant que le joueur ne
+	 * dépasse pas les bords de la scène.
+	 * @param {Player} player
+	 * @param {number} x
+	 * @param {number} y
+	 */
+	movePlayer(player, x, y) {
+		const playerHalfWidth = player.width / 2;
+		const playerHalfHeight = player.height / 2;
+
+		let newX = player.position.x + x;
+		let newY = player.position.y + y;
+
+		if (
+			newX - playerHalfWidth > 0 &&
+			newX + playerHalfWidth < this.#app.screen.width
+		) {
+			player.position.x = newX;
+		} else {
+			if (newX - playerHalfWidth <= 0) {
+				player.position.x = playerHalfWidth;
+			} else {
+				player.position.x = this.#app.screen.width - playerHalfWidth;
+			}
+		}
+
+		if (
+			newY - playerHalfHeight > 0 &&
+			newY + playerHalfHeight < this.#app.screen.height
+		) {
+			player.position.y = newY;
+		} else {
+			if (newY - playerHalfHeight <= 0) {
+				player.position.y = playerHalfHeight;
+			} else {
+				player.position.y = this.#app.screen.height - playerHalfHeight;
+			}
 		}
 	}
 }
