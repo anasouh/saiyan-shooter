@@ -20,7 +20,7 @@ Router.navigate(window.location.pathname, true);
 window.onpopstate = () => Router.navigate(document.location.pathname, true);
 
 const player = new Player();
-gameView.addPlayer(player);
+gameView.currentPlayer = player;
 
 document.addEventListener('keydown', event => {
 	const key = event.key.toUpperCase();

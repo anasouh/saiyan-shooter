@@ -6,7 +6,8 @@ import * as PIXI from 'pixi.js';
 
 export default class GameView extends View {
 	#app;
-	#players = [];
+	#currentPlayer;
+	#secondPlayer;
 	#pauseButton;
 	#pauseMenu;
 	#gameOverMenu;
@@ -36,6 +37,26 @@ export default class GameView extends View {
 		this.#init();
 	}
 
+	/**
+	 * Ajoute le joueur contrôlé à la scène.
+	 * @param {Player} player
+	 */
+	set currentPlayer(player) {
+		if (this.#currentPlayer) this.#app.stage.removeChild(this.#currentPlayer);
+		this.#currentPlayer = player;
+		this.#app.stage.addChild(this.#currentPlayer);
+	}
+
+	/**
+	 * Ajoute le joueur secondaire à la scène.
+	 * @param {Player} player
+	 */
+	set secondPlayer(player) {
+		if (this.#secondPlayer) this.#app.stage.removeChild(this.#secondPlayer);
+		this.#secondPlayer = player;
+		this.#app.stage.addChild(this.#secondPlayer);
+	}
+
 	show() {
 		super.show();
 		if (this.paused) this.resume();
@@ -50,39 +71,28 @@ export default class GameView extends View {
 		this.#app.renderer.resize(window.innerWidth, window.innerHeight);
 	}
 
-	#randomSprite() {
-		const sprites = [
-			'https://risibank.fr/cache/medias/0/22/2266/226637/thumb.png',
-			'https://risibank.fr/cache/medias/0/13/1366/136617/thumb.png',
-			'https://risibank.fr/cache/medias/0/13/1366/136618/thumb.png',
-			'https://risibank.fr/cache/medias/0/13/1366/136620/thumb.png',
-		];
-		return sprites[Math.floor(Math.random() * sprites.length)];
+	#tickEvent() {
+		if (this.#currentPlayer.moving.left) {
+			this.movePlayer(this.#currentPlayer, -5, 0);
+		}
+		if (this.#currentPlayer.moving.right) {
+			this.movePlayer(this.#currentPlayer, 5, 0);
+		}
+		if (this.#currentPlayer.moving.up) {
+			this.movePlayer(this.#currentPlayer, 0, -5);
+		}
+		if (this.#currentPlayer.moving.down) {
+			this.movePlayer(this.#currentPlayer, 0, 5);
+		}
 	}
 
 	/**
 	 * Initialise le jeu.
 	 */
 	#init() {
-		// holder to store the aliens
 		this.#app.stage.removeChildren();
 
-		this.#app.ticker.add(() => {
-			this.#players.forEach(player => {
-				if (player.moving.left) {
-					this.movePlayer(player, -5, 0);
-				}
-				if (player.moving.right) {
-					this.movePlayer(player, 5, 0);
-				}
-				if (player.moving.up) {
-					this.movePlayer(player, 0, -5);
-				}
-				if (player.moving.down) {
-					this.movePlayer(player, 0, 5);
-				}
-			});
-		});
+		this.#app.ticker.add(() => this.#tickEvent());
 	}
 
 	/**
@@ -128,28 +138,6 @@ export default class GameView extends View {
 	}
 
 	/**
-	 * Ajoute un joueur à la scène.
-	 * @param {Player} player
-	 */
-	addPlayer(player) {
-		this.#players.push(player);
-		player.anchor.set(0.5);
-		player.x = this.#app.screen.width / 2;
-		player.y = this.#app.screen.height / 2;
-		player.scale.set(0.5);
-		this.#app.stage.addChild(player);
-	}
-
-	/**
-	 * Supprime un joueur de la scène.
-	 * @param {Player} player
-	 */
-	removePlayer(player) {
-		this.#players = this.#players.filter(p => p !== player);
-		this.#app.stage.removeChild(player);
-	}
-
-	/**
 	 * Déplace le joueur dans la scène, en vérifiant que le joueur ne
 	 * dépasse pas les bords de la scène.
 	 * @param {Player} player
@@ -192,9 +180,7 @@ export default class GameView extends View {
 
 	#handleMouseMove(event) {
 		const { clientX, clientY } = event;
-		this.#players.forEach(player => {
-			player.x = clientX;
-			player.y = clientY;
-		});
+		this.#currentPlayer.x = clientX;
+		this.#currentPlayer.y = clientY;
 	}
 }

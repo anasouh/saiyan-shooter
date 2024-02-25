@@ -8,6 +8,7 @@ export default class Player extends PIXI.Sprite {
 
 	constructor() {
 		super(PIXI.Texture.from('/images/player.png'));
+		this.anchor.set(0.5);
 	}
 
 	get moving() {
