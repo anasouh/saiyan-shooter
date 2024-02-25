@@ -1,11 +1,11 @@
-import path from 'path';
+const path = require('path');
 
-export default {
+module.exports = {
 	// Fichier d'entrée :
 	entry: './src/main.js',
 	// Fichier de sortie :
 	output: {
-		path: path.resolve(import.meta.dirname, './build'),
+		path: path.resolve(__dirname, './build'),
 		filename: 'main.bundle.js',
 		publicPath: '/build/',
 	},
