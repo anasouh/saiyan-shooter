@@ -21,6 +21,7 @@ export default class GameView extends View {
 			background: '#1099bb',
 			resizeTo: window,
 		});
+		window.addEventListener('resize', () => this.#resize());
 		this.#pauseButton = element.querySelector('button#pauseGame');
 		this.#pauseButton.addEventListener('click', () => this.togglePause());
 		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
@@ -40,6 +41,10 @@ export default class GameView extends View {
 	hide() {
 		super.hide();
 		this.pause();
+	}
+
+	#resize() {
+		this.#app.renderer.resize(window.innerWidth, window.innerHeight);
 	}
 
 	#randomSprite() {
