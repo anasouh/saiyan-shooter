@@ -9,7 +9,7 @@ export default class Ennemy extends Character {
 	 * Crée un nouvel ennemi.
 	 */
 	constructor() {
-		super(PIXI.Texture.from('/images/ennemy.png'));
+		super(PIXI.Texture.from('/assets/images/ennemy.png'));
 		this.anchor.set(0.5);
 	}
 

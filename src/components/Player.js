@@ -4,9 +4,9 @@ import Character, { ANIMATION_TIME } from './Character.js';
 
 const LIFE = 3;
 const SCORE = 0;
-const SPRITE = '/images/player.png';
-export const SHOOTING_SPRITE = '/images/player_shooting.png';
-export const RELOADING_SPRITE = '/images/player_reloading.png';
+const SPRITE = '/assets/images/player.png';
+export const SHOOTING_SPRITE = '/assets/images/player_shooting.png';
+export const RELOADING_SPRITE = '/assets/images/player_reloading.png';
 
 /**
  * Représente un joueur.

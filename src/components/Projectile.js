@@ -7,7 +7,7 @@ export default class Projectile extends PIXI.Sprite {
 	 * Crée un nouveau projectile.
 	 */
 	constructor() {
-		super(PIXI.Texture.from('/images/projectile.png'));
+		super(PIXI.Texture.from('/assets/images/projectile.png'));
 		this.anchor.set(0.5);
 	}
 

@@ -211,7 +211,7 @@ export default class GameView extends View {
 	#init() {
 		this.element.classList.remove('gameOver');
 		this.#clear();
-		const background = PIXI.Sprite.from('/images/background.jpg');
+		const background = PIXI.Sprite.from('/assets/images/background.jpg');
 		background.width = this.#app.screen.width;
 		background.height = this.#app.screen.height;
 		this.#app.stage.addChild(background);
