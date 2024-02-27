@@ -1,6 +1,8 @@
 import * as PIXI from 'pixi.js';
 import Projectile from './Projectile.js';
 import Character, { ANIMATION_TIME } from './Character.js';
+import * as SFX from '../consts/sfx.js';
+import { playSound } from '../utils.js';
 
 const LIFE = 3;
 const SCORE = 0;
@@ -156,6 +158,7 @@ export default class Player extends Character {
 		const projectile = new Projectile();
 		projectile.position = this.position;
 		projectile.move('right');
+		playSound(SFX.PROJECTILE);
 		this.texture = PIXI.Texture.from(SHOOTING_SPRITE);
 		if (this.onShoot) {
 			this.onShoot(projectile);

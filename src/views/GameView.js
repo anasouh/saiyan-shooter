@@ -3,10 +3,10 @@ import Menu from '../components/Menu.js';
 import Player, { RELOADING_SPRITE } from '../components/Player.js';
 import Projectile from '../components/Projectile.js';
 import Router from '../Router.js';
-import { SHOOT_KEYS } from '../settings/keys.js';
-import { areColliding, isOutOfScreen } from './utils.js';
+import { areColliding, isOutOfScreen, playSound } from '../utils.js';
 import View from './View.js';
 import * as PIXI from 'pixi.js';
+import * as SFX from '../consts/sfx.js';
 
 export default class GameView extends View {
 	#app;
@@ -169,6 +169,7 @@ export default class GameView extends View {
 				if (areColliding(child, this.#currentPlayer) && child.isAlive) {
 					this.#removeEnnemy(child);
 					this.#currentPlayer.decrementLife();
+					playSound(SFX.PUNCH_1);
 				}
 				if (child.moving.left) {
 					child.x -= 5;

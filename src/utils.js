@@ -21,3 +21,10 @@ export function areColliding(object1, object2) {
 		bounds1.y + bounds1.height > bounds2.y
 	);
 }
+
+export function playSound(sound, volume = 0.1) {
+	const audio = new Audio(sound);
+	audio.volume = volume;
+	audio.play();
+	return audio;
+}
