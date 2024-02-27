@@ -166,7 +166,7 @@ export default class GameView extends View {
 					child.y += 5;
 				}
 			} else if (child instanceof Ennemy) {
-				if (areColliding(child, this.#currentPlayer)) {
+				if (areColliding(child, this.#currentPlayer) && child.isAlive) {
 					this.#removeEnnemy(child);
 					this.#currentPlayer.decrementLife();
 				}
@@ -187,9 +187,10 @@ export default class GameView extends View {
 
 		this.#projectiles.forEach(projectile => {
 			this.#ennemies.forEach(ennemy => {
-				if (areColliding(projectile, ennemy)) {
+				if (areColliding(projectile, ennemy) && ennemy.isAlive) {
 					this.#removeProjectile(projectile);
-					this.#removeEnnemy(ennemy);
+					ennemy.explode();
+					//this.#removeEnnemy(ennemy);
 					this.#currentPlayer.incrementScore();
 				}
 			});
@@ -321,6 +322,7 @@ export default class GameView extends View {
 				this.#app.screen.width,
 				Math.random() * this.#app.screen.height
 			);
+			ennemy.onComplete = () => this.#removeEnnemy(ennemy);
 			this.#addEnnemy(ennemy);
 			ennemy.move('left');
 		}

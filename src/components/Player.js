@@ -1,17 +1,17 @@
 import * as PIXI from 'pixi.js';
 import Projectile from './Projectile.js';
+import Character, { ANIMATION_TIME } from './Character.js';
 
 const LIFE = 3;
 const SCORE = 0;
 const SPRITE = '/images/player.png';
 export const SHOOTING_SPRITE = '/images/player_shooting.png';
 export const RELOADING_SPRITE = '/images/player_reloading.png';
-export const ANIMATION_TIME = 200;
 
 /**
  * Représente un joueur.
  */
-export default class Player extends PIXI.Sprite {
+export default class Player extends Character {
 	#score = SCORE;
 	#life = LIFE;
 	#moving = { up: false, down: false, left: false, right: false };
@@ -24,18 +24,33 @@ export default class Player extends PIXI.Sprite {
 		this.anchor.set(0.5);
 	}
 
+	/**
+	 * Retourne si le joueur est en mouvement.
+	 */
 	get moving() {
 		return this.#moving;
 	}
 
+	/**
+	 * Retourne le score du joueur.
+	 * @returns {number} Le score du joueur.
+	 */
 	getScore() {
 		return this.#score;
 	}
 
+	/**
+	 * Retourne la vie du joueur.
+	 * @returns {number} La vie du joueur.
+	 */
 	getLife() {
 		return this.#life;
 	}
 
+	/**
+	 * Modifie le score du joueur.
+	 * @param {number} value La nouvelle valeur du score.
+	 */
 	setLife(value) {
 		this.#life = value;
 		if (this.onLifeChange) {
@@ -43,6 +58,9 @@ export default class Player extends PIXI.Sprite {
 		}
 	}
 
+	/**
+	 * Incrémente le score du joueur.
+	 */
 	incrementScore() {
 		this.#score++;
 		if (this.onScoreChange) {
@@ -50,13 +68,20 @@ export default class Player extends PIXI.Sprite {
 		}
 	}
 
+	/**
+	 * Décrémente la vie du joueur.
+	 */
 	decrementLife() {
 		this.#life--;
 		if (this.onLifeChange) {
 			this.onLifeChange(this.#life);
 		}
+		this.hitAnimation();
 	}
 
+	/**
+	 * Réinitialise le score et la vie du joueur.
+	 */
 	reset() {
 		this.#score = SCORE;
 		this.#life = LIFE;
@@ -141,6 +166,10 @@ export default class Player extends PIXI.Sprite {
 		);
 	}
 
+	/**
+	 * Change la texture du joueur.
+	 * @param {string} texture La nouvelle texture.
+	 */
 	changeTexture(texture = SPRITE) {
 		this.texture = PIXI.Texture.from(texture);
 	}

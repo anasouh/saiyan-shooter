@@ -1,7 +1,9 @@
 import * as PIXI from 'pixi.js';
+import Character from './Character.js';
 
-export default class Ennemy extends PIXI.Sprite {
+export default class Ennemy extends Character {
 	#moving = { up: false, down: false, left: false, right: false };
+	isAlive = true;
 
 	/**
 	 * Crée un nouvel ennemi.
@@ -32,10 +34,9 @@ export default class Ennemy extends PIXI.Sprite {
 		}
 	}
 
-	stop() {
-		this.#moving.up = false;
-		this.#moving.down = false;
-		this.#moving.left = false;
-		this.#moving.right = false;
+	explode() {
+		this.isAlive = false;
+		this.scale.set(0.75);
+		this.explodeAnimation();
 	}
 }
