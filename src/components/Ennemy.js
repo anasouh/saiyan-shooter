@@ -1,5 +1,7 @@
 import * as PIXI from 'pixi.js';
 import Character from './Character.js';
+import * as SFX from '../consts/sfx.js';
+import { playSound } from '../utils.js';
 
 export default class Ennemy extends Character {
 	#moving = { up: false, down: false, left: false, right: false };
@@ -38,5 +40,6 @@ export default class Ennemy extends Character {
 		this.isAlive = false;
 		this.scale.set(0.75);
 		this.explodeAnimation();
+		playSound(SFX.ENNEMY_DISINTEGRATION);
 	}
 }
