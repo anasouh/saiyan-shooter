@@ -3,6 +3,7 @@ import Projectile from './Projectile.js';
 import Character, { ANIMATION_TIME } from './Character.js';
 import * as SFX from '../consts/sfx.js';
 import { playSound } from '../utils.js';
+import { PLAYER_FALLING } from '../consts/sprites.js';
 
 const LIFE = 3;
 const SCORE = 0;
@@ -85,6 +86,7 @@ export default class Player extends Character {
 	 * Réinitialise le score et la vie du joueur.
 	 */
 	reset() {
+		this.texture = PIXI.Texture.from(SPRITE);
 		this.#score = SCORE;
 		this.#life = LIFE;
 		if (this.onScoreChange) this.onScoreChange(this.#score);
@@ -175,5 +177,24 @@ export default class Player extends Character {
 	 */
 	changeTexture(texture = SPRITE) {
 		this.texture = PIXI.Texture.from(texture);
+	}
+
+	/**
+	 * Fait tomber le joueur.
+	 * @returns {Promise<void>} Une promesse qui se résout lorsque l'animation est terminée.
+	 */
+	fallAnimation() {
+		this.textures = PLAYER_FALLING;
+		this.loop = false;
+		this.animationSpeed = 0.5;
+		this.play();
+		const initialOnComplete = this.onComplete;
+		return new Promise(
+			resolve =>
+				(this.onComplete = () => {
+					resolve();
+					this.onComplete = initialOnComplete;
+				})
+		);
 	}
 }

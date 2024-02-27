@@ -72,7 +72,9 @@ export default class GameView extends View {
 	#onLifeChange(life) {
 		this.#athLife.innerText = `Vies : ${life}`;
 		if (life <= 0) {
-			this.#app.ticker.stop();
+			this.#currentPlayer.fallAnimation().then(() => {
+				this.#app.ticker.stop();
+			});
 			this.element.classList.add('gameOver');
 		}
 	}
