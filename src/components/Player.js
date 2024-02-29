@@ -5,8 +5,8 @@ import * as SFX from '../consts/sfx.js';
 import { playSound } from '../utils.js';
 import { PLAYER_FALLING } from '../consts/sprites.js';
 
-const LIFE = 3;
-const SCORE = 0;
+export const LIFE = 3;
+export const SCORE = 0;
 const SPRITE = '/assets/images/player.png';
 export const SHOOTING_SPRITE = '/assets/images/player_shooting.png';
 export const RELOADING_SPRITE = '/assets/images/player_reloading.png';
@@ -20,11 +20,19 @@ export default class Player extends Character {
 	#moving = { up: false, down: false, left: false, right: false };
 	onShoot;
 	onScoreChange;
-	onLifeChange;
+	onLifeChange = [];
 
 	constructor() {
 		super(PIXI.Texture.from(SPRITE));
 		this.anchor.set(0.5);
+	}
+
+	addEventListener(event, callback) {
+		switch (event) {
+			case 'lifeChange':
+				this.onLifeChange.push(callback);
+				break;
+		}
 	}
 
 	/**
@@ -56,9 +64,7 @@ export default class Player extends Character {
 	 */
 	setLife(value) {
 		this.#life = value;
-		if (this.onLifeChange) {
-			this.onLifeChange(this.#life);
-		}
+		this.onLifeChange.forEach(callback => callback(this.#life));
 	}
 
 	/**
@@ -76,9 +82,7 @@ export default class Player extends Character {
 	 */
 	decrementLife() {
 		this.#life--;
-		if (this.onLifeChange) {
-			this.onLifeChange(this.#life);
-		}
+		this.onLifeChange.forEach(callback => callback(this.#life));
 		this.hitAnimation();
 	}
 
@@ -90,7 +94,7 @@ export default class Player extends Character {
 		this.#score = SCORE;
 		this.#life = LIFE;
 		if (this.onScoreChange) this.onScoreChange(this.#score);
-		if (this.onLifeChange) this.onLifeChange(this.#life);
+		this.onLifeChange.forEach(callback => callback(this.#life));
 	}
 
 	/**

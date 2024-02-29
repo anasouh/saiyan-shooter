@@ -7,14 +7,14 @@ import { areColliding, isOutOfScreen, playSound } from '../utils.js';
 import View from './View.js';
 import * as PIXI from 'pixi.js';
 import * as SFX from '../consts/sfx.js';
+import LifeBar from '../components/LifeBar.js';
 
 export default class GameView extends View {
 	#app;
 	#currentPlayer;
 	#secondPlayer;
 	#pauseButton;
-	#athScore;
-	#athLife;
+	#lifeBar;
 	#pauseMenu;
 	#gameOverMenu;
 	#ennemies = [];
@@ -37,8 +37,7 @@ export default class GameView extends View {
 		const ath = element.querySelector('.ath');
 		this.#pauseButton = ath.querySelector('button#pauseGame');
 		this.#pauseButton.addEventListener('click', () => this.togglePause());
-		this.#athScore = ath.querySelector('.playerInfos .score');
-		this.#athLife = ath.querySelector('.playerInfos .life');
+		this.#lifeBar = new LifeBar(ath.querySelector('.life-bar'));
 		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
 		this.#pauseMenu.onResume(() => this.togglePause());
 		this.#pauseMenu.onMainMenu(() => this.leave());
@@ -70,17 +69,12 @@ export default class GameView extends View {
 	}
 
 	#onLifeChange(life) {
-		this.#athLife.innerText = `Vies : ${life}`;
 		if (life <= 0) {
 			this.#currentPlayer.fallAnimation().then(() => {
 				this.#app.ticker.stop();
 			});
 			this.element.classList.add('gameOver');
 		}
-	}
-
-	#onScoreChange(score) {
-		this.#athScore.innerText = `Score : ${score}`;
 	}
 
 	/**
@@ -90,13 +84,13 @@ export default class GameView extends View {
 	set currentPlayer(player) {
 		if (this.#currentPlayer) this.#app.stage.removeChild(this.#currentPlayer);
 		this.#currentPlayer = player;
+		this.#lifeBar.player = player;
 		this.#currentPlayer.onShoot = projectile => {
 			this.#addProjectile(projectile);
 		};
-		this.#currentPlayer.onScoreChange = score => this.#onScoreChange(score);
-		this.#currentPlayer.onLifeChange = life => this.#onLifeChange(life);
-		this.#athLife.innerText = `Vies : ${this.#currentPlayer.getLife()}`;
-		this.#athScore.innerText = `Score : ${this.#currentPlayer.getScore()}`;
+		this.#currentPlayer.addEventListener('lifeChange', life =>
+			this.#onLifeChange(life)
+		);
 		this.#app.view.onmousedown = () =>
 			this.#currentPlayer.changeTexture(RELOADING_SPRITE);
 	}
