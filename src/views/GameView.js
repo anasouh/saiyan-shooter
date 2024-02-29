@@ -41,9 +41,9 @@ export default class GameView extends View {
 		this.#athLife = ath.querySelector('.playerInfos .life');
 		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
 		this.#pauseMenu.onResume(() => this.togglePause());
-		this.#pauseMenu.onMainMenu(() => Router.navigate('/'));
+		this.#pauseMenu.onMainMenu(() => this.leave());
 		this.#gameOverMenu = new Menu(element.querySelector('.menu#gameOver'));
-		this.#gameOverMenu.onMainMenu(() => Router.navigate('/'));
+		this.#gameOverMenu.onMainMenu(() => this.leave());
 		this.element.appendChild(this.#app.view);
 		this.#app.view.onmousemove = event => this.#handleMouseMove(event);
 		this.#init();
@@ -329,5 +329,11 @@ export default class GameView extends View {
 			this.#addEnnemy(ennemy);
 			ennemy.move('left');
 		}
+	}
+
+	leave() {
+		this.#clear();
+		this.pause();
+		Router.navigate('/');
 	}
 }
