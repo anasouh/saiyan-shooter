@@ -15,6 +15,7 @@ export default class GameView extends View {
 	#secondPlayer;
 	#pauseButton;
 	#lifeBar;
+	#score;
 	#pauseMenu;
 	#gameOverMenu;
 	#ennemies = [];
@@ -38,6 +39,7 @@ export default class GameView extends View {
 		this.#pauseButton = ath.querySelector('button#pauseGame');
 		this.#pauseButton.addEventListener('click', () => this.togglePause());
 		this.#lifeBar = new LifeBar(ath.querySelector('.life-bar'));
+		this.#score = ath.querySelector('#scoreVal');
 		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
 		this.#pauseMenu.onResume(() => this.togglePause());
 		this.#pauseMenu.onMainMenu(() => this.leave());
@@ -91,6 +93,9 @@ export default class GameView extends View {
 		this.#currentPlayer.addEventListener('lifeChange', life =>
 			this.#onLifeChange(life)
 		);
+		this.#currentPlayer.addEventListener('scoreChange', score => {
+			this.#score.innerText = score;
+		});
 		this.#app.view.onmousedown = () =>
 			this.#currentPlayer.changeTexture(RELOADING_SPRITE);
 	}

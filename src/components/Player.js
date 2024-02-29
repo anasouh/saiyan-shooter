@@ -19,7 +19,7 @@ export default class Player extends Character {
 	#life = LIFE;
 	#moving = { up: false, down: false, left: false, right: false };
 	onShoot;
-	onScoreChange;
+	onScoreChange = [];
 	onLifeChange = [];
 
 	constructor() {
@@ -27,10 +27,18 @@ export default class Player extends Character {
 		this.anchor.set(0.5);
 	}
 
+	/**
+	 * Ajoute un écouteur d'évènement.
+	 * @param {string} event L'évènement à écouter.
+	 * @param {function} callback La fonction à appeler lors de l'évènement.
+	 */
 	addEventListener(event, callback) {
 		switch (event) {
 			case 'lifeChange':
 				this.onLifeChange.push(callback);
+				break;
+			case 'scoreChange':
+				this.onScoreChange.push(callback);
 				break;
 		}
 	}
@@ -72,9 +80,7 @@ export default class Player extends Character {
 	 */
 	incrementScore() {
 		this.#score++;
-		if (this.onScoreChange) {
-			this.onScoreChange(this.#score);
-		}
+		this.onScoreChange.forEach(callback => callback(this.#score));
 	}
 
 	/**
@@ -93,7 +99,7 @@ export default class Player extends Character {
 		this.texture = PIXI.Texture.from(SPRITE);
 		this.#score = SCORE;
 		this.#life = LIFE;
-		if (this.onScoreChange) this.onScoreChange(this.#score);
+		this.onScoreChange.forEach(callback => callback(this.#score));
 		this.onLifeChange.forEach(callback => callback(this.#life));
 	}
 
