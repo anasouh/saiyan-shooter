@@ -151,7 +151,7 @@ export default class GameView extends View {
 				}
 			} else if (child instanceof Projectile) {
 				if (isOutOfScreen(this.#app.screen, child)) {
-					this.#app.stage.removeChild(child);
+					this.#removeProjectile(child);
 					return;
 				}
 				if (child.moving.left) {
