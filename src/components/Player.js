@@ -3,7 +3,14 @@ import Projectile from './Projectile.js';
 import Character, { ANIMATION_TIME } from './Character.js';
 import * as SFX from '../consts/sfx.js';
 import { playSound } from '../utils.js';
-import { PLAYER_FALLING, SPRITES_PATH } from '../consts/sprites.js';
+import {
+	PLAYER_DOWN,
+	PLAYER_FALLING,
+	PLAYER_LEFT,
+	PLAYER_RIGHT,
+	PLAYER_UP,
+	SPRITES_PATH,
+} from '../consts/sprites.js';
 
 export const LIFE = 3;
 export const SCORE = 0;
@@ -113,18 +120,22 @@ export default class Player extends Character {
 			case 'ARROWUP':
 			case 'Z':
 				this.#moving.up = true;
+				this.texture = PLAYER_UP;
 				break;
 			case 'ARROWDOWN':
 			case 'S':
 				this.#moving.down = true;
+				this.texture = PLAYER_DOWN;
 				break;
 			case 'ARROWLEFT':
 			case 'Q':
 				this.#moving.left = true;
+				this.texture = PLAYER_LEFT;
 				break;
 			case 'ARROWRIGHT':
 			case 'D':
 				this.#moving.right = true;
+				this.texture = PLAYER_RIGHT;
 				break;
 		}
 	}
@@ -146,10 +157,12 @@ export default class Player extends Character {
 			case 'ARROWLEFT':
 			case 'Q':
 				this.#moving.left = false;
+				this.texture = PIXI.Texture.from(SPRITE);
 				break;
 			case 'ARROWRIGHT':
 			case 'D':
 				this.#moving.right = false;
+				this.texture = PIXI.Texture.from(SPRITE);
 				break;
 		}
 	}
