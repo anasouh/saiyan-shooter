@@ -222,8 +222,8 @@ export default class GameView extends View {
 
 		this.#items.forEach(item => {
 			if (areColliding(item, this.#currentPlayer)) {
+				item.use(this.#currentPlayer);
 				this.#removeItem(item);
-				this.#currentPlayer.setLife(LIFE);
 			}
 		});
 	}

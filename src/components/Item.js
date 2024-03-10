@@ -1,4 +1,7 @@
 import * as PIXI from 'pixi.js';
+import Player, { LIFE } from './Player.js';
+import { playSound } from '../utils.js';
+import * as SFX from '../consts/sfx.js';
 
 const ITEM_SPAWN_PROBABILITY = 0.1;
 const ITEM_LIFETIME = 5 * 1000;
@@ -26,6 +29,15 @@ export default class Item extends PIXI.Sprite {
 				clearInterval(this.#blinkInterval);
 			}
 		}, 100);
+	}
+
+	/**
+	 * Utilise l'objet.
+	 * @param {Player} player
+	 */
+	use(player) {
+		player.setLife(LIFE);
+		playSound(SFX.SENZU_BEAN, 0.5);
 	}
 }
 
