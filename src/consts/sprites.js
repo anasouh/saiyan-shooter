@@ -1,7 +1,8 @@
 import * as PIXI from 'pixi.js';
 
-const PATH = '/assets/sprites/';
+export const SPRITES_PATH = '/assets/sprites/';
 
-export const PLAYER_FALLING = Array.from({ length: 5 }, (_, i) =>
-	PIXI.Texture.from(PATH + `player/player_falling_${i + 1}.png`)
-);
+export const PLAYER_FALLING = [
+	PIXI.Texture.from(SPRITES_PATH + 'player/hit.png'),
+	PIXI.Texture.from(SPRITES_PATH + 'player/ko.png'),
+];

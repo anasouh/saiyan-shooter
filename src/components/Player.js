@@ -3,13 +3,13 @@ import Projectile from './Projectile.js';
 import Character, { ANIMATION_TIME } from './Character.js';
 import * as SFX from '../consts/sfx.js';
 import { playSound } from '../utils.js';
-import { PLAYER_FALLING } from '../consts/sprites.js';
+import { PLAYER_FALLING, SPRITES_PATH } from '../consts/sprites.js';
 
 export const LIFE = 3;
 export const SCORE = 0;
-const SPRITE = '/assets/images/player.png';
-export const SHOOTING_SPRITE = '/assets/images/player_shooting.png';
-export const RELOADING_SPRITE = '/assets/images/player_reloading.png';
+const SPRITE = SPRITES_PATH + 'player/player.png';
+export const SHOOTING_SPRITE = SPRITES_PATH + 'player/player_shooting.png';
+export const RELOADING_SPRITE = SPRITES_PATH + 'player/player_reloading.png';
 
 /**
  * Représente un joueur.
@@ -25,6 +25,7 @@ export default class Player extends Character {
 	constructor() {
 		super(PIXI.Texture.from(SPRITE));
 		this.anchor.set(0.5);
+		this.scale.set(0.15);
 	}
 
 	/**
