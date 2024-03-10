@@ -202,6 +202,10 @@ export default class GameView extends View {
 				if (child.moving.down) {
 					child.y += 5;
 				}
+			} else if (child instanceof Item) {
+				if (child.isExpired) {
+					this.#removeItem(child);
+				}
 			}
 		});
 
