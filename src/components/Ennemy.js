@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import Character from './Character.js';
 import * as SFX from '../consts/sfx.js';
 import { playSound } from '../utils.js';
+import { FREEZER, FREEZER_LEFT } from '../consts/sprites.js';
 
 export default class Ennemy extends Character {
 	#moving = { up: false, down: false, left: false, right: false };
@@ -11,8 +12,9 @@ export default class Ennemy extends Character {
 	 * Crée un nouvel ennemi.
 	 */
 	constructor() {
-		super(PIXI.Texture.from('/assets/images/ennemy.png'));
+		super(FREEZER);
 		this.anchor.set(0.5);
+		this.scale.set(0.1);
 	}
 
 	get moving() {
@@ -29,9 +31,27 @@ export default class Ennemy extends Character {
 				break;
 			case 'left':
 				this.#moving.left = true;
+				this.texture = FREEZER_LEFT;
 				break;
 			case 'right':
 				this.#moving.right = true;
+				break;
+		}
+	}
+
+	release(direction) {
+		switch (direction) {
+			case 'up':
+				this.#moving.up = false;
+				break;
+			case 'down':
+				this.#moving.down = false;
+				break;
+			case 'left':
+				this.#moving.left = false;
+				break;
+			case 'right':
+				this.#moving.right = false;
 				break;
 		}
 	}
