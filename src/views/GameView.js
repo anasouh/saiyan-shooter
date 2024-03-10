@@ -1,6 +1,6 @@
 import Ennemy from '../components/Ennemy.js';
 import Menu from '../components/Menu.js';
-import Player, { RELOADING_SPRITE } from '../components/Player.js';
+import Player, { LIFE, RELOADING_SPRITE } from '../components/Player.js';
 import Projectile from '../components/Projectile.js';
 import Router from '../Router.js';
 import { areColliding, isOutOfScreen, playSound } from '../utils.js';
@@ -21,6 +21,7 @@ export default class GameView extends View {
 	#gameOverMenu;
 	#ennemies = [];
 	#projectiles = [];
+	#items = [];
 
 	/**
 	 * Crée une nouvelle vue de jeu.
@@ -76,9 +77,15 @@ export default class GameView extends View {
 			if (Math.random() < ITEM_SPAWN_PROBABILITY) {
 				const item = new Item();
 				item.position.set(x, y);
+				this.#items.push(item);
 				this.#app.stage.addChild(item);
 			}
 		}, delay);
+	}
+
+	#removeItem(item) {
+		this.#items = this.#items.filter(i => i !== item);
+		this.#app.stage.removeChild(item);
 	}
 
 	#onLifeChange(life) {
@@ -207,6 +214,13 @@ export default class GameView extends View {
 					this.#currentPlayer.incrementScore();
 				}
 			});
+		});
+
+		this.#items.forEach(item => {
+			if (areColliding(item, this.#currentPlayer)) {
+				this.#removeItem(item);
+				this.#currentPlayer.setLife(LIFE);
+			}
 		});
 	}
 

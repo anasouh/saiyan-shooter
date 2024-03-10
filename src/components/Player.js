@@ -67,8 +67,8 @@ export default class Player extends Character {
 	}
 
 	/**
-	 * Modifie le score du joueur.
-	 * @param {number} value La nouvelle valeur du score.
+	 * Modifie la vie du joueur.
+	 * @param {number} value La nouvelle vie du joueur.
 	 */
 	setLife(value) {
 		this.#life = value;
