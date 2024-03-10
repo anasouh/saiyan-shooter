@@ -38,6 +38,7 @@ export default class Ennemy extends Character {
 
 	explode() {
 		this.isAlive = false;
+		this.#moving = { up: false, down: false, left: false, right: false };
 		this.scale.set(0.75);
 		this.explodeAnimation();
 		playSound(SFX.ENNEMY_DISINTEGRATION);

@@ -8,6 +8,7 @@ import View from './View.js';
 import * as PIXI from 'pixi.js';
 import * as SFX from '../consts/sfx.js';
 import LifeBar from '../components/LifeBar.js';
+import Item, { ITEM_SPAWN_PROBABILITY } from '../components/Item.js';
 
 export default class GameView extends View {
 	#app;
@@ -68,6 +69,16 @@ export default class GameView extends View {
 	#removeEnnemy(ennemy) {
 		this.#ennemies = this.#ennemies.filter(e => e !== ennemy);
 		this.#app.stage.removeChild(ennemy);
+	}
+
+	#spawnItem({ x, y }, delay = 450) {
+		setTimeout(() => {
+			if (Math.random() < ITEM_SPAWN_PROBABILITY) {
+				const item = new Item();
+				item.position.set(x, y);
+				this.#app.stage.addChild(item);
+			}
+		}, delay);
 	}
 
 	#onLifeChange(life) {
@@ -191,8 +202,8 @@ export default class GameView extends View {
 			this.#ennemies.forEach(ennemy => {
 				if (areColliding(projectile, ennemy) && ennemy.isAlive) {
 					this.#removeProjectile(projectile);
+					this.#spawnItem(ennemy.position);
 					ennemy.explode();
-					//this.#removeEnnemy(ennemy);
 					this.#currentPlayer.incrementScore();
 				}
 			});
