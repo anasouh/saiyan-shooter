@@ -9,6 +9,7 @@ export default class Projectile extends PIXI.Sprite {
 	constructor() {
 		super(PIXI.Texture.from('/assets/images/projectile.png'));
 		this.anchor.set(0.5);
+		this.scale.set(0.07);
 	}
 
 	get moving() {
