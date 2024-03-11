@@ -25,3 +25,5 @@ export const FREEZER_HIT = PIXI.Texture.from(
 export const FREEZER_KO = PIXI.Texture.from(
 	SPRITES_PATH + 'ennemy/freezer/ko.png'
 );
+
+export const SENZU_BEAN = PIXI.Texture.from(SPRITES_PATH + 'items/senzu.png');

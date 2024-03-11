@@ -2,24 +2,49 @@ import * as PIXI from 'pixi.js';
 import Player, { LIFE } from './Player.js';
 import { playSound } from '../utils.js';
 import * as SFX from '../consts/sfx.js';
+import { SENZU_BEAN } from '../consts/sprites.js';
 
 const ITEM_SPAWN_PROBABILITY = 0.1;
-const ITEM_LIFETIME = 5 * 1000;
+
+const items = [
+	{
+		name: 'senzu',
+		probability: 0.1,
+		lifetime: 5 * 1000,
+		sprite: SENZU_BEAN,
+		scale: 0.05,
+	},
+];
+
+function randomItem() {
+	const rand = Math.random();
+	let acc = 0;
+	for (const item of items) {
+		acc += item.probability;
+		if (rand < acc) {
+			return item;
+		}
+	}
+	return items[0];
+}
 
 export default class Item extends PIXI.Sprite {
+	#itemProperties;
 	#spawnTime;
 	#blinkInterval;
 
 	constructor() {
-		super(PIXI.Texture.from('assets/images/senzu.png'));
+		const itemProperties = randomItem();
+		super(itemProperties.sprite);
+		this.#itemProperties = itemProperties;
 		this.anchor.set(0.5);
-		this.scale.set(0.05);
+		this.scale.set(this.#itemProperties.scale || 1);
 		this.#spawnTime = Date.now();
-		setTimeout(() => this.#blink(), ITEM_LIFETIME * 0.7);
+		setTimeout(() => this.#blink(), this.#itemProperties.lifetime * 0.7);
 	}
 
 	get isExpired() {
-		return Date.now() - this.#spawnTime > ITEM_LIFETIME;
+		return Date.now() - this.#spawnTime > this.#itemProperties.lifetime;
 	}
 
 	#blink() {
