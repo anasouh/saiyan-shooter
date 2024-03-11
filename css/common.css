@@ -30,3 +30,35 @@
 .gap-20 {
     gap: 20px;
 }
+
+.gap-30 {
+    gap: 30px;
+}
+
+.radius {
+    border-radius: 7px;
+}
+
+.surface {
+    background-color: var(--surface-color);
+}
+
+.padding-10 {
+    padding: 10px;
+}
+
+.padding-20 {
+    padding: 20px;
+}
+
+.padding-30 {
+    padding: 30px;
+}
+
+.shadow {
+    box-shadow: 0 .2em rgba(24, 24, 24, 0.466);
+}
+
+.no-margin {
+    margin: 0;
+}

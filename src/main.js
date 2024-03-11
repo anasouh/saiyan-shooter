@@ -4,13 +4,16 @@ import View from './views/View.js';
 import GameView from './views/GameView.js';
 import Player from './components/Player.js';
 import { CONTROL_KEYS, PAUSE_KEYS, SHOOT_KEYS } from './settings/keys.js';
+import GuideView from './views/GuideView.js';
 
 const homeView = new HomeView(document.querySelector('.home'));
+const guideView = new GuideView(document.querySelector('.guide'));
 const gameView = new GameView(document.querySelector('.game'));
 const creditsView = new View(document.querySelector('.credits'));
 
 const routes = [
 	{ path: '/', view: homeView, title: 'Accueil' },
+	{ path: '/guide', view: guideView, title: 'Guide' },
 	{ path: '/game', view: gameView, title: 'Jeu' },
 	{ path: '/credits', view: creditsView, title: 'Crédits' },
 ];
