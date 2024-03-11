@@ -157,14 +157,13 @@ export default class Player extends Character {
 			case 'ARROWLEFT':
 			case 'Q':
 				this.#moving.left = false;
-				this.texture = PIXI.Texture.from(SPRITE);
 				break;
 			case 'ARROWRIGHT':
 			case 'D':
 				this.#moving.right = false;
-				this.texture = PIXI.Texture.from(SPRITE);
 				break;
 		}
+		this.texture = PIXI.Texture.from(SPRITE);
 	}
 
 	/**
