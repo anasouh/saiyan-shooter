@@ -53,9 +53,19 @@ export default class Player extends Character {
 
 	/**
 	 * Retourne si le joueur est en mouvement.
+	 * @readonly
 	 */
 	get moving() {
 		return this.#moving;
+	}
+
+	/**
+	 * Retourne si le joueur est en vie.
+	 * @returns {boolean} Vrai si le joueur est en vie, faux sinon.
+	 * @readonly
+	 */
+	get alive() {
+		return this.#life > 0;
 	}
 
 	/**
@@ -116,6 +126,7 @@ export default class Player extends Character {
 	 * @param {string} key La touche enfoncée.
 	 */
 	press(key) {
+		if (!this.alive) return;
 		switch (key) {
 			case 'ARROWUP':
 			case 'Z':
@@ -163,6 +174,7 @@ export default class Player extends Character {
 				this.#moving.right = false;
 				break;
 		}
+		if (!this.alive) return;
 		this.texture = PIXI.Texture.from(SPRITE);
 	}
 
@@ -180,6 +192,7 @@ export default class Player extends Character {
 	 * Fait tirer le joueur.
 	 */
 	shoot() {
+		if (!this.alive) return;
 		const projectile = new Projectile();
 		projectile.position = this.position;
 		projectile.move('right');
