@@ -7,7 +7,7 @@ import { SPRITES_PATH } from '../consts/sprites.js';
 
 export const LIFE = 3;
 export const SCORE = 0;
-export const KILL_FOR_ULTI = 5;
+export const KILL_FOR_ULTI = 1;
 
 const sprites = {
 	goku: {
@@ -26,31 +26,38 @@ const sprites = {
 		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/right.png'),
 		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/up.png'),
 		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/down.png'),
+		projectile: PIXI.Texture.from('/assets/images/projectile.png'),
 		scale: 0.15,
 	},
 	vegeta: {
 		sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
 		shooting_sprite: PIXI.Texture.from(
-			SPRITES_PATH + 'player/vegeta/Vegeta_shooting.png'
+			SPRITES_PATH + 'player/vegeta/shooting.png'
 		),
 		reloading_sprite: PIXI.Texture.from(
-			SPRITES_PATH + 'player/vegeta/vegeta_realoading.png'
+			SPRITES_PATH + 'player/vegeta/reloading.png'
 		),
 		falling_sprites: [
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/hit1.png'),
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/hit2.png'),
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ko.png'),
 		],
-		left_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
-		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
-		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
-		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
-		ulti_charging: PIXI.Texture.from(
-			SPRITES_PATH + 'player/vegeta/vegeta_charging.png'
-		),
-		ulti_start: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ulti1.png'),
-		ulti_load: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ulti2.png'),
-		scale: 1.5,
+		left_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/left.png'),
+		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/right.png'),
+		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/up.png'),
+		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/down.png'),
+		ult_sprites: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult1.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult2.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult3.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult4.png'),
+		],
+		projectile: PIXI.Texture.from('/assets/images/projectile.png'),
+		ult_projectile: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult1.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult2.png'),
+		],
+		scale: 0.15,
 	},
 };
 
@@ -254,7 +261,7 @@ export default class Player extends Character {
 	 */
 	shoot() {
 		if (!this.alive) return;
-		const projectile = new Projectile();
+		const projectile = new Projectile([sprites[this.#id].projectile]);
 		projectile.position = this.position;
 		projectile.move('right');
 		playSound(SFX.PROJECTILE);
@@ -270,17 +277,22 @@ export default class Player extends Character {
 	 */
 	ulti() {
 		if (!this.alive || !this.canUlt) return;
-		const projectile = new Projectile();
-		projectile.position = this.position;
-		projectile.move('right');
-		playSound(SFX.PROJECTILE);
-		this.texture = sprites[this.#id].shooting_sprite;
-		if (this.onShoot) {
-			this.onShoot(projectile);
-		}
-		setTimeout(() => {
+		this.textures = sprites[this.#id].ult_sprites;
+		this.animationSpeed = 0.25;
+		this.loop = false;
+		this.onComplete = () => {
+			const projectile = new Projectile(sprites[this.#id].ult_projectile);
+			projectile.position = this.position;
+			projectile.move('right');
+			playSound(SFX.PROJECTILE);
+			this.texture = sprites[this.#id].shooting_sprite;
+			if (this.onShoot) {
+				this.onShoot(projectile);
+			}
 			this.texture = sprites[this.#id].sprite;
-		}, ANIMATION_TIME);
+		};
+		this.play();
+
 		this.kills = -1;
 	}
 

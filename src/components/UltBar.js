@@ -30,7 +30,6 @@ export default class UltBar {
 	set player(value) {
 		this.#player = value;
 		this.#player.addEventListener('killsChange', kills => {
-			console.log(kills);
 			this.update();
 		});
 		this.update();

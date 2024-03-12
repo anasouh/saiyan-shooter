@@ -183,16 +183,16 @@ export default class GameView extends View {
 					this.#removeProjectile(child);
 					return;
 				}
-				if (child.moving.left) {
+				if (child.isMoving.left) {
 					child.x -= 5;
 				}
-				if (child.moving.right) {
+				if (child.isMoving.right) {
 					child.x += 5;
 				}
-				if (child.moving.up) {
+				if (child.isMoving.up) {
 					child.y -= 5;
 				}
-				if (child.moving.down) {
+				if (child.isMoving.down) {
 					child.y += 5;
 				}
 			} else if (child instanceof Ennemy) {
