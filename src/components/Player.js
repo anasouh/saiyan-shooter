@@ -12,8 +12,12 @@ export const KILL_FOR_ULTI = 5;
 const sprites = {
 	goku: {
 		sprite: PIXI.Texture.from(SPRITES_PATH + 'player/player.png'),
-		shooting_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/player_shooting.png'),
-		reloading_sprite:  PIXI.Texture.from(SPRITES_PATH + 'player/player_reloading.png'),
+		shooting_sprite: PIXI.Texture.from(
+			SPRITES_PATH + 'player/player_shooting.png'
+		),
+		reloading_sprite: PIXI.Texture.from(
+			SPRITES_PATH + 'player/player_reloading.png'
+		),
 		falling_sprites: [
 			PIXI.Texture.from(SPRITES_PATH + 'player/hit.png'),
 			PIXI.Texture.from(SPRITES_PATH + 'player/ko.png'),
@@ -22,13 +26,16 @@ const sprites = {
 		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/right.png'),
 		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/up.png'),
 		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/down.png'),
-		scale: 0.15
-
+		scale: 0.15,
 	},
-	vegeta:{
+	vegeta: {
 		sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
-		shooting_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/Vegeta_shooting.png'),
-		reloading_sprite:  PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/vegeta_realoading.png'),
+		shooting_sprite: PIXI.Texture.from(
+			SPRITES_PATH + 'player/vegeta/Vegeta_shooting.png'
+		),
+		reloading_sprite: PIXI.Texture.from(
+			SPRITES_PATH + 'player/vegeta/vegeta_realoading.png'
+		),
 		falling_sprites: [
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/hit1.png'),
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/hit2.png'),
@@ -38,13 +45,14 @@ const sprites = {
 		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
 		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
 		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
-		ulti_charging : PIXI.Texture.from(SPRITES_PATH+ 'player/vegeta/vegeta_charging.png'),
-		ulti_start : PIXI.Texture.from(SPRITES_PATH+ 'player/vegeta/ulti1.png'),
-		ulti_load: PIXI.Texture.from(SPRITES_PATH+ 'player/vegeta/ulti2.png'),
-		scale: 1.5
-	}
-
-}
+		ulti_charging: PIXI.Texture.from(
+			SPRITES_PATH + 'player/vegeta/vegeta_charging.png'
+		),
+		ulti_start: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ulti1.png'),
+		ulti_load: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ulti2.png'),
+		scale: 1.5,
+	},
+};
 
 /**
  * Représente un joueur.
@@ -56,24 +64,29 @@ export default class Player extends Character {
 	onShoot;
 	onScoreChange = [];
 	onLifeChange = [];
+	onKillsChange = [];
 	#id;
-	#nb_kill;
+	#kills;
 
 	constructor(id) {
 		super(sprites[id].sprite);
 		this.anchor.set(0.5);
 		this.scale.set(sprites[id].scale);
 		this.#id = id;
+		this.#kills = 0;
 	}
 
-
-	incrementNbKill()
-	{
-		this.nb_Kill++;
+	incrementNbKill() {
+		this.kills = this.kills + 1;
 	}
 
 	get canUlt() {
-		return this.#nb_kill >= KILL_FOR_ULTI;
+		return this.#kills >= KILL_FOR_ULTI;
+	}
+
+	set kills(value) {
+		this.#kills = value;
+		this.onKillsChange.forEach(callback => callback(this.#kills));
 	}
 
 	/**
@@ -89,6 +102,8 @@ export default class Player extends Character {
 			case 'scoreChange':
 				this.onScoreChange.push(callback);
 				break;
+			case 'killsChange':
+				this.onKillsChange.push(callback);
 		}
 	}
 
@@ -98,6 +113,10 @@ export default class Player extends Character {
 	 */
 	get moving() {
 		return this.#moving;
+	}
+
+	get kills() {
+		return this.#kills;
 	}
 
 	/**
@@ -158,7 +177,7 @@ export default class Player extends Character {
 		this.texture = sprites[this.#id].sprite;
 		this.#score = SCORE;
 		this.#life = LIFE;
-		this.#nb_kill = 0;
+		this.#kills = 0;
 		this.onScoreChange.forEach(callback => callback(this.#score));
 		this.onLifeChange.forEach(callback => callback(this.#life));
 	}
@@ -243,10 +262,7 @@ export default class Player extends Character {
 		if (this.onShoot) {
 			this.onShoot(projectile);
 		}
-		setTimeout(
-			() => (this.texture = sprites[this.#id].sprite),
-			ANIMATION_TIME
-		);
+		setTimeout(() => (this.texture = sprites[this.#id].sprite), ANIMATION_TIME);
 	}
 
 	/**
@@ -262,17 +278,11 @@ export default class Player extends Character {
 		if (this.onShoot) {
 			this.onShoot(projectile);
 		}
-		setTimeout(
-			() =>{
-				this.texture = sprites[this.#id].sprite
-				this.#nb_kill = 0;
-			},
-			ANIMATION_TIME
-
-		);
-
+		setTimeout(() => {
+			this.texture = sprites[this.#id].sprite;
+		}, ANIMATION_TIME);
+		this.kills = -1;
 	}
-
 
 	reload() {
 		this.texture = sprites[this.#id].reloading_sprite;

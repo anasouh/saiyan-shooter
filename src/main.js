@@ -18,16 +18,14 @@ const routes = [
 	{ path: '/credits', view: creditsView, title: 'Crédits' },
 ];
 
-const player = new Player("vegeta");
+const player = new Player('goku');
 gameView.currentPlayer = player;
-gameView.onClick = (event) => {
-	if(event.button == 2) //Click droit
-	{
-		player.ulti();
-	}else{
-		player.shoot();
-	}
-	
+gameView.onClick = event => {
+	player.shoot();
+};
+gameView.onContextMenu = event => {
+	event.preventDefault();
+	player.ulti();
 };
 
 document.addEventListener('keydown', event => {

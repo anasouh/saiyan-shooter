@@ -9,6 +9,7 @@ import * as PIXI from 'pixi.js';
 import * as SFX from '../consts/sfx.js';
 import LifeBar from '../components/LifeBar.js';
 import Item, { ITEM_SPAWN_PROBABILITY } from '../components/Item.js';
+import UltBar from '../components/UltBar.js';
 
 export default class GameView extends View {
 	#app;
@@ -16,6 +17,7 @@ export default class GameView extends View {
 	#secondPlayer;
 	#pauseButton;
 	#lifeBar;
+	#ultBar;
 	#score;
 	#pauseMenu;
 	#gameOverMenu;
@@ -42,6 +44,7 @@ export default class GameView extends View {
 		this.#pauseButton.addEventListener('click', () => this.togglePause());
 		console.log(ath.querySelector('.bar#life'));
 		this.#lifeBar = new LifeBar(ath.querySelector('.bar#life'));
+		this.#lifeBar = new UltBar(ath.querySelector('.bar#ult'));
 		this.#score = ath.querySelector('#scoreVal');
 		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
 		this.#pauseMenu.onResume(() => this.togglePause());
@@ -134,6 +137,14 @@ export default class GameView extends View {
 	 */
 	set onClick(callback) {
 		this.#app.view.onclick = callback;
+	}
+
+	/**
+	 * Définit la fonction à appeler lorsqu'un clic droit est effectué sur la scène.
+	 * @param {function} callback
+	 */
+	set onContextMenu(callback) {
+		this.#app.view.oncontextmenu = callback;
 	}
 
 	show() {

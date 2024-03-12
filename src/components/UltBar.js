@@ -1,6 +1,16 @@
-import Player, { LIFE } from './Player.js';
+import Player, { KILL_FOR_ULTI, LIFE } from './Player.js';
 
-export default class LifeBar {
+/**
+ * Retourne la valeur la plus petite.
+ * @param {number} a
+ * @param {number} b
+ * @returns
+ */
+function min(a, b) {
+	return a < b ? a : b;
+}
+
+export default class UltBar {
 	#player;
 	bar;
 
@@ -19,7 +29,10 @@ export default class LifeBar {
 	 */
 	set player(value) {
 		this.#player = value;
-		this.#player.addEventListener('lifeChange', () => this.update());
+		this.#player.addEventListener('killsChange', kills => {
+			console.log(kills);
+			this.update();
+		});
 		this.update();
 	}
 
@@ -27,7 +40,7 @@ export default class LifeBar {
 	 * Met à jour la barre de vie.
 	 */
 	update() {
-		const percent = (this.#player.getLife() / LIFE) * 100;
-		this.bar.style.width = `${percent}%`;
+		const percent = (this.#player.kills / KILL_FOR_ULTI) * 100;
+		this.bar.style.width = `${percent > 0 ? min(percent, 100) : 1}%`;
 	}
 }
