@@ -216,6 +216,7 @@ export default class GameView extends View {
 					this.#spawnItem(ennemy.position);
 					ennemy.explode();
 					this.#currentPlayer.incrementScore();
+					this.#currentPlayer.incrementNbKill();
 				}
 			});
 		});

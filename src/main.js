@@ -20,7 +20,15 @@ const routes = [
 
 const player = new Player("vegeta");
 gameView.currentPlayer = player;
-gameView.onClick = () => player.shoot();
+gameView.onClick = (event) => {
+	if(event.button == 2) //Click droit
+	{
+		player.ulti();
+	}else{
+		player.shoot();
+	}
+	
+};
 
 document.addEventListener('keydown', event => {
 	const key = event.key.toUpperCase();

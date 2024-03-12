@@ -7,6 +7,7 @@ import { SPRITES_PATH } from '../consts/sprites.js';
 
 export const LIFE = 3;
 export const SCORE = 0;
+export const KILL_FOR_ULTI = 5;
 
 const sprites = {
 	goku: {
@@ -37,6 +38,9 @@ const sprites = {
 		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
 		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
 		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
+		ulti_charging : PIXI.Texture.from(SPRITES_PATH+ 'player/vegeta/vegeta_charging.png'),
+		ulti_start : PIXI.Texture.from(SPRITES_PATH+ 'player/vegeta/ulti1.png'),
+		ulti_load: PIXI.Texture.from(SPRITES_PATH+ 'player/vegeta/ulti2.png'),
 		scale: 1.5
 	}
 
@@ -53,12 +57,23 @@ export default class Player extends Character {
 	onScoreChange = [];
 	onLifeChange = [];
 	#id;
+	#nb_kill;
 
 	constructor(id) {
 		super(sprites[id].sprite);
 		this.anchor.set(0.5);
 		this.scale.set(sprites[id].scale);
 		this.#id = id;
+	}
+
+
+	incrementNbKill()
+	{
+		this.nb_Kill++;
+	}
+
+	get canUlt() {
+		return this.#nb_kill >= KILL_FOR_ULTI;
 	}
 
 	/**
@@ -143,6 +158,7 @@ export default class Player extends Character {
 		this.texture = sprites[this.#id].sprite;
 		this.#score = SCORE;
 		this.#life = LIFE;
+		this.#nb_kill = 0;
 		this.onScoreChange.forEach(callback => callback(this.#score));
 		this.onLifeChange.forEach(callback => callback(this.#life));
 	}
@@ -232,6 +248,31 @@ export default class Player extends Character {
 			ANIMATION_TIME
 		);
 	}
+
+	/**
+	 * Lance une attaque ultime
+	 */
+	ulti() {
+		if (!this.alive || !this.canUlt) return;
+		const projectile = new Projectile();
+		projectile.position = this.position;
+		projectile.move('right');
+		playSound(SFX.PROJECTILE);
+		this.texture = sprites[this.#id].shooting_sprite;
+		if (this.onShoot) {
+			this.onShoot(projectile);
+		}
+		setTimeout(
+			() =>{
+				this.texture = sprites[this.#id].sprite
+				this.#nb_kill = 0;
+			},
+			ANIMATION_TIME
+
+		);
+
+	}
+
 
 	reload() {
 		this.texture = sprites[this.#id].reloading_sprite;
