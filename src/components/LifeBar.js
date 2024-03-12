@@ -28,6 +28,6 @@ export default class LifeBar {
 	 */
 	update() {
 		const percent = (this.#player.getLife() / LIFE) * 100;
-		this.bar.style.width = `${percent}%`;
+		this.bar.style.width = `${percent.toFixed()}%`;
 	}
 }

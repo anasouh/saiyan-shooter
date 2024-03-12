@@ -42,9 +42,8 @@ export default class GameView extends View {
 		const ath = element.querySelector('.ath');
 		this.#pauseButton = ath.querySelector('button#pauseGame');
 		this.#pauseButton.addEventListener('click', () => this.togglePause());
-		console.log(ath.querySelector('.bar#life'));
 		this.#lifeBar = new LifeBar(ath.querySelector('.bar#life'));
-		this.#lifeBar = new UltBar(ath.querySelector('.bar#ult'));
+		this.#ultBar = new UltBar(ath.querySelector('.bar#ult'));
 		this.#score = ath.querySelector('#scoreVal');
 		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
 		this.#pauseMenu.onResume(() => this.togglePause());
@@ -109,6 +108,7 @@ export default class GameView extends View {
 		if (this.#currentPlayer) this.#app.stage.removeChild(this.#currentPlayer);
 		this.#currentPlayer = player;
 		this.#lifeBar.player = player;
+		this.#ultBar.player = player;
 		this.#currentPlayer.onShoot = projectile => {
 			this.#addProjectile(projectile);
 		};
