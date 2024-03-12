@@ -1,6 +1,6 @@
 import Ennemy from '../components/Ennemy.js';
 import Menu from '../components/Menu.js';
-import Player, { LIFE, RELOADING_SPRITE } from '../components/Player.js';
+import Player, { LIFE } from '../components/Player.js';
 import Projectile from '../components/Projectile.js';
 import Router from '../Router.js';
 import { areColliding, isOutOfScreen, playSound } from '../utils.js';
@@ -115,7 +115,7 @@ export default class GameView extends View {
 			this.#score.innerText = score;
 		});
 		this.#app.view.onmousedown = () =>
-			this.#currentPlayer.changeTexture(RELOADING_SPRITE);
+			this.#currentPlayer.reload();
 	}
 
 	/**
@@ -263,7 +263,7 @@ export default class GameView extends View {
 	}
 
 	shootKeyDown() {
-		this.#currentPlayer.changeTexture(RELOADING_SPRITE);
+		this.#currentPlayer.reload();
 	}
 
 	/**

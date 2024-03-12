@@ -18,7 +18,7 @@ const routes = [
 	{ path: '/credits', view: creditsView, title: 'Crédits' },
 ];
 
-const player = new Player();
+const player = new Player("vegeta");
 gameView.currentPlayer = player;
 gameView.onClick = () => player.shoot();
 

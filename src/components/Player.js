@@ -3,20 +3,44 @@ import Projectile from './Projectile.js';
 import Character, { ANIMATION_TIME } from './Character.js';
 import * as SFX from '../consts/sfx.js';
 import { playSound } from '../utils.js';
-import {
-	PLAYER_DOWN,
-	PLAYER_FALLING,
-	PLAYER_LEFT,
-	PLAYER_RIGHT,
-	PLAYER_UP,
-	SPRITES_PATH,
-} from '../consts/sprites.js';
+import { SPRITES_PATH } from '../consts/sprites.js';
 
 export const LIFE = 3;
 export const SCORE = 0;
-const SPRITE = SPRITES_PATH + 'player/player.png';
-export const SHOOTING_SPRITE = SPRITES_PATH + 'player/player_shooting.png';
-export const RELOADING_SPRITE = SPRITES_PATH + 'player/player_reloading.png';
+
+const sprites = {
+	goku: {
+		sprite: PIXI.Texture.from(SPRITES_PATH + 'player/player.png'),
+		shooting_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/player_shooting.png'),
+		reloading_sprite:  PIXI.Texture.from(SPRITES_PATH + 'player/player_reloading.png'),
+		falling_sprites: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/hit.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/ko.png'),
+		],
+		left_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/left.png'),
+		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/right.png'),
+		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/up.png'),
+		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/down.png'),
+		scale: 0.15
+
+	},
+	vegeta:{
+		sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
+		shooting_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/Vegeta_shooting.png'),
+		reloading_sprite:  PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/vegeta_realoading.png'),
+		falling_sprites: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/hit1.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/hit2.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ko.png'),
+		],
+		left_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
+		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
+		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
+		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
+		scale: 1.5
+	}
+
+}
 
 /**
  * Représente un joueur.
@@ -28,11 +52,13 @@ export default class Player extends Character {
 	onShoot;
 	onScoreChange = [];
 	onLifeChange = [];
+	#id;
 
-	constructor() {
-		super(PIXI.Texture.from(SPRITE));
+	constructor(id) {
+		super(sprites[id].sprite);
 		this.anchor.set(0.5);
-		this.scale.set(0.15);
+		this.scale.set(sprites[id].scale);
+		this.#id = id;
 	}
 
 	/**
@@ -114,7 +140,7 @@ export default class Player extends Character {
 	 * Réinitialise le score et la vie du joueur.
 	 */
 	reset() {
-		this.texture = PIXI.Texture.from(SPRITE);
+		this.texture = sprites[this.#id].sprite;
 		this.#score = SCORE;
 		this.#life = LIFE;
 		this.onScoreChange.forEach(callback => callback(this.#score));
@@ -131,22 +157,22 @@ export default class Player extends Character {
 			case 'ARROWUP':
 			case 'Z':
 				this.#moving.up = true;
-				this.texture = PLAYER_UP;
+				this.texture = sprites[this.#id].up_sprite;
 				break;
 			case 'ARROWDOWN':
 			case 'S':
 				this.#moving.down = true;
-				this.texture = PLAYER_DOWN;
+				this.texture = sprites[this.#id].down_sprite;
 				break;
 			case 'ARROWLEFT':
 			case 'Q':
 				this.#moving.left = true;
-				this.texture = PLAYER_LEFT;
+				this.texture = sprites[this.#id].left_sprite;
 				break;
 			case 'ARROWRIGHT':
 			case 'D':
 				this.#moving.right = true;
-				this.texture = PLAYER_RIGHT;
+				this.texture = sprites[this.#id].right_sprite;
 				break;
 		}
 	}
@@ -175,7 +201,7 @@ export default class Player extends Character {
 				break;
 		}
 		if (!this.alive) return;
-		this.texture = PIXI.Texture.from(SPRITE);
+		this.texture = sprites[this.#id].sprite;
 	}
 
 	/**
@@ -197,30 +223,25 @@ export default class Player extends Character {
 		projectile.position = this.position;
 		projectile.move('right');
 		playSound(SFX.PROJECTILE);
-		this.texture = PIXI.Texture.from(SHOOTING_SPRITE);
+		this.texture = sprites[this.#id].shooting_sprite;
 		if (this.onShoot) {
 			this.onShoot(projectile);
 		}
 		setTimeout(
-			() => (this.texture = PIXI.Texture.from(SPRITE)),
+			() => (this.texture = sprites[this.#id].sprite),
 			ANIMATION_TIME
 		);
 	}
 
-	/**
-	 * Change la texture du joueur.
-	 * @param {string} texture La nouvelle texture.
-	 */
-	changeTexture(texture = SPRITE) {
-		this.texture = PIXI.Texture.from(texture);
+	reload() {
+		this.texture = sprites[this.#id].reloading_sprite;
 	}
-
 	/**
 	 * Fait tomber le joueur.
 	 * @returns {Promise<void>} Une promesse qui se résout lorsque l'animation est terminée.
 	 */
 	fallAnimation() {
-		this.textures = PLAYER_FALLING;
+		this.textures = sprites[this.#id].falling_sprites;
 		this.loop = false;
 		this.animationSpeed = 0.5;
 		this.play();
