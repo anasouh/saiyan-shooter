@@ -7,7 +7,7 @@ import { SPRITES_PATH } from '../consts/sprites.js';
 
 export const LIFE = 3;
 export const SCORE = 0;
-export const KILL_FOR_ULTI = 1;
+export const KILL_FOR_ULTI = 5;
 
 const sprites = {
 	goku: {
@@ -26,6 +26,17 @@ const sprites = {
 		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/right.png'),
 		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/up.png'),
 		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/down.png'),
+		projectile: PIXI.Texture.from('/assets/images/projectile.png'),
+		ult_sprites: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult1.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult2.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult3.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult4.png'),
+		],
+		ult_projectile: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult1.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult2.png'),
+		],
 		scale: 0.15,
 	},
 	kaioken: {
@@ -52,6 +63,17 @@ const sprites = {
 		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/right.png'),
 		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/up.png'),
 		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/down.png'),
+		projectile: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/shoot.png'),
+		ult_sprites: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult1.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult2.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult3.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult4.png'),
+		],
+		ult_projectile: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult1.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult2.png'),
+		],
 		scale: 0.15,
 	},
 	vegeta: {
@@ -320,18 +342,23 @@ export default class Player extends Character {
 	 */
 	ulti() {
 		if (!this.alive || !this.canUlt) return;
-		const projectile = new Projectile();
-		projectile.position = this.position;
-		projectile.move('right');
-		playSound(SFX.PROJECTILE);
-		this.texture = sprites[this.#id].shooting_sprite;
-		if (this.onShoot) {
-			this.onShoot(projectile);
-		}
-		setTimeout(() => {
+		this.textures = sprites[this.#id].ult_sprites;
+		this.animationSpeed = 0.25;
+		this.loop = false;
+		this.onComplete = () => {
+			const projectile = new Projectile(sprites[this.#id].ult_projectile);
+			projectile.position = this.position;
+			projectile.move('right');
+			playSound(SFX.PROJECTILE);
+			this.texture = sprites[this.#id].shooting_sprite;
+			if (this.onShoot) {
+				this.onShoot(projectile);
+			}
 			this.texture = sprites[this.#id].sprite;
-			this.#nb_kill = 0;
-		}, ANIMATION_TIME);
+		};
+		this.play();
+
+		this.kills = -1;
 	}
 
 	reload() {
