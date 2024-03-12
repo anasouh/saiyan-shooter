@@ -1,4 +1,4 @@
-import Player, { LIFE } from './Player.js';
+import Player, { LIFE } from '../models/Player.js';
 
 export default class LifeBar {
 	#player;

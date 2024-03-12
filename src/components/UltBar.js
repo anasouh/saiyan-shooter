@@ -1,4 +1,4 @@
-import Player, { KILL_FOR_ULTI, LIFE } from './Player.js';
+import Player, { KILL_FOR_ULTI, LIFE } from '../models/Player.js';
 
 /**
  * Retourne la valeur la plus petite.

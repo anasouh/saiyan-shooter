@@ -1,44 +1,44 @@
-import Ennemy from '../components/Ennemy.js';
+import Ennemy from '../models/Ennemy.js';
 import Menu from '../components/Menu.js';
-import Player, { LIFE } from '../components/Player.js';
-import Projectile from '../components/Projectile.js';
+import Player, { LIFE } from '../models/Player.js';
+import Projectile from '../models/Projectile.js';
 import Router from '../Router.js';
 import { areColliding, isOutOfScreen, playSound } from '../utils.js';
 import View from './View.js';
 import * as PIXI from 'pixi.js';
 import * as SFX from '../consts/sfx.js';
 import LifeBar from '../components/LifeBar.js';
-import Item, { ITEM_SPAWN_PROBABILITY } from '../components/Item.js';
+import Item from '../models/Item.js';
 import UltBar from '../components/UltBar.js';
+import Game from '../models/Game.js';
 
 export default class GameView extends View {
 	#app;
-	#currentPlayer;
-	#secondPlayer;
 	#pauseButton;
 	#lifeBar;
 	#ultBar;
 	#score;
 	#pauseMenu;
 	#gameOverMenu;
-	#ennemies = [];
-	#projectiles = [];
-	#items = [];
+	game;
 
 	/**
 	 * Crée une nouvelle vue de jeu.
+	 * @param {Game} game Le modèle de jeu à associer à la vue.
 	 * @param {HTMLElement} element La balise HTML à associer à la vue.
 	 */
-	constructor(element) {
+	constructor(game, element) {
 		super(element);
+		this.game = game;
 		this.#app = new PIXI.Application({
 			background: '#1099bb',
 			resizeTo: window,
 		});
+		this.game.onAddChild = child => this.#app.stage.addChild(child);
+		this.game.onRemoveChild = child => this.#app.stage.removeChild(child);
 		this.#app.stage.eventMode = 'auto';
 		this.#app.ticker.add(() => this.#tickEvent());
-		this.#app.ticker.add(() => this.#generateEnnemy());
-		window.onresize = () => this.#resize();
+		this.#app.ticker.add(() => this.game.generateEnnemy());
 		const ath = element.querySelector('.ath');
 		this.#pauseButton = ath.querySelector('button#pauseGame');
 		this.#pauseButton.addEventListener('click', () => this.togglePause());
@@ -55,45 +55,9 @@ export default class GameView extends View {
 		this.#init();
 	}
 
-	#addProjectile(projectile) {
-		this.#projectiles.push(projectile);
-		this.#app.stage.addChild(projectile);
-	}
-
-	#removeProjectile(projectile) {
-		this.#projectiles = this.#projectiles.filter(p => p !== projectile);
-		this.#app.stage.removeChild(projectile);
-	}
-
-	#addEnnemy(ennemy) {
-		this.#ennemies.push(ennemy);
-		this.#app.stage.addChild(ennemy);
-	}
-
-	#removeEnnemy(ennemy) {
-		this.#ennemies = this.#ennemies.filter(e => e !== ennemy);
-		this.#app.stage.removeChild(ennemy);
-	}
-
-	#spawnItem({ x, y }, delay = 450) {
-		setTimeout(() => {
-			if (Math.random() < ITEM_SPAWN_PROBABILITY) {
-				const item = new Item();
-				item.position.set(x, y);
-				this.#items.push(item);
-				this.#app.stage.addChild(item);
-			}
-		}, delay);
-	}
-
-	#removeItem(item) {
-		this.#items = this.#items.filter(i => i !== item);
-		this.#app.stage.removeChild(item);
-	}
-
 	#onLifeChange(life) {
 		if (life <= 0) {
-			this.#currentPlayer.fallAnimation().then(() => {
+			this.game.currentPlayer.fallAnimation().then(() => {
 				this.#app.ticker.stop();
 			});
 			this.element.classList.add('gameOver');
@@ -105,20 +69,16 @@ export default class GameView extends View {
 	 * @param {Player} player
 	 */
 	set currentPlayer(player) {
-		if (this.#currentPlayer) this.#app.stage.removeChild(this.#currentPlayer);
-		this.#currentPlayer = player;
+		this.game.currentPlayer = player;
 		this.#lifeBar.player = player;
 		this.#ultBar.player = player;
-		this.#currentPlayer.onShoot = projectile => {
-			this.#addProjectile(projectile);
-		};
-		this.#currentPlayer.addEventListener('lifeChange', life =>
+		this.game.currentPlayer.addEventListener('lifeChange', life =>
 			this.#onLifeChange(life)
 		);
-		this.#currentPlayer.addEventListener('scoreChange', score => {
+		this.game.currentPlayer.addEventListener('scoreChange', score => {
 			this.#score.innerText = score;
 		});
-		this.#app.view.onmousedown = () => this.#currentPlayer.reload();
+		this.#app.view.onmousedown = () => this.game.currentPlayer.reload();
 	}
 
 	/**
@@ -126,9 +86,7 @@ export default class GameView extends View {
 	 * @param {Player} player
 	 */
 	set secondPlayer(player) {
-		if (this.#secondPlayer) this.#app.stage.removeChild(this.#secondPlayer);
-		this.#secondPlayer = player;
-		this.#app.stage.addChild(this.#secondPlayer);
+		this.game.secondPlayer = player;
 	}
 
 	/**
@@ -180,7 +138,7 @@ export default class GameView extends View {
 				}
 			} else if (child instanceof Projectile) {
 				if (isOutOfScreen(this.#app.screen, child)) {
-					this.#removeProjectile(child);
+					this.game.removeProjectile(child);
 					return;
 				}
 				if (child.isMoving.left) {
@@ -196,9 +154,9 @@ export default class GameView extends View {
 					child.y += 5;
 				}
 			} else if (child instanceof Ennemy) {
-				if (areColliding(child, this.#currentPlayer) && child.isAlive) {
-					this.#removeEnnemy(child);
-					this.#currentPlayer.decrementLife();
+				if (areColliding(child, this.game.currentPlayer) && child.isAlive) {
+					this.game.removeEnnemy(child);
+					this.game.currentPlayer.decrementLife();
 					playSound(SFX.PUNCH_1);
 				}
 				if (child.moving.left) {
@@ -215,37 +173,36 @@ export default class GameView extends View {
 				}
 			} else if (child instanceof Item) {
 				if (child.isExpired) {
-					this.#removeItem(child);
+					this.game.removeItem(child);
 				}
 			}
 		});
 
-		this.#projectiles.forEach(projectile => {
-			this.#ennemies.forEach(ennemy => {
+		this.game.projectiles.forEach(projectile => {
+			this.game.ennemies.forEach(ennemy => {
 				if (areColliding(projectile, ennemy) && ennemy.isAlive) {
-					this.#removeProjectile(projectile);
-					this.#spawnItem(ennemy.position);
+					this.game.removeProjectile(projectile);
+					this.game.spawnItem(ennemy.position);
 					ennemy.explode();
-					this.#currentPlayer.incrementScore();
-					this.#currentPlayer.incrementNbKill();
+					this.game.currentPlayer.incrementScore();
+					this.game.currentPlayer.incrementNbKill();
 				}
 			});
 		});
 
-		this.#items.forEach(item => {
-			if (areColliding(item, this.#currentPlayer)) {
-				item.use(this.#currentPlayer);
-				this.#removeItem(item);
+		this.game.items.forEach(item => {
+			if (areColliding(item, this.game.currentPlayer)) {
+				item.use(this.game.currentPlayer);
+				this.game.removeItem(item);
 			}
 		});
 	}
 
 	#clear() {
 		this.#app.ticker.remove(this.#tickEvent);
-		this.#app.ticker.remove(this.#generateEnnemy);
+		this.#app.ticker.remove(this.game.generateEnnemy);
 		this.#app.stage.removeChildren();
-		this.#ennemies = [];
-		this.#projectiles = [];
+		this.game.clear();
 	}
 
 	/**
@@ -258,11 +215,12 @@ export default class GameView extends View {
 		background.width = this.#app.screen.width;
 		background.height = this.#app.screen.height;
 		this.#app.stage.addChild(background);
-		if (this.#currentPlayer) {
-			this.#app.stage.addChild(this.#currentPlayer);
-			this.#currentPlayer.reset();
+		if (this.game.currentPlayer) {
+			this.#app.stage.addChild(this.game.currentPlayer);
+			this.game.currentPlayer.reset();
 		}
-		if (this.#secondPlayer) this.#app.stage.addChild(this.#secondPlayer);
+		if (this.game.secondPlayer)
+			this.#app.stage.addChild(this.game.secondPlayer);
 	}
 
 	/**
@@ -275,7 +233,7 @@ export default class GameView extends View {
 	}
 
 	shootKeyDown() {
-		this.#currentPlayer.reload();
+		this.game.currentPlayer.reload();
 	}
 
 	/**
@@ -352,23 +310,8 @@ export default class GameView extends View {
 
 	#handleMouseMove(event) {
 		const { clientX, clientY } = event;
-		this.#currentPlayer.x = clientX;
-		this.#currentPlayer.y = clientY;
-	}
-
-	#generateEnnemy() {
-		if (this.paused) return;
-		const random = Math.random();
-		if (random < 0.01) {
-			const ennemy = new Ennemy();
-			ennemy.position.set(
-				this.#app.screen.width,
-				Math.random() * this.#app.screen.height
-			);
-			ennemy.onComplete = () => this.#removeEnnemy(ennemy);
-			this.#addEnnemy(ennemy);
-			ennemy.move('left');
-		}
+		this.game.currentPlayer.x = clientX;
+		this.game.currentPlayer.y = clientY;
 	}
 
 	leave() {

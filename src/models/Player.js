@@ -249,7 +249,7 @@ export default class Player extends Character {
 		this.texture = sprites[this.#id].sprite;
 		this.#score = SCORE;
 		this.#life = LIFE;
-		this.#kills = 0;
+		this.kills = 0;
 		this.onScoreChange.forEach(callback => callback(this.#score));
 		this.onLifeChange.forEach(callback => callback(this.#life));
 	}

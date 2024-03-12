@@ -2,13 +2,21 @@ import HomeView from './views/HomeView.js';
 import Router from './Router.js';
 import View from './views/View.js';
 import GameView from './views/GameView.js';
-import Player from './components/Player.js';
+import Player from './models/Player.js';
 import { CONTROL_KEYS, PAUSE_KEYS, SHOOT_KEYS } from './settings/keys.js';
 import GuideView from './views/GuideView.js';
+import Game from './models/Game.js';
+
+const game = new Game(window.screen.width, window.screen.height);
+window.onresize = () =>
+	(game.dimensions = {
+		width: window.innerWidth,
+		height: window.innerHeight,
+	});
 
 const homeView = new HomeView(document.querySelector('.home'));
 const guideView = new GuideView(document.querySelector('.guide'));
-const gameView = new GameView(document.querySelector('.game'));
+const gameView = new GameView(game, document.querySelector('.game'));
 const creditsView = new View(document.querySelector('.credits'));
 
 const routes = [
