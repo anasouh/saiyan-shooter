@@ -40,7 +40,8 @@ export default class GameView extends View {
 		const ath = element.querySelector('.ath');
 		this.#pauseButton = ath.querySelector('button#pauseGame');
 		this.#pauseButton.addEventListener('click', () => this.togglePause());
-		this.#lifeBar = new LifeBar(ath.querySelector('.life-bar'));
+		console.log(ath.querySelector('.bar#life'));
+		this.#lifeBar = new LifeBar(ath.querySelector('.bar#life'));
 		this.#score = ath.querySelector('#scoreVal');
 		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
 		this.#pauseMenu.onResume(() => this.togglePause());
@@ -114,8 +115,7 @@ export default class GameView extends View {
 		this.#currentPlayer.addEventListener('scoreChange', score => {
 			this.#score.innerText = score;
 		});
-		this.#app.view.onmousedown = () =>
-			this.#currentPlayer.reload();
+		this.#app.view.onmousedown = () => this.#currentPlayer.reload();
 	}
 
 	/**

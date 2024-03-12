@@ -57,7 +57,7 @@
     display: none;
 }
 
-.life-bar {
+.bar-container {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -79,3 +79,7 @@
     
     transition: width .5s linear;
   }
+
+.bar.orange {
+    background: #e2b728;
+}

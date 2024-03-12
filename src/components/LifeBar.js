@@ -2,7 +2,6 @@ import Player, { LIFE } from './Player.js';
 
 export default class LifeBar {
 	#player;
-	element;
 	bar;
 
 	/**
@@ -11,8 +10,7 @@ export default class LifeBar {
 	 * @param {HTMLElement} element La balise HTML à associer à la barre de vie.
 	 */
 	constructor(element) {
-		this.element = element;
-		this.bar = element.querySelector('.bar');
+		this.bar = element;
 	}
 
 	/**
