@@ -26,7 +26,32 @@ const sprites = {
 		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/right.png'),
 		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/up.png'),
 		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/down.png'),
-		projectile: PIXI.Texture.from('/assets/images/projectile.png'),
+		scale: 0.15,
+	},
+	kaioken: {
+		animation: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/transfo_1.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/transfo_2.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/transfo_3.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/transfo_4.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/transfo_5.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/player.png'),
+		],
+		sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/player.png'),
+		shooting_sprite: PIXI.Texture.from(
+			SPRITES_PATH + 'player/kaioken/player_shooting.png'
+		),
+		reloading_sprite: PIXI.Texture.from(
+			SPRITES_PATH + 'player/kaioken/player_reloading.png'
+		),
+		falling_sprites: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/hit.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/ko.png'),
+		],
+		left_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/left.png'),
+		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/right.png'),
+		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/up.png'),
+		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/down.png'),
 		scale: 0.15,
 	},
 	vegeta: {
@@ -80,6 +105,9 @@ export default class Player extends Character {
 		this.anchor.set(0.5);
 		this.scale.set(sprites[id].scale);
 		this.#id = id;
+		this.addEventListener('scoreChange', score => {
+			if (this.#id === 'goku' && score == 20) this.setSprites('kaioken');
+		});
 		this.#kills = 0;
 	}
 
@@ -161,6 +189,20 @@ export default class Player extends Character {
 	}
 
 	/**
+	 * Met à jour les sprites du joueur.
+	 * @param {String} spritesName le nom des sprites à aller chercher.
+	 */
+	setSprites(spritesName) {
+		this.#id = spritesName;
+		if (spritesName === 'kaioken') {
+			this.textures = sprites[spritesName].animation;
+			this.loop = false;
+			this.animationSpeed = 0.1;
+			this.play();
+		}
+	}
+
+	/**
 	 * Incrémente le score du joueur.
 	 */
 	incrementScore() {
@@ -181,6 +223,7 @@ export default class Player extends Character {
 	 * Réinitialise le score et la vie du joueur.
 	 */
 	reset() {
+		if (this.#id === 'kaioken') this.#id = 'goku';
 		this.texture = sprites[this.#id].sprite;
 		this.#score = SCORE;
 		this.#life = LIFE;
@@ -277,23 +320,18 @@ export default class Player extends Character {
 	 */
 	ulti() {
 		if (!this.alive || !this.canUlt) return;
-		this.textures = sprites[this.#id].ult_sprites;
-		this.animationSpeed = 0.25;
-		this.loop = false;
-		this.onComplete = () => {
-			const projectile = new Projectile(sprites[this.#id].ult_projectile);
-			projectile.position = this.position;
-			projectile.move('right');
-			playSound(SFX.PROJECTILE);
-			this.texture = sprites[this.#id].shooting_sprite;
-			if (this.onShoot) {
-				this.onShoot(projectile);
-			}
+		const projectile = new Projectile();
+		projectile.position = this.position;
+		projectile.move('right');
+		playSound(SFX.PROJECTILE);
+		this.texture = sprites[this.#id].shooting_sprite;
+		if (this.onShoot) {
+			this.onShoot(projectile);
+		}
+		setTimeout(() => {
 			this.texture = sprites[this.#id].sprite;
-		};
-		this.play();
-
-		this.kills = -1;
+			this.#nb_kill = 0;
+		}, ANIMATION_TIME);
 	}
 
 	reload() {
