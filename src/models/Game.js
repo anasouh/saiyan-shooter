@@ -6,19 +6,17 @@ import Player from './Player.js';
 export default class Game {
 	width;
 	height;
-	#currentPlayer;
-	#secondPlayer;
 	onAddChild = child => {};
 	onRemoveChild = child => {};
+	#players = [];
 	ennemies = [];
 	projectiles = [];
 	items = [];
+	players = [];
 
 	constructor(width, height) {
 		this.width = width;
 		this.height = height;
-		this.#currentPlayer = null;
-		this.#secondPlayer = null;
 	}
 
 	set dimensions({ width, height }) {
@@ -91,49 +89,18 @@ export default class Game {
 
 	/* Players management */
 
-	/**
-	 * Ajoute le joueur contrôlé à la scène.
-	 * @param {Player} player
-	 */
-	set currentPlayer(player) {
-		if (this.#currentPlayer) this.onRemoveChild(this.#currentPlayer);
-		this.#currentPlayer = player;
-		// this.#lifeBar.player = player;
-		// this.#ultBar.player = player;
-		this.#currentPlayer.onShoot = projectile => {
-			this.addProjectile(projectile);
-		};
-		this.onAddChild(this.#currentPlayer);
-		// this.#currentPlayer.addEventListener('scoreChange', score => {
-		// 	this.#score.innerText = score;
-		// });
-		// this.#app.view.onmousedown = () => this.#currentPlayer.reload();
+	addPlayer(player) {
+		this.players.push(player);
+		this.onAddChild(player);
 	}
 
-	/**
-	 * Retourne le joueur principal.
-	 * @return {Player}
-	 */
-	get currentPlayer() {
-		return this.#currentPlayer;
+	removePlayer(player) {
+		this.players = this.players.filter(p => p !== player);
+		this.onRemoveChild(player);
 	}
 
-	/**
-	 * Ajoute le second joueur à la scène.
-	 * @param {Player} player
-	 */
-	get secondPlayer() {
-		return this.#secondPlayer;
-	}
-
-	/**
-	 * Ajoute le second joueur à la scène.
-	 * @param {Player} player
-	 */
-	set secondPlayer(player) {
-		if (this.#secondPlayer) this.onRemoveChild(this.#secondPlayer);
-		this.#secondPlayer = player;
-		this.onAddChild(this.#secondPlayer);
+	get players() {
+		return this.#players;
 	}
 
 	clear() {

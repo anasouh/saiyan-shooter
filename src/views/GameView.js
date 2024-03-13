@@ -20,6 +20,7 @@ export default class GameView extends View {
 	#score;
 	#pauseMenu;
 	#gameOverMenu;
+	#currentPlayer;
 	game;
 
 	/**
@@ -57,7 +58,7 @@ export default class GameView extends View {
 
 	#onLifeChange(life) {
 		if (life <= 0) {
-			this.game.currentPlayer.fallAnimation().then(() => {
+			this.#currentPlayer.fallAnimation().then(() => {
 				this.#app.ticker.stop();
 			});
 			this.element.classList.add('gameOver');
@@ -69,24 +70,18 @@ export default class GameView extends View {
 	 * @param {Player} player
 	 */
 	set currentPlayer(player) {
-		this.game.currentPlayer = player;
+		this.#currentPlayer = player;
+		this.game.addPlayer(player);
 		this.#lifeBar.player = player;
 		this.#ultBar.player = player;
-		this.game.currentPlayer.addEventListener('lifeChange', life =>
-			this.#onLifeChange(life)
-		);
-		this.game.currentPlayer.addEventListener('scoreChange', score => {
+		player.onShoot = projectile => {
+			this.game.addProjectile(projectile);
+		};
+		player.addEventListener('lifeChange', life => this.#onLifeChange(life));
+		player.addEventListener('scoreChange', score => {
 			this.#score.innerText = score;
 		});
-		this.#app.view.onmousedown = () => this.game.currentPlayer.reload();
-	}
-
-	/**
-	 * Ajoute le joueur secondaire à la scène.
-	 * @param {Player} player
-	 */
-	set secondPlayer(player) {
-		this.game.secondPlayer = player;
+		this.#app.view.onmousedown = () => player.reload();
 	}
 
 	/**
@@ -154,9 +149,9 @@ export default class GameView extends View {
 					child.y += 5;
 				}
 			} else if (child instanceof Ennemy) {
-				if (areColliding(child, this.game.currentPlayer) && child.isAlive) {
+				if (areColliding(child, this.#currentPlayer) && child.isAlive) {
 					this.game.removeEnnemy(child);
-					this.game.currentPlayer.decrementLife();
+					this.#currentPlayer.decrementLife();
 					playSound(SFX.PUNCH_1);
 				}
 				if (child.moving.left) {
@@ -184,15 +179,15 @@ export default class GameView extends View {
 					this.game.removeProjectile(projectile);
 					this.game.spawnItem(ennemy.position);
 					ennemy.explode();
-					this.game.currentPlayer.incrementScore();
-					this.game.currentPlayer.incrementNbKill();
+					this.#currentPlayer.incrementScore();
+					this.#currentPlayer.incrementNbKill();
 				}
 			});
 		});
 
 		this.game.items.forEach(item => {
-			if (areColliding(item, this.game.currentPlayer)) {
-				item.use(this.game.currentPlayer);
+			if (areColliding(item, this.#currentPlayer)) {
+				item.use(this.#currentPlayer);
 				this.game.removeItem(item);
 			}
 		});
@@ -215,9 +210,9 @@ export default class GameView extends View {
 		background.width = this.#app.screen.width;
 		background.height = this.#app.screen.height;
 		this.#app.stage.addChild(background);
-		if (this.game.currentPlayer) {
-			this.#app.stage.addChild(this.game.currentPlayer);
-			this.game.currentPlayer.reset();
+		if (this.#currentPlayer) {
+			this.#app.stage.addChild(this.#currentPlayer);
+			this.#currentPlayer.reset();
 		}
 		if (this.game.secondPlayer)
 			this.#app.stage.addChild(this.game.secondPlayer);
@@ -233,7 +228,7 @@ export default class GameView extends View {
 	}
 
 	shootKeyDown() {
-		this.game.currentPlayer.reload();
+		this.#currentPlayer.reload();
 	}
 
 	/**
@@ -310,8 +305,8 @@ export default class GameView extends View {
 
 	#handleMouseMove(event) {
 		const { clientX, clientY } = event;
-		this.game.currentPlayer.x = clientX;
-		this.game.currentPlayer.y = clientY;
+		this.#currentPlayer.x = clientX;
+		this.#currentPlayer.y = clientY;
 	}
 
 	leave() {
