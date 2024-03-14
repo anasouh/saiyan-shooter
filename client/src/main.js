@@ -6,6 +6,9 @@ import Player from './models/Player.js';
 import { CONTROL_KEYS, PAUSE_KEYS, SHOOT_KEYS } from './settings/keys.js';
 import GuideView from './views/GuideView.js';
 import Game from './models/Game.js';
+import { io } from 'socket.io-client';
+
+const socket = io();
 
 const game = new Game(window.screen.width, window.screen.height);
 window.onresize = () =>

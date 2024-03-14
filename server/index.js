@@ -1,6 +1,7 @@
 import express from 'express';
 import http from 'http';
 import addWebpackMiddleware from './middlewares/addWebpackMiddleware.js';
+import { Server as IOServer } from 'socket.io';
 
 const routesPaths = [
 	'/guide',
@@ -25,4 +26,10 @@ routesPaths.forEach(path => {
 
 httpServer.listen(port, () => {
 	console.log(`Server running at http://localhost:${port}/`);
+});
+
+const io = new IOServer(httpServer);
+
+io.on('connection', socket => {
+	console.log(`Nouvelle connexion du client ${socket.id}`);
 });
