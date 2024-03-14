@@ -2,14 +2,16 @@
   "name": "jsae",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/index.js",
   "type": "module",
   "scripts": {
     "build": "webpack --mode=production",
     "watch": "webpack --mode=development --watch",
     "start": "webpack serve --mode=development",
     "test": "node --test",
-    "test:watch": "node --test --watch"
+    "test:watch": "node --test --watch",
+    "server": "node .",
+    "server:watch": "node --watch ."
   },
   "repository": {
     "type": "git",
