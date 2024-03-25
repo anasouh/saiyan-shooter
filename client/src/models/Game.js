@@ -1,14 +1,11 @@
-import Projectile from './Projectile.js';
 import Ennemy from './Ennemy.js';
 import Item, { ITEM_SPAWN_PROBABILITY } from './Item.js';
-import Player from './Player.js';
 
 export default class Game {
 	width;
 	height;
 	onAddChild = child => {};
 	onRemoveChild = child => {};
-	#players = [];
 	ennemies = [];
 	projectiles = [];
 	items = [];
@@ -97,10 +94,6 @@ export default class Game {
 	removePlayer(player) {
 		this.players = this.players.filter(p => p !== player);
 		this.onRemoveChild(player);
-	}
-
-	get players() {
-		return this.#players;
 	}
 
 	clear() {
