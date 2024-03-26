@@ -4,6 +4,8 @@ import View from './View.js';
 export default class HomeView extends View {
 	#startGameButton;
 	#guideButton;
+	#usernameField;
+	username;
 
 	constructor(element) {
 		super(element);
@@ -15,6 +17,12 @@ export default class HomeView extends View {
 		this.#guideButton.addEventListener('click', event =>
 			Router.navigate('/guide')
 		);
+		this.#usernameField = element.querySelector('input[name="username"]');
+		this.#usernameField.value = localStorage.getItem('username') || '';
+		this.#usernameField.addEventListener('change', event => {
+			this.username = event.currentTarget.value;
+			localStorage.setItem('username', this.username);
+		});
 	}
 
 	#handleStartGame(event) {
