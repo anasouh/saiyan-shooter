@@ -28,3 +28,10 @@ export function playSound(sound, volume = 0.1) {
 	audio.play();
 	return audio;
 }
+
+export const getFPS = () =>
+	new Promise(resolve =>
+		requestAnimationFrame(t1 =>
+			requestAnimationFrame(t2 => resolve(1000 / (t2 - t1)))
+		)
+	);
