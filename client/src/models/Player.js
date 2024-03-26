@@ -127,10 +127,10 @@ export default class Player extends Character {
 		this.anchor.set(0.5);
 		this.scale.set(sprites[id].scale);
 		this.#id = id;
+		this.#kills = 0;
 		this.addEventListener('scoreChange', score => {
 			if (this.#id === 'goku' && score == 20) this.setSprites('kaioken');
 		});
-		this.#kills = 0;
 	}
 
 	incrementNbKill() {
