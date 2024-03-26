@@ -121,6 +121,7 @@ export default class Game {
 
 	start() {
 		this.timeStart = Date.now();
+		if (this.#tickInterval) clearInterval(this.#tickInterval);
 		this.#tickInterval = setInterval(() => this.#tickEvent(), 1000 / 60);
 		this.paused = false;
 	}
