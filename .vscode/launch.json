@@ -36,5 +36,19 @@
 				{ "url": "http://localhost:8000/build", "path": null }
 			]
 		},
+		{
+			"name": "Debug server",
+			"type": "node",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run-script", "server:watch"],
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"env": {
+				"PORT": "8000"
+			}
+		}
 	]
 }
