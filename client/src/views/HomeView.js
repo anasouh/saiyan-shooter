@@ -6,10 +6,9 @@ export default class HomeView extends View {
 	#guideButton;
 	#usernameField;
 	username;
-	#goku;
-	#vegeta;
-	character;
-	#confirm;
+	#characterButtons;
+	#activeCharacter;
+	onCharacterChange = characterId => {};
 	isConfirmed = false;
 
 	constructor(element) {
@@ -28,19 +27,25 @@ export default class HomeView extends View {
 			this.username = event.currentTarget.value;
 			localStorage.setItem('username', this.username);
 		});
-		this.character = 'goku';
-		this.#goku = element.querySelector('.btn#goku');
-		this.#goku.addEventListener('click', () => {
-			this.character = 'goku';
+		this.#characterButtons = element.querySelectorAll(
+			'.characterChoice button'
+		);
+		this.#activeCharacter = element.querySelector(
+			'.characterChoice button.active'
+		);
+		this.#characterButtons.forEach(button => {
+			button.innerHTML = `<img src="/assets/sprites/player/${button.id}/player.png" height="70">`;
+			button.addEventListener('click', event => {
+				this.#activeCharacter.classList.remove('active');
+				this.#activeCharacter = event.currentTarget;
+				this.#activeCharacter.classList.add('active');
+				this.onCharacterChange(this.characterId);
+			});
 		});
-		this.#vegeta = element.querySelector('.btn#vegeta');
-		this.#vegeta.addEventListener('click', () => {
-			this.character = 'vegeta';
-		});
-		this.#confirm = element.querySelector('.btn#confirm');
-		this.#confirm.addEventListener('click', () => {
-			this.isConfirmed = true;
-		});
+	}
+
+	get characterId() {
+		return this.#activeCharacter.getAttribute('id');
 	}
 
 	#handleStartGame(event) {

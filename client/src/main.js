@@ -29,14 +29,10 @@ const routes = [
 	{ path: '/credits', view: creditsView, title: 'Crédits' },
 ];
 
-let character = homeView.character;
-//trouver une solution pour faire en sorte de pouvoir choisir le perso
-
-// ajout d'un bouton pour confirmer son choix : while (!homeView.isConfirmed) ??
-// le bouton JOUER sert aussi de bouton confirmer et lance avec le dernier perso choisi (dernier bouton sur lequel on a cliqué) ??
-// gérer ça dans homeView directement ??
-// ...
-const player = new Player(character);
+const player = new Player(homeView.characterId);
+homeView.onCharacterChange = characterId => {
+	player.setSprites(characterId);
+};
 gameView.currentPlayer = player;
 gameView.onClick = event => {
 	player.shoot();

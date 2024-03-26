@@ -1,0 +1,11 @@
+.characterChoice {
+    margin-top: 20px;
+}
+
+.characterChoice button img {
+    opacity: 0.5;
+}
+
+.characterChoice button.active img, .characterChoice button:hover img {
+    opacity: 1;
+}
