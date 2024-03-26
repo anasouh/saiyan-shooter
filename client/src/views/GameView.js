@@ -48,15 +48,20 @@ export default class GameView extends View {
 		this.#pauseMenu.onResume(() => this.togglePause());
 		this.#pauseMenu.onMainMenu(() => this.leave());
 		this.#gameOverMenu = new Menu(element.querySelector('.menu#gameOver'));
-
+		this.#app.ticker.start();
 		this.#gameOverMenu.onMainMenu(() => this.leave());
 		this.#gameOverMenu.onReplay(() => {
 			this.#init();
 			this.resume();
 		});
 		this.element.appendChild(this.#app.view);
-		this.#app.view.onmousemove = event => this.#handleMouseMove(event);
+		// this.#app.view.onmousemove = event => this.#handleMouseMove(event);
 		this.#init();
+	}
+
+	set children(children) {
+		this.#app.stage.removeChildren();
+		children.forEach(child => this.#app.stage.addChild(child));
 	}
 
 	#onLifeChange(life) {
@@ -238,11 +243,11 @@ export default class GameView extends View {
 		}
 	}
 
-	#handleMouseMove(event) {
-		const { clientX, clientY } = event;
-		this.#currentPlayer.x = clientX;
-		this.#currentPlayer.y = clientY;
-	}
+	// #handleMouseMove(event) {
+	// 	const { clientX, clientY } = event;
+	// 	this.#currentPlayer.x = clientX;
+	// 	this.#currentPlayer.y = clientY;
+	// }
 
 	leave() {
 		this.#clear();

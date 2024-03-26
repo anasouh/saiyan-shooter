@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http';
 import addWebpackMiddleware from './middlewares/addWebpackMiddleware.js';
 import { Server as IOServer } from 'socket.io';
+import Game from './Game.js';
 
 const routesPaths = ['/guide', '/game', '/credits'];
 
@@ -24,11 +25,34 @@ httpServer.listen(port, () => {
 });
 
 const io = new IOServer(httpServer);
+const game = new Game(1920, 1080);
+game.start();
 
 io.on('connection', socket => {
 	console.log(`Nouvelle connexion du client ${socket.id}`);
+	const player = {
+		x: 50,
+		y: game.height / 2,
+		width: 246,
+		height: 406,
+		characterId: 'goku',
+		moving: {
+			left: false,
+			right: false,
+			up: false,
+			down: false,
+		},
+		id: socket.id,
+	};
+	game.addPlayer(player);
+
+	io.emit('game', game);
+	game.onTick = () => {
+		io.emit('game', game);
+	};
 
 	socket.on('disconnect', () => {
 		console.log(`Déconnexion du client ${socket.id}`);
+		game.removePlayer(player);
 	});
 });
