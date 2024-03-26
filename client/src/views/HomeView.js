@@ -6,6 +6,11 @@ export default class HomeView extends View {
 	#guideButton;
 	#usernameField;
 	username;
+	#goku;
+	#vegeta;
+	character;
+	#confirm;
+	isConfirmed = false;
 
 	constructor(element) {
 		super(element);
@@ -22,6 +27,19 @@ export default class HomeView extends View {
 		this.#usernameField.addEventListener('change', event => {
 			this.username = event.currentTarget.value;
 			localStorage.setItem('username', this.username);
+		});
+		this.character = 'goku';
+		this.#goku = element.querySelector('.btn#goku');
+		this.#goku.addEventListener('click', () => {
+			this.character = 'goku';
+		});
+		this.#vegeta = element.querySelector('.btn#vegeta');
+		this.#vegeta.addEventListener('click', () => {
+			this.character = 'vegeta';
+		});
+		this.#confirm = element.querySelector('.btn#confirm');
+		this.#confirm.addEventListener('click', () => {
+			this.isConfirmed = true;
 		});
 	}
 
