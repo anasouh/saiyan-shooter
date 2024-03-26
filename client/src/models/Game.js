@@ -10,6 +10,8 @@ export default class Game {
 	projectiles = [];
 	items = [];
 	players = [];
+	timeStart;
+	time;
 
 	constructor(width, height) {
 		this.width = width;
@@ -112,5 +114,15 @@ export default class Game {
 			this.addEnnemy(ennemy);
 			ennemy.move('left');
 		}
+	}
+
+	start() {
+		this.timeStart = Date.now();
+	}
+
+	timeEnd() {
+		this.time = ((Date.now() - this.timeStart) / 1000).toFixed();
+
+		console.log(this.timeStart);
 	}
 }
