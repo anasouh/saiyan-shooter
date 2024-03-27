@@ -26,6 +26,15 @@ export default class Character extends PIXI.AnimatedSprite {
 	}
 
 	/**
+	 * Définit les dimensions du personnage.
+	 * @param {{ width: number, height: number }} Les dimensions du personnage.
+	 */
+	set dimensions({ width, height }) {
+		this.width = width;
+		this.height = height;
+	}
+
+	/**
 	 * Rend le personnage rouge pendant un court instant.
 	 */
 	hitAnimation() {

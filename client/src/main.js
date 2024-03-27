@@ -7,15 +7,14 @@ import { CONTROL_KEYS, PAUSE_KEYS, SHOOT_KEYS } from './settings/keys.js';
 import GuideView from './views/GuideView.js';
 import Game from './models/Game.js';
 import { io } from 'socket.io-client';
+import Ennemy from './models/Ennemy.js';
+import Item from './models/Item.js';
+import Projectile from './models/Projectile.js';
+import { Texture } from 'pixi.js';
 
 const socket = io();
 
 const game = new Game(window.screen.width, window.screen.height);
-window.onresize = () =>
-	(game.dimensions = {
-		width: window.innerWidth,
-		height: window.innerHeight,
-	});
 
 const homeView = new HomeView(document.querySelector('.home'));
 const guideView = new GuideView(document.querySelector('.guide'));
@@ -29,23 +28,28 @@ const routes = [
 	{ path: '/credits', view: creditsView, title: 'Crédits' },
 ];
 
-const player = new Player(homeView.characterId);
-homeView.onCharacterChange = characterId => {
-	player.setSprites(characterId);
-};
-gameView.currentPlayer = player;
-gameView.onClick = event => {
-	player.shoot();
-};
-gameView.onContextMenu = event => {
-	event.preventDefault();
-	player.ulti();
-};
+// const player = new Player(homeView.characterId);
+// homeView.onCharacterChange = characterId => {
+// 	player.setSprites(characterId);
+// };
+// gameView.currentPlayer = player;
+// gameView.onClick = event => {
+// 	player.shoot();
+// };
+// gameView.onContextMenu = event => {
+// 	event.preventDefault();
+// 	player.ulti();
+// };
+
+const keysDown = new Set();
 
 document.addEventListener('keydown', event => {
 	const key = event.key.toUpperCase();
 	if (CONTROL_KEYS.includes(key)) {
-		player.press(key);
+		if (!keysDown.has(key)) {
+			keysDown.add(key);
+			socket.emit('keydown', key);
+		}
 	} else if (PAUSE_KEYS.includes(key)) {
 		gameView.togglePause();
 	} else if (SHOOT_KEYS.includes(key)) {
@@ -56,9 +60,10 @@ document.addEventListener('keydown', event => {
 document.addEventListener('keyup', event => {
 	const key = event.key.toUpperCase();
 	if (CONTROL_KEYS.includes(key)) {
-		player.release(key);
+		keysDown.delete(key);
+		socket.emit('keyup', key);
 	} else if (SHOOT_KEYS.includes(key)) {
-		player.shoot();
+		// player.shoot();
 	}
 });
 
@@ -66,3 +71,32 @@ Router.routes = routes;
 
 Router.navigate(window.location.pathname, true);
 window.onpopstate = () => Router.navigate(document.location.pathname, true);
+
+socket.on('game', gameData => {
+	const { width, height, players, items, projectiles, ennemies } = gameData;
+	game.dimensions = { width, height };
+	game.players = players.map(p => {
+		const player = new Player(p.characterId);
+		player.position.set(p.x, p.y);
+		player.dimensions = { width: p.width, height: p.height };
+		return player;
+	});
+	game.ennemies = ennemies.map(e => {
+		const ennemy = new Ennemy();
+		ennemy.position.set(e.x, e.y);
+		ennemy.dimensions = { width: e.width, height: e.height };
+		return ennemy;
+	});
+	game.items = items.map(i => {
+		const item = new Item();
+		item.position.set(i.x, i.y);
+		return item;
+	});
+	game.projectiles = projectiles.map(p => {
+		const projectile = new Projectile();
+		projectile.position.set(p.x, p.y);
+		projectile.texture = Texture.from(p.sprite);
+		return projectile;
+	});
+	gameView.children = game.children;
+});

@@ -1,6 +1,5 @@
-import { areColliding, isOutOfScreen } from '../utils.js';
-import Ennemy from './Ennemy.js';
-import Item, { ITEM_SPAWN_PROBABILITY } from './Item.js';
+import { areColliding, isLeftOfScreen, isOutOfScreen } from './utils.js';
+import EnnemyData from './models/EnnemyData.js';
 
 export default class Game {
 	width;
@@ -13,8 +12,10 @@ export default class Game {
 	players = [];
 	timeStart;
 	time;
+	io;
 	paused = true;
-	// #tickInterval;
+	#tickInterval;
+	onTick;
 
 	constructor(width, height) {
 		this.width = width;
@@ -24,15 +25,6 @@ export default class Game {
 	set dimensions({ width, height }) {
 		this.width = width;
 		this.height = height;
-	}
-
-	get children() {
-		return [
-			...this.ennemies,
-			...this.projectiles,
-			...this.items,
-			...this.players,
-		];
 	}
 
 	/* Child management */
@@ -81,8 +73,7 @@ export default class Game {
 	spawnItem({ x, y }, delay = 450) {
 		setTimeout(() => {
 			if (Math.random() < ITEM_SPAWN_PROBABILITY) {
-				const item = new Item();
-				item.position.set(x, y);
+				const item = { x, y, width: 246, height: 406 };
 				this.items.push(item);
 				this.onAddChild(item);
 			}
@@ -101,9 +92,6 @@ export default class Game {
 	/* Players management */
 
 	addPlayer(player) {
-		if (this.players.length === 0) {
-			this.start();
-		}
 		this.players.push(player);
 		this.onAddChild(player);
 	}
@@ -111,9 +99,6 @@ export default class Game {
 	removePlayer(player) {
 		this.players = this.players.filter(p => p !== player);
 		this.onRemoveChild(player);
-		if (this.players.length === 0) {
-			this.stop();
-		}
 	}
 
 	clear() {
@@ -126,23 +111,24 @@ export default class Game {
 		if (this.paused) return;
 		const random = Math.random();
 		if (random < 0.01) {
-			const ennemy = new Ennemy();
-			ennemy.position.set(this.width, Math.random() * this.height);
-			ennemy.onComplete = () => this.removeEnnemy(ennemy);
+			const ennemy = new EnnemyData({
+				x: this.width - 1,
+				y: Math.random() * this.height,
+				moving: { left: true, right: false, up: false, down: false },
+			});
 			this.addEnnemy(ennemy);
-			ennemy.move('left');
 		}
 	}
 
 	start() {
 		this.timeStart = Date.now();
-		// if (this.#tickInterval) clearInterval(this.#tickInterval);
-		// this.#tickInterval = setInterval(() => this.#tickEvent(), 1000 / 60);
+		if (this.#tickInterval) clearInterval(this.#tickInterval);
+		this.#tickInterval = setInterval(() => this.#tickEvent(), 1000 / 60);
 		this.paused = false;
 	}
 
 	stop() {
-		// clearInterval(this.#tickInterval);
+		clearInterval(this.#tickInterval);
 		this.timeEnd();
 		this.paused = true;
 	}
@@ -164,26 +150,26 @@ export default class Game {
 		const playerHalfWidth = player.width / 2;
 		const playerHalfHeight = player.height / 2;
 
-		let newX = player.position.x + x;
-		let newY = player.position.y + y;
+		let newX = player.x + x;
+		let newY = player.y + y;
 
 		if (newX - playerHalfWidth > 0 && newX + playerHalfWidth < this.width) {
-			player.position.x = newX;
+			player.x = newX;
 		} else {
 			if (newX - playerHalfWidth <= 0) {
-				player.position.x = playerHalfWidth;
+				player.x = playerHalfWidth;
 			} else {
-				player.position.x = this.width - playerHalfWidth;
+				player.x = this.width - playerHalfWidth;
 			}
 		}
 
 		if (newY - playerHalfHeight > 0 && newY + playerHalfHeight < this.height) {
-			player.position.y = newY;
+			player.y = newY;
 		} else {
 			if (newY - playerHalfHeight <= 0) {
-				player.position.y = playerHalfHeight;
+				player.y = playerHalfHeight;
 			} else {
-				player.position.y = this.height - playerHalfHeight;
+				player.y = this.height - playerHalfHeight;
 			}
 		}
 	}
@@ -231,6 +217,9 @@ export default class Game {
 					//playSound(SFX.PUNCH_1);
 				}
 			});
+			if (isLeftOfScreen(child)) {
+				this.removeEnnemy(child);
+			}
 			if (child.moving.left) {
 				child.x -= 5;
 			}
@@ -272,5 +261,6 @@ export default class Game {
 				}
 			});
 		});
+		this.onTick?.();
 	}
 }

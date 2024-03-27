@@ -32,14 +32,12 @@ export default class GameView extends View {
 		super(element);
 		this.game = game;
 		this.#app = new PIXI.Application({
-			background: '#1099bb',
+			backgroundAlpha: 0,
 			resizeTo: window,
 		});
 		this.game.onAddChild = child => this.#app.stage.addChild(child);
 		this.game.onRemoveChild = child => this.#app.stage.removeChild(child);
 		this.#app.stage.eventMode = 'auto';
-		this.#app.ticker.add(() => this.#tickEvent());
-		this.#app.ticker.add(() => this.game.generateEnnemy());
 		const ath = element.querySelector('.ath');
 		this.#pauseButton = ath.querySelector('button#pauseGame');
 		this.#pauseButton.addEventListener('click', () => this.togglePause());
@@ -50,15 +48,20 @@ export default class GameView extends View {
 		this.#pauseMenu.onResume(() => this.togglePause());
 		this.#pauseMenu.onMainMenu(() => this.leave());
 		this.#gameOverMenu = new Menu(element.querySelector('.menu#gameOver'));
-
+		this.#app.ticker.start();
 		this.#gameOverMenu.onMainMenu(() => this.leave());
 		this.#gameOverMenu.onReplay(() => {
 			this.#init();
 			this.resume();
 		});
 		this.element.appendChild(this.#app.view);
-		this.#app.view.onmousemove = event => this.#handleMouseMove(event);
+		// this.#app.view.onmousemove = event => this.#handleMouseMove(event);
 		this.#init();
+	}
+
+	set children(children) {
+		this.#app.stage.removeChildren();
+		children.forEach(child => this.#app.stage.addChild(child));
 	}
 
 	#onLifeChange(life) {
@@ -121,98 +124,20 @@ export default class GameView extends View {
 		if (this.paused) this.resume();
 		this.#init();
 		this.game.start();
+		this.resume();
 	}
 
 	hide() {
 		super.hide();
 		this.pause();
+		this.game.stop();
 	}
 
 	#resize() {
 		this.#app.renderer.resize(window.innerWidth, window.innerHeight);
 	}
 
-	#tickEvent() {
-		if (this.paused) return;
-		this.#app.stage.children.forEach(child => {
-			if (child instanceof Player) {
-				if (child.moving.left) {
-					this.movePlayer(child, -5, 0);
-				}
-				if (child.moving.right) {
-					this.movePlayer(child, 5, 0);
-				}
-				if (child.moving.up) {
-					this.movePlayer(child, 0, -5);
-				}
-				if (child.moving.down) {
-					this.movePlayer(child, 0, 5);
-				}
-			} else if (child instanceof Projectile) {
-				if (isOutOfScreen(this.#app.screen, child)) {
-					this.game.removeProjectile(child);
-					return;
-				}
-				if (child.isMoving.left) {
-					child.x -= 5;
-				}
-				if (child.isMoving.right) {
-					child.x += 5;
-				}
-				if (child.isMoving.up) {
-					child.y -= 5;
-				}
-				if (child.isMoving.down) {
-					child.y += 5;
-				}
-			} else if (child instanceof Ennemy) {
-				if (areColliding(child, this.#currentPlayer) && child.isAlive) {
-					this.game.removeEnnemy(child);
-					this.#currentPlayer.decrementLife();
-					playSound(SFX.PUNCH_1);
-				}
-				if (child.moving.left) {
-					child.x -= 5;
-				}
-				if (child.moving.right) {
-					child.x += 5;
-				}
-				if (child.moving.up) {
-					child.y -= 5;
-				}
-				if (child.moving.down) {
-					child.y += 5;
-				}
-			} else if (child instanceof Item) {
-				if (child.isExpired) {
-					this.game.removeItem(child);
-				}
-			}
-		});
-
-		this.game.projectiles.forEach(projectile => {
-			this.game.ennemies.forEach(ennemy => {
-				if (areColliding(projectile, ennemy) && ennemy.isAlive) {
-					this.game.removeProjectile(projectile);
-					this.game.spawnItem(ennemy.position);
-					ennemy.explode();
-					this.#currentPlayer.incrementScore();
-					this.#currentPlayer.incrementNbKill();
-				}
-			});
-		});
-
-		this.game.items.forEach(item => {
-			if (areColliding(item, this.#currentPlayer)) {
-				item.use(this.#currentPlayer);
-				this.game.removeItem(item);
-			}
-		});
-	}
-
 	#clear() {
-		this.#app.ticker.remove(this.#tickEvent);
-		this.#app.ticker.remove(this.game.generateEnnemy);
 		this.#app.stage.removeChildren();
 		this.game.clear();
 	}
@@ -223,10 +148,6 @@ export default class GameView extends View {
 	#init() {
 		this.element.classList.remove('gameOver');
 		this.#clear();
-		const background = PIXI.Sprite.from('/assets/images/background.jpg');
-		background.width = this.#app.screen.width;
-		background.height = this.#app.screen.height;
-		this.#app.stage.addChild(background);
 		if (this.#currentPlayer) {
 			this.#app.stage.addChild(this.#currentPlayer);
 			this.#currentPlayer.reset();
@@ -254,6 +175,7 @@ export default class GameView extends View {
 	pause() {
 		this.element.classList.add('paused');
 		this.#app.ticker.stop();
+		this.game.stop();
 		this.#app.stage.interactive = false;
 	}
 
@@ -263,6 +185,7 @@ export default class GameView extends View {
 	resume() {
 		this.element.classList.remove('paused');
 		this.#app.ticker.start();
+		this.game.start();
 		this.#app.stage.interactive = true;
 	}
 
@@ -320,11 +243,11 @@ export default class GameView extends View {
 		}
 	}
 
-	#handleMouseMove(event) {
-		const { clientX, clientY } = event;
-		this.#currentPlayer.x = clientX;
-		this.#currentPlayer.y = clientY;
-	}
+	// #handleMouseMove(event) {
+	// 	const { clientX, clientY } = event;
+	// 	this.#currentPlayer.x = clientX;
+	// 	this.#currentPlayer.y = clientY;
+	// }
 
 	leave() {
 		this.#clear();
