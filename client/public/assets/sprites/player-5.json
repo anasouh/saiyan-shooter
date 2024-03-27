@@ -1,0 +1,85 @@
+{"frames": {
+
+"goku/hit1.png":
+{
+	"frame": {"x":0,"y":0,"w":431,"h":745},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":41,"y":41,"w":431,"h":745},
+	"sourceSize": {"w":498,"h":812},
+	"anchor": {"x":0,"y":0}
+},
+"goku/left.png":
+{
+	"frame": {"x":431,"y":0,"w":499,"h":747},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":39,"y":39,"w":499,"h":747},
+	"sourceSize": {"w":564,"h":812},
+	"anchor": {"x":0,"y":0}
+},
+"goku/shooting.png":
+{
+	"frame": {"x":930,"y":0,"w":572,"h":748},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":39,"y":39,"w":572,"h":748},
+	"sourceSize": {"w":636,"h":812},
+	"anchor": {"x":0,"y":0}
+},
+"ssj/detransfo_2.png":
+{
+	"frame": {"x":1502,"y":0,"w":445,"h":745},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":41,"y":41,"w":445,"h":745},
+	"sourceSize": {"w":512,"h":812},
+	"anchor": {"x":0,"y":0}
+},
+"ssj/detransfo_3.png":
+{
+	"frame": {"x":0,"y":748,"w":445,"h":745},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":41,"y":41,"w":445,"h":745},
+	"sourceSize": {"w":512,"h":812},
+	"anchor": {"x":0,"y":0}
+},
+"ssj/transfo_9.png":
+{
+	"frame": {"x":445,"y":748,"w":631,"h":745},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":41,"y":41,"w":631,"h":745},
+	"sourceSize": {"w":698,"h":812},
+	"anchor": {"x":0,"y":0}
+},
+"ssj/up.png":
+{
+	"frame": {"x":1076,"y":748,"w":445,"h":745},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":41,"y":41,"w":445,"h":745},
+	"sourceSize": {"w":512,"h":812},
+	"anchor": {"x":0,"y":0}
+},
+"vegeta/player.png":
+{
+	"frame": {"x":1521,"y":748,"w":382,"h":746},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":40,"y":40,"w":382,"h":746},
+	"sourceSize": {"w":448,"h":812},
+	"anchor": {"x":0,"y":0}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "/player-5.png",
+	"format": "RGBA8888",
+	"size": {"w":1947,"h":1494},
+	"scale": "1",
+	"related_multi_packs": [ "player-0.json", "player-1.json", "player-2.json", "player-3.json", "player-4.json", "player-6.json", "player-7.json", "player-8.json" ],
+	"smartupdate": "$TexturePacker:SmartUpdate:b4c6ea6d060cfd6b44170583fff6e573:73e13251298ac0ff861b4b75ed37e7c3:fddbdc0b0c5721195d03c278d1a92ee4$"
+}
+}

@@ -116,6 +116,10 @@ export default class Game {
 		}
 	}
 
+	findPlayerById(id) {
+		return this.players.find(p => p.id === id);
+	}
+
 	clear() {
 		this.ennemies = [];
 		this.projectiles = [];

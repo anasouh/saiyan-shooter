@@ -1,0 +1,63 @@
+{"frames": {
+
+"goku/01.png":
+{
+	"frame": {"x":1,"y":1,"w":639,"h":364},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":49,"y":49,"w":639,"h":364},
+	"sourceSize": {"w":720,"h":445}
+},
+"kaioken/01.png":
+{
+	"frame": {"x":1,"y":367,"w":604,"h":353},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":37,"y":111,"w":604,"h":353},
+	"sourceSize": {"w":720,"h":556}
+},
+"ssj/01.png":
+{
+	"frame": {"x":1,"y":722,"w":617,"h":264},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":44,"y":182,"w":617,"h":264},
+	"sourceSize": {"w":720,"h":551}
+},
+"vegeta/01.png":
+{
+	"frame": {"x":1,"y":1,"w":639,"h":364},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":49,"y":49,"w":639,"h":364},
+	"sourceSize": {"w":720,"h":445}
+},
+"vegeta/ult/01.png":
+{
+	"frame": {"x":1,"y":988,"w":664,"h":400},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":34,"y":34,"w":664,"h":400},
+	"sourceSize": {"w":720,"h":456}
+},
+"vegeta/ult/02.png":
+{
+	"frame": {"x":1,"y":1390,"w":600,"h":386},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":32,"y":144,"w":600,"h":386},
+	"sourceSize": {"w":720,"h":618}
+}},
+"animations": {
+	"vegeta/ult": ["vegeta/ult/01.png","vegeta/ult/02.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "projectile-0.png",
+	"format": "RGBA8888",
+	"size": {"w":666,"h":1777},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:2013ad13c4b258003f313ae34efa4bba:9af6d9a3515c62569e3ada08d8a669a3:f54507b7a79c761e07b3236b74cef6f9$"
+}
+}

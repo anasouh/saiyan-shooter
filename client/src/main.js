@@ -10,7 +10,7 @@ import { io } from 'socket.io-client';
 import Ennemy from './models/Ennemy.js';
 import Item from './models/Item.js';
 import Projectile from './models/Projectile.js';
-import { Texture } from 'pixi.js';
+import { Assets, Texture } from 'pixi.js';
 
 const socket = io();
 
@@ -28,18 +28,13 @@ const routes = [
 	{ path: '/credits', view: creditsView, title: 'Crédits' },
 ];
 
-// const player = new Player(homeView.characterId);
-// homeView.onCharacterChange = characterId => {
-// 	player.setSprites(characterId);
-// };
-// gameView.currentPlayer = player;
-// gameView.onClick = event => {
-// 	player.shoot();
-// };
-// gameView.onContextMenu = event => {
-// 	event.preventDefault();
-// 	player.ulti();
-// };
+async function loadTextures() {
+	for (let i = 0; i < 9; i++) {
+		const path = `/assets/sprites/player-${i}.json`;
+		await Assets.load(path);
+	}
+	await Assets.load('/assets/sprites/projectile-0.json');
+}
 
 const keysDown = new Set();
 
@@ -53,14 +48,17 @@ document.addEventListener('keydown', event => {
 	} else if (PAUSE_KEYS.includes(key)) {
 		gameView.togglePause();
 	} else if (SHOOT_KEYS.includes(key)) {
-		socket.emit('shoot');
+		if (!keysDown.has(key)) {
+			keysDown.add(key);
+			socket.emit('shoot');
+		}
 	}
 });
 
 document.addEventListener('keyup', event => {
 	const key = event.key.toUpperCase();
+	keysDown.delete(key);
 	if (CONTROL_KEYS.includes(key)) {
-		keysDown.delete(key);
 		socket.emit('keyup', key);
 	} else if (SHOOT_KEYS.includes(key)) {
 		// player.shoot();
@@ -72,31 +70,54 @@ Router.routes = routes;
 Router.navigate(window.location.pathname, true);
 window.onpopstate = () => Router.navigate(document.location.pathname, true);
 
-socket.on('game', gameData => {
-	const { width, height, players, items, projectiles, ennemies } = gameData;
-	game.dimensions = { width, height };
-	game.players = players.map(p => {
-		const player = new Player(p.characterId);
-		player.position.set(p.x, p.y);
-		player.dimensions = { width: p.width, height: p.height };
-		return player;
+gameView.setLoading(true);
+loadTextures().then(() => {
+	// const player = new Player(homeView.characterId);
+	// homeView.onCharacterChange = characterId => {
+	// 	player.setSprites(characterId);
+	// };
+	// gameView.currentPlayer = player;
+	// gameView.onClick = event => {
+	// 	player.shoot();
+	// };
+	// gameView.onContextMenu = event => {
+	// 	event.preventDefault();
+	// 	player.ulti();
+	// };
+	gameView.setLoading(false);
+
+	socket.on('game', gameData => {
+		const { width, height, players, items, projectiles, ennemies } = gameData;
+		game.dimensions = { width, height };
+		game.players = players.map(p => {
+			let player = game.findPlayerById(p.id);
+			if (!player) {
+				player = new Player(p.characterId);
+				player.dimensions = { width: p.width, height: p.height };
+				player.id = p.id;
+			}
+			player.position.set(p.x, p.y);
+			player.life = p.life;
+			player.setMoving(p.moving);
+			return player;
+		});
+		game.ennemies = ennemies.map(e => {
+			const ennemy = new Ennemy();
+			ennemy.position.set(e.x, e.y);
+			ennemy.dimensions = { width: e.width, height: e.height };
+			return ennemy;
+		});
+		game.items = items.map(i => {
+			const item = new Item();
+			item.position.set(i.x, i.y);
+			return item;
+		});
+		game.projectiles = projectiles.map(p => {
+			const projectile = new Projectile(p.characterId, p.ulti);
+			projectile.position.set(p.x, p.y);
+			projectile.dimensions = { width: p.width, height: p.height };
+			return projectile;
+		});
+		gameView.children = game.children;
 	});
-	game.ennemies = ennemies.map(e => {
-		const ennemy = new Ennemy();
-		ennemy.position.set(e.x, e.y);
-		ennemy.dimensions = { width: e.width, height: e.height };
-		return ennemy;
-	});
-	game.items = items.map(i => {
-		const item = new Item();
-		item.position.set(i.x, i.y);
-		return item;
-	});
-	game.projectiles = projectiles.map(p => {
-		const projectile = new Projectile(p.characterId, p.ulti);
-		projectile.position.set(p.x, p.y);
-		projectile.dimensions = { width: p.width, height: p.height };
-		return projectile;
-	});
-	gameView.children = game.children;
 });

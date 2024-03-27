@@ -53,6 +53,10 @@
     box-sizing: border-box;
 }
 
+.viewContainer > .game.loading .ath {
+    display: none;
+}
+
 .viewContainer > .game.paused .ath, .viewContainer > .game.gameOver .ath {
     display: none;
 }

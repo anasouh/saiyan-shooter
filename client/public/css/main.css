@@ -33,11 +33,31 @@ h1, h2, h3, h4, h5, h6 {
 
 .viewContainer > div {
     display: none;
+    width: 100%;
+    height: 100%;
 }
 
 .viewContainer > div.active {
     display: flex;
 }
+
+.loading {
+  transition: all 0.5s ease;
+  animation: fadeIn 0.15s;
+}
+
+.viewContainer > div.loading {
+  background-color: #143953;
+  background-image: url('https://steamuserimages-a.akamaihd.net/ugc/1994561868940676197/C1F06ACC3D0694B1DDC82509CE49B97AF50D38C0/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false');
+  background-position: bottom left;
+  background-repeat: no-repeat;
+  background-size: 400px ;
+}
+
+.viewContainer > div.loading > * {
+  display: none;
+}
+
 .font {
     letter-spacing: 1.3px;
     font-family: 'Press Start 2p';

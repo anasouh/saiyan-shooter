@@ -9,128 +9,28 @@ export const LIFE = 3;
 export const SCORE = 0;
 export const KILL_FOR_ULTI = 5;
 
-export const sprites = {
-	goku: {
-		sprite: PIXI.Texture.from(SPRITES_PATH + 'player/goku/player.png'),
-		shooting_sprite: PIXI.Texture.from(
-			SPRITES_PATH + 'player/goku/player_shooting.png'
-		),
-		reloading_sprite: PIXI.Texture.from(
-			SPRITES_PATH + 'player/goku/player_reloading.png'
-		),
-		falling_sprites: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/goku/hit.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/goku/ko.png'),
-		],
-		left_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/goku/left.png'),
-		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/goku/right.png'),
-		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/goku/up.png'),
-		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/goku/down.png'),
-		projectile: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/goku/projectiles/01.png'),
-		],
-		ult_sprites: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult1.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult2.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult3.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult4.png'),
-		],
-		ult_projectile: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult1.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult2.png'),
-		],
-	},
-	kaioken: {
-		animation: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/transfo_1.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/transfo_2.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/transfo_3.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/transfo_4.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/transfo_5.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/player.png'),
-		],
-		sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/player.png'),
-		shooting_sprite: PIXI.Texture.from(
-			SPRITES_PATH + 'player/kaioken/player_shooting.png'
-		),
-		reloading_sprite: PIXI.Texture.from(
-			SPRITES_PATH + 'player/kaioken/player_reloading.png'
-		),
-		falling_sprites: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/hit.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/ko.png'),
-		],
-		left_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/left.png'),
-		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/right.png'),
-		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/up.png'),
-		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/down.png'),
-		projectile: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/projectiles/01.png'),
-		],
-		ult_sprites: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult1.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult2.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult3.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult4.png'),
-		],
-		ult_projectile: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult1.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult2.png'),
-		],
-	},
-	vegeta: {
-		sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
-		shooting_sprite: PIXI.Texture.from(
-			SPRITES_PATH + 'player/vegeta/shooting.png'
-		),
-		reloading_sprite: PIXI.Texture.from(
-			SPRITES_PATH + 'player/vegeta/reloading.png'
-		),
-		falling_sprites: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/hit1.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/hit2.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ko.png'),
-		],
-		left_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/left.png'),
-		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/right.png'),
-		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/up.png'),
-		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/down.png'),
-		ult_sprites: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult1.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult2.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult3.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult4.png'),
-		],
-		projectile: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectiles/01.png'),
-		],
-		ult_projectile: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult1.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult2.png'),
-		],
-	},
-};
-
 /**
  * Représente un joueur.
  */
 export default class Player extends Character {
 	#score = SCORE;
-	#life = LIFE;
+	life;
 	#moving = { up: false, down: false, left: false, right: false };
 	onShoot;
 	onScoreChange = [];
 	onLifeChange = [];
 	onKillsChange = [];
-	#id;
+	#characterId;
 	#kills;
+	id;
 
-	constructor(id) {
-		super(sprites[id].sprite);
-		this.#id = id;
+	constructor(characterId) {
+		super(PIXI.Assets.get(`${characterId}/player.png`));
+		this.#characterId = characterId;
 		this.#kills = 0;
 		this.addEventListener('scoreChange', score => {
-			if (this.#id === 'goku' && score == 20) this.setSprites('kaioken');
+			if (this.#characterId === 'goku' && score == 20)
+				this.setSprites('kaioken');
 		});
 	}
 
@@ -145,6 +45,12 @@ export default class Player extends Character {
 	set kills(value) {
 		this.#kills = value;
 		this.onKillsChange.forEach(callback => callback(this.#kills));
+	}
+
+	set dimensions({ width, height }) {
+		this.scaleValue = width / this.width;
+		this.width = width;
+		this.height = height;
 	}
 
 	/**
@@ -173,6 +79,23 @@ export default class Player extends Character {
 		return this.#moving;
 	}
 
+	setMoving(moves) {
+		let nbDirection = 0;
+		Object.keys(this.#moving).forEach(direction => {
+			if (moves[direction]) {
+				this.#moving[direction] = true;
+				const path = `${this.#characterId}/${direction}.png`;
+				const texture = PIXI.Assets.get(path);
+				this.texture = texture;
+				this.scale.set(this.scaleValue);
+				nbDirection++;
+			}
+		});
+		if (nbDirection === 0) {
+			this.texture = PIXI.Assets.get(`${this.#characterId}/player.png`);
+		}
+	}
+
 	get kills() {
 		return this.#kills;
 	}
@@ -183,7 +106,7 @@ export default class Player extends Character {
 	 * @readonly
 	 */
 	get alive() {
-		return this.#life > 0;
+		return this.life > 0;
 	}
 
 	/**
@@ -199,7 +122,7 @@ export default class Player extends Character {
 	 * @returns {number} La vie du joueur.
 	 */
 	getLife() {
-		return this.#life;
+		return this.life;
 	}
 
 	/**
@@ -207,8 +130,8 @@ export default class Player extends Character {
 	 * @param {number} value La nouvelle vie du joueur.
 	 */
 	setLife(value) {
-		this.#life = value;
-		this.onLifeChange.forEach(callback => callback(this.#life));
+		this.life = value;
+		this.onLifeChange.forEach(callback => callback(this.life));
 	}
 
 	/**
@@ -216,9 +139,9 @@ export default class Player extends Character {
 	 * @param {String} spritesName le nom des sprites à aller chercher.
 	 */
 	setSprites(spritesName) {
-		this.#id = spritesName;
+		this.#characterId = spritesName;
 		if (spritesName === 'kaioken') {
-			this.textures = sprites[spritesName].animation;
+			this.textures = PIXI.Assets.get('kaioken/transfo');
 			this.loop = false;
 			this.animationSpeed = 0.1;
 			this.play();
@@ -237,8 +160,8 @@ export default class Player extends Character {
 	 * Décrémente la vie du joueur.
 	 */
 	decrementLife() {
-		this.#life--;
-		this.onLifeChange.forEach(callback => callback(this.#life));
+		this.life--;
+		this.onLifeChange.forEach(callback => callback(this.life));
 		this.hitAnimation();
 	}
 
@@ -246,70 +169,47 @@ export default class Player extends Character {
 	 * Réinitialise le score et la vie du joueur.
 	 */
 	reset() {
-		if (this.#id === 'kaioken') this.#id = 'goku';
-		this.texture = sprites[this.#id].sprite;
+		if (this.#characterId === 'kaioken' || this.#characterId === 'ssj')
+			this.#characterId = 'goku';
+		this.texture = PIXI.Assets.get(`${this.#characterId}/player.png`);
 		this.#score = SCORE;
-		this.#life = LIFE;
+		this.life = LIFE;
 		this.kills = 0;
 		this.onScoreChange.forEach(callback => callback(this.#score));
-		this.onLifeChange.forEach(callback => callback(this.#life));
+		this.onLifeChange.forEach(callback => callback(this.life));
 	}
 
 	/**
-	 * Appelée lorsqu'une touche est enfoncée.
-	 * @param {string} key La touche enfoncée.
+	 * Appelée lorsqu'une touche est pressée.
+	 * @param {string} direction La direction de la touche pressée.
 	 */
-	press(key) {
+	move(direction) {
 		if (!this.alive) return;
-		switch (key) {
-			case 'ARROWUP':
-			case 'Z':
-				this.#moving.up = true;
-				this.texture = sprites[this.#id].up_sprite;
-				break;
-			case 'ARROWDOWN':
-			case 'S':
-				this.#moving.down = true;
-				this.texture = sprites[this.#id].down_sprite;
-				break;
-			case 'ARROWLEFT':
-			case 'Q':
-				this.#moving.left = true;
-				this.texture = sprites[this.#id].left_sprite;
-				break;
-			case 'ARROWRIGHT':
-			case 'D':
-				this.#moving.right = true;
-				this.texture = sprites[this.#id].right_sprite;
-				break;
-		}
+		this.#moving[direction] = true;
+		this.texture = PIXI.Assets.get(`${this.#characterId}/${direction}.png`);
 	}
 
 	/**
 	 * Appelée lorsqu'une touche est relâchée.
-	 * @param {string} key La touche relâchée.
+	 * @param {string} direction La direction relâchée.
 	 */
-	release(key) {
-		switch (key) {
-			case 'ARROWUP':
-			case 'Z':
+	stop(direction) {
+		switch (direction) {
+			case 'up':
 				this.#moving.up = false;
 				break;
-			case 'ARROWDOWN':
-			case 'S':
+			case 'down':
 				this.#moving.down = false;
 				break;
-			case 'ARROWLEFT':
-			case 'Q':
+			case 'left':
 				this.#moving.left = false;
 				break;
-			case 'ARROWRIGHT':
-			case 'D':
+			case 'right':
 				this.#moving.right = false;
 				break;
 		}
 		if (!this.alive) return;
-		this.texture = sprites[this.#id].sprite;
+		this.texture = PIXI.Assets.get(`${this.#characterId}/player.png`);
 	}
 
 	/**
@@ -327,15 +227,18 @@ export default class Player extends Character {
 	 */
 	shoot() {
 		if (!this.alive) return;
-		const projectile = new Projectile(this.#id);
+		const projectile = new Projectile(this.#characterId);
 		projectile.position = this.position;
 		projectile.move('right');
 		playSound(SFX.PROJECTILE);
-		this.texture = sprites[this.#id].shooting_sprite;
+		this.texture = PIXI.Assets.get(`${this.#characterId}/shooting.png`);
 		if (this.onShoot) {
 			this.onShoot(projectile);
 		}
-		setTimeout(() => (this.texture = sprites[this.#id].sprite), ANIMATION_TIME);
+		setTimeout(
+			() => (this.texture = PIXI.Assets.get(`${this.#characterId}/player.png`)),
+			ANIMATION_TIME
+		);
 	}
 
 	/**
@@ -343,19 +246,19 @@ export default class Player extends Character {
 	 */
 	ulti() {
 		if (!this.alive || !this.canUlt) return;
-		this.textures = sprites[this.#id].ult_sprites;
+		this.textures = PIXI.Assets.get(`${this.#characterId}/ult`);
 		this.animationSpeed = 0.25;
 		this.loop = false;
 		this.onComplete = () => {
-			const projectile = new Projectile(this.#id, true);
+			const projectile = new Projectile(this.#characterId, true);
 			projectile.position = this.position;
 			projectile.move('right');
 			playSound(SFX.PROJECTILE);
-			this.texture = sprites[this.#id].shooting_sprite;
+			this.texture = PIXI.Assets.get(`${this.#characterId}/shooting.png`);
 			if (this.onShoot) {
 				this.onShoot(projectile);
 			}
-			this.texture = sprites[this.#id].sprite;
+			this.texture = PIXI.Assets.get(`${this.#characterId}/player.png`);
 		};
 		this.play();
 
@@ -363,24 +266,25 @@ export default class Player extends Character {
 	}
 
 	reload() {
-		this.texture = sprites[this.#id].reloading_sprite;
+		this.texture = PIXI.Assets.get(`${this.#characterId}/reloading.png`);
 	}
 	/**
 	 * Fait tomber le joueur.
 	 * @returns {Promise<void>} Une promesse qui se résout lorsque l'animation est terminée.
 	 */
 	fallAnimation() {
-		this.textures = sprites[this.#id].falling_sprites;
-		this.loop = false;
-		this.animationSpeed = 0.5;
-		this.play();
-		const initialOnComplete = this.onComplete;
-		return new Promise(
-			resolve =>
-				(this.onComplete = () => {
-					resolve();
-					this.onComplete = initialOnComplete;
-				})
-		);
+		// this.textures = sprites[this.#id].falling_sprites;
+		// this.loop = false;
+		// this.animationSpeed = 0.5;
+		// this.play();
+		// const initialOnComplete = this.onComplete;
+		// return new Promise(
+		// 	resolve =>
+		// 		(this.onComplete = () => {
+		// 			resolve();
+		// 			this.onComplete = initialOnComplete;
+		// 		})
+		// );
+		this.texture = PIXI.Assets.get(`${this.#characterId}/ko.png`);
 	}
 }

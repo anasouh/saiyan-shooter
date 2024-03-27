@@ -23,4 +23,15 @@ export default class View {
 	hide() {
 		this.element.classList.remove('active');
 	}
+	/**
+	 * Affiche un indicateur de chargement.
+	 * @param {boolean} loading - Si l'indicateur de chargement doit être affiché.
+	 */
+	setLoading(loading) {
+		if (loading) {
+			this.element.classList.add('loading');
+		} else {
+			this.element.classList.remove('loading');
+		}
+	}
 }

@@ -1,5 +1,4 @@
 import * as PIXI from 'pixi.js';
-import { sprites } from './Player.js';
 
 export default class Projectile extends PIXI.AnimatedSprite {
 	#isMoving = { up: false, down: false, left: false, right: false };
@@ -10,10 +9,13 @@ export default class Projectile extends PIXI.AnimatedSprite {
 	 * @param {boolean} ultime - Si le projectile est un ultime.
 	 */
 	constructor(charcterId, ultime = false) {
-		if (ultime) {
-			super(sprites[charcterId].ult_projectile);
+		if (ultime && charcterId === 'vegeta') {
+			super([
+				PIXI.Assets.get(`${charcterId}/ult/01.png`),
+				PIXI.Assets.get(`${charcterId}/ult/02.png`),
+			]);
 		} else {
-			super(sprites[charcterId].projectile);
+			super([PIXI.Assets.get(`${charcterId}/01.png`)]);
 		}
 		this.animationSpeed = 0.3;
 		if (this.textures.length) this.play();
