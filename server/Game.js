@@ -150,26 +150,26 @@ export default class Game {
 		const playerHalfWidth = player.width / 2;
 		const playerHalfHeight = player.height / 2;
 
-		let newX = player.position.x + x;
-		let newY = player.position.y + y;
+		let newX = player.x + x;
+		let newY = player.y + y;
 
 		if (newX - playerHalfWidth > 0 && newX + playerHalfWidth < this.width) {
-			player.position.x = newX;
+			player.x = newX;
 		} else {
 			if (newX - playerHalfWidth <= 0) {
-				player.position.x = playerHalfWidth;
+				player.x = playerHalfWidth;
 			} else {
-				player.position.x = this.width - playerHalfWidth;
+				player.x = this.width - playerHalfWidth;
 			}
 		}
 
 		if (newY - playerHalfHeight > 0 && newY + playerHalfHeight < this.height) {
-			player.position.y = newY;
+			player.y = newY;
 		} else {
 			if (newY - playerHalfHeight <= 0) {
-				player.position.y = playerHalfHeight;
+				player.y = playerHalfHeight;
 			} else {
-				player.position.y = this.height - playerHalfHeight;
+				player.y = this.height - playerHalfHeight;
 			}
 		}
 	}

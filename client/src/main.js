@@ -41,10 +41,15 @@ const routes = [
 // 	player.ulti();
 // };
 
+const keysDown = new Set();
+
 document.addEventListener('keydown', event => {
 	const key = event.key.toUpperCase();
 	if (CONTROL_KEYS.includes(key)) {
-		// player.press(key);
+		if (!keysDown.has(key)) {
+			keysDown.add(key);
+			socket.emit('keydown', key);
+		}
 	} else if (PAUSE_KEYS.includes(key)) {
 		gameView.togglePause();
 	} else if (SHOOT_KEYS.includes(key)) {
@@ -55,7 +60,8 @@ document.addEventListener('keydown', event => {
 document.addEventListener('keyup', event => {
 	const key = event.key.toUpperCase();
 	if (CONTROL_KEYS.includes(key)) {
-		// player.release(key);
+		keysDown.delete(key);
+		socket.emit('keyup', key);
 	} else if (SHOOT_KEYS.includes(key)) {
 		// player.shoot();
 	}
