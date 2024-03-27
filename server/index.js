@@ -3,6 +3,7 @@ import http from 'http';
 import addWebpackMiddleware from './middlewares/addWebpackMiddleware.js';
 import { Server as IOServer } from 'socket.io';
 import Game from './Game.js';
+import PlayerData from './models/PlayerData.js';
 
 const routesPaths = ['/guide', '/game', '/credits'];
 
@@ -30,20 +31,12 @@ game.start();
 
 io.on('connection', socket => {
 	console.log(`Nouvelle connexion du client ${socket.id}`);
-	const player = {
+	const player = new PlayerData({
 		x: 50,
 		y: game.height / 2,
-		width: 246,
-		height: 406,
 		characterId: 'goku',
-		moving: {
-			left: false,
-			right: false,
-			up: false,
-			down: false,
-		},
 		id: socket.id,
-	};
+	});
 	game.addPlayer(player);
 
 	io.emit('game', game);

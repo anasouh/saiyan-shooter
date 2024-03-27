@@ -125,7 +125,6 @@ export default class Player extends Character {
 	constructor(id) {
 		super(sprites[id].sprite);
 		this.anchor.set(0.5);
-		this.scale.set(sprites[id].scale);
 		this.#id = id;
 		this.#kills = 0;
 		this.addEventListener('scoreChange', score => {

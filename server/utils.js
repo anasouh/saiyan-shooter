@@ -11,7 +11,7 @@ export function isOutOfScreen(screen, sprite) {
 }
 
 export function isLeftOfScreen(sprite) {
-	return sprite.x < 0;
+	return sprite.x + sprite.width < 0;
 }
 
 export function areColliding(object1, object2) {

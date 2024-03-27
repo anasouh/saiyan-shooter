@@ -72,11 +72,13 @@ socket.on('game', gameData => {
 	game.players = players.map(p => {
 		const player = new Player(p.characterId);
 		player.position.set(p.x, p.y);
+		player.dimensions = { width: p.width, height: p.height };
 		return player;
 	});
 	game.ennemies = ennemies.map(e => {
 		const ennemy = new Ennemy();
 		ennemy.position.set(e.x, e.y);
+		ennemy.dimensions = { width: e.width, height: e.height };
 		return ennemy;
 	});
 	game.items = items.map(i => {
