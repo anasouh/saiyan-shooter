@@ -9,24 +9,26 @@ export const LIFE = 3;
 export const SCORE = 0;
 export const KILL_FOR_ULTI = 5;
 
-const sprites = {
+export const sprites = {
 	goku: {
-		sprite: PIXI.Texture.from(SPRITES_PATH + 'player/player.png'),
+		sprite: PIXI.Texture.from(SPRITES_PATH + 'player/goku/player.png'),
 		shooting_sprite: PIXI.Texture.from(
-			SPRITES_PATH + 'player/player_shooting.png'
+			SPRITES_PATH + 'player/goku/player_shooting.png'
 		),
 		reloading_sprite: PIXI.Texture.from(
-			SPRITES_PATH + 'player/player_reloading.png'
+			SPRITES_PATH + 'player/goku/player_reloading.png'
 		),
 		falling_sprites: [
-			PIXI.Texture.from(SPRITES_PATH + 'player/hit.png'),
-			PIXI.Texture.from(SPRITES_PATH + 'player/ko.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/goku/hit.png'),
+			PIXI.Texture.from(SPRITES_PATH + 'player/goku/ko.png'),
 		],
-		left_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/left.png'),
-		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/right.png'),
-		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/up.png'),
-		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/down.png'),
-		projectile: PIXI.Texture.from('/assets/images/projectile.png'),
+		left_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/goku/left.png'),
+		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/goku/right.png'),
+		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/goku/up.png'),
+		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/goku/down.png'),
+		projectile: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/goku/projectiles/01.png'),
+		],
 		ult_sprites: [
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult1.png'),
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult2.png'),
@@ -37,7 +39,6 @@ const sprites = {
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult1.png'),
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult2.png'),
 		],
-		scale: 0.15,
 	},
 	kaioken: {
 		animation: [
@@ -63,7 +64,9 @@ const sprites = {
 		right_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/right.png'),
 		up_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/up.png'),
 		down_sprite: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/down.png'),
-		projectile: PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/shoot.png'),
+		projectile: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/kaioken/projectiles/01.png'),
+		],
 		ult_sprites: [
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult1.png'),
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult2.png'),
@@ -74,7 +77,6 @@ const sprites = {
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult1.png'),
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult2.png'),
 		],
-		scale: 0.15,
 	},
 	vegeta: {
 		sprite: PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/player.png'),
@@ -99,12 +101,13 @@ const sprites = {
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult3.png'),
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/ult4.png'),
 		],
-		projectile: PIXI.Texture.from('/assets/images/projectile.png'),
+		projectile: [
+			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectiles/01.png'),
+		],
 		ult_projectile: [
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult1.png'),
 			PIXI.Texture.from(SPRITES_PATH + 'player/vegeta/projectile_ult2.png'),
 		],
-		scale: 0.15,
 	},
 };
 
@@ -124,7 +127,6 @@ export default class Player extends Character {
 
 	constructor(id) {
 		super(sprites[id].sprite);
-		this.anchor.set(0.5);
 		this.#id = id;
 		this.#kills = 0;
 		this.addEventListener('scoreChange', score => {
@@ -325,7 +327,7 @@ export default class Player extends Character {
 	 */
 	shoot() {
 		if (!this.alive) return;
-		const projectile = new Projectile([sprites[this.#id].projectile]);
+		const projectile = new Projectile(this.#id);
 		projectile.position = this.position;
 		projectile.move('right');
 		playSound(SFX.PROJECTILE);
@@ -345,7 +347,7 @@ export default class Player extends Character {
 		this.animationSpeed = 0.25;
 		this.loop = false;
 		this.onComplete = () => {
-			const projectile = new Projectile(sprites[this.#id].ult_projectile);
+			const projectile = new Projectile(this.#id, true);
 			projectile.position = this.position;
 			projectile.move('right');
 			playSound(SFX.PROJECTILE);

@@ -1,18 +1,31 @@
 import * as PIXI from 'pixi.js';
+import { sprites } from './Player.js';
 
 export default class Projectile extends PIXI.AnimatedSprite {
 	#isMoving = { up: false, down: false, left: false, right: false };
 
 	/**
 	 * Crée un nouveau projectile.
-	 * @param {Array<PIXI.Texture>} textures
+	 * @param {string} charcterId - L'identifiant du personnage.
+	 * @param {boolean} ultime - Si le projectile est un ultime.
 	 */
-	constructor(textures) {
-		super(textures);
-		this.anchor.set(0.5);
-		this.scale.set(0.07);
+	constructor(charcterId, ultime = false) {
+		if (ultime) {
+			super(sprites[charcterId].ult_projectile);
+		} else {
+			super(sprites[charcterId].projectile);
+		}
 		this.animationSpeed = 0.3;
 		if (this.textures.length) this.play();
+	}
+
+	/**
+	 * Définit les dimensions du projectile.
+	 * @param {{ width: number, height: number }} Les dimensions du projectile.
+	 */
+	set dimensions({ width, height }) {
+		this.width = width;
+		this.height = height;
 	}
 
 	get isMoving() {

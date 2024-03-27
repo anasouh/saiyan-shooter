@@ -13,7 +13,6 @@ export default class Ennemy extends Character {
 	 */
 	constructor() {
 		super(FREEZER);
-		this.anchor.set(0.5);
 	}
 
 	get moving() {

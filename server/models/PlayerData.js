@@ -3,6 +3,7 @@ export default class PlayerData {
 	static DEFAULT_SCORE = 0;
 	score = PlayerData.DEFAULT_SCORE;
 	life = PlayerData.DEFAULT_LIFE;
+	ult = 0;
 	moving = { left: false, right: false, up: false, down: false };
 	id;
 	x;
@@ -10,6 +11,7 @@ export default class PlayerData {
 	width = 246;
 	height = 406;
 	characterId;
+	id;
 
 	constructor({ x, y, characterId, id }) {
 		this.x = x;
@@ -32,8 +34,17 @@ export default class PlayerData {
 		this.score++;
 	}
 
+	incrementUlt() {
+		this.ult++;
+	}
+
+	resetUlt() {
+		this.ult = 0;
+	}
+
 	reset() {
 		this.life = PlayerData.DEFAULT_LIFE;
 		this.score = PlayerData.DEFAULT_SCORE;
+		this.ult = 0;
 	}
 }

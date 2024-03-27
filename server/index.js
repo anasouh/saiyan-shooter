@@ -73,6 +73,10 @@ io.on('connection', socket => {
 		if (direction) player.moving[direction] = false;
 	});
 
+	socket.on('shoot', () => {
+		game.shoot(player);
+	});
+
 	socket.on('disconnect', () => {
 		console.log(`Déconnexion du client ${socket.id}`);
 		game.removePlayer(player);

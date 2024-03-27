@@ -101,6 +101,24 @@ export default class Game {
 		this.onRemoveChild(player);
 	}
 
+	getPlayerById(id) {
+		return this.players.find(p => p.id === id);
+	}
+
+	shoot(player) {
+		const projectile = {
+			x: player.x + player.width - 10,
+			y: player.y + player.height / 2,
+			width: 720 * 0.07,
+			height: 445 * 0.07,
+			moving: { left: false, right: true, up: false, down: false },
+			from: player.id,
+			characterId: player.characterId,
+			ulti: false,
+		};
+		this.addProjectile(projectile);
+	}
+
 	clear() {
 		this.ennemies = [];
 		this.projectiles = [];
@@ -147,31 +165,10 @@ export default class Game {
 	 * @param {number} y
 	 */
 	movePlayer(player, x, y) {
-		const playerHalfWidth = player.width / 2;
-		const playerHalfHeight = player.height / 2;
-
-		let newX = player.x + x;
-		let newY = player.y + y;
-
-		if (newX - playerHalfWidth > 0 && newX + playerHalfWidth < this.width) {
-			player.x = newX;
-		} else {
-			if (newX - playerHalfWidth <= 0) {
-				player.x = playerHalfWidth;
-			} else {
-				player.x = this.width - playerHalfWidth;
-			}
-		}
-
-		if (newY - playerHalfHeight > 0 && newY + playerHalfHeight < this.height) {
-			player.y = newY;
-		} else {
-			if (newY - playerHalfHeight <= 0) {
-				player.y = playerHalfHeight;
-			} else {
-				player.y = this.height - playerHalfHeight;
-			}
-		}
+		if (player.x + x < 0 || player.x + player.width + x > this.width) return;
+		if (player.y + y < 0 || player.y + player.height + y > this.height) return;
+		player.x += x;
+		player.y += y;
 	}
 
 	#tickEvent() {
@@ -196,16 +193,16 @@ export default class Game {
 				this.removeProjectile(child);
 				return;
 			}
-			if (child.isMoving.left) {
+			if (child.moving.left) {
 				child.x -= 5;
 			}
-			if (child.isMoving.right) {
+			if (child.moving.right) {
 				child.x += 5;
 			}
-			if (child.isMoving.up) {
+			if (child.moving.up) {
 				child.y -= 5;
 			}
-			if (child.isMoving.down) {
+			if (child.moving.down) {
 				child.y += 5;
 			}
 		});
@@ -243,12 +240,16 @@ export default class Game {
 			this.ennemies.forEach(ennemy => {
 				if (areColliding(projectile, ennemy) && ennemy.isAlive) {
 					this.removeProjectile(projectile);
-					this.spawnItem(ennemy.position);
-					ennemy.explode();
-					this.players.forEach(player => {
+					/* A IMPLEMENTER */
+					// this.spawnItem(ennemy.position);
+					// ennemy.explode();
+					/* A REMPLACER */
+					this.removeEnnemy(ennemy);
+					const player = this.getPlayerById(projectile.from);
+					if (player) {
 						player.incrementScore();
-						player.incrementNbKill();
-					});
+						player.incrementUlt();
+					}
 				}
 			});
 		});

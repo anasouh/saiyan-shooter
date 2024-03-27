@@ -53,7 +53,7 @@ document.addEventListener('keydown', event => {
 	} else if (PAUSE_KEYS.includes(key)) {
 		gameView.togglePause();
 	} else if (SHOOT_KEYS.includes(key)) {
-		gameView.shootKeyDown();
+		socket.emit('shoot');
 	}
 });
 
@@ -93,9 +93,9 @@ socket.on('game', gameData => {
 		return item;
 	});
 	game.projectiles = projectiles.map(p => {
-		const projectile = new Projectile();
+		const projectile = new Projectile(p.characterId, p.ulti);
 		projectile.position.set(p.x, p.y);
-		projectile.texture = Texture.from(p.sprite);
+		projectile.dimensions = { width: p.width, height: p.height };
 		return projectile;
 	});
 	gameView.children = game.children;
