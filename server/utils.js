@@ -3,11 +3,15 @@ export function isOutOfScreen(screen, sprite) {
 	const halfHeight = sprite.height / 2;
 
 	return (
-		sprite.x - halfWidth < 0 ||
-		sprite.x + halfWidth > screen.width ||
-		sprite.y - halfHeight < 0 ||
-		sprite.y + halfHeight > screen.height
+		sprite.position.x - halfWidth < 0 ||
+		sprite.position.x + halfWidth > screen.width ||
+		sprite.position.y - halfHeight < 0 ||
+		sprite.position.y + halfHeight > screen.height
 	);
+}
+
+export function isLeftOfScreen(sprite) {
+	return sprite.x < 0;
 }
 
 export function areColliding(object1, object2) {

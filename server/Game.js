@@ -1,4 +1,21 @@
-import { areColliding, isOutOfScreen } from './utils.js';
+import { areColliding, isLeftOfScreen, isOutOfScreen } from './utils.js';
+
+class EnnemyData {
+	width;
+	height;
+	x;
+	y;
+	moving;
+	isAlive = true;
+
+	constructor({ width, height, x, y }) {
+		this.width = width;
+		this.height = height;
+		this.x = x;
+		this.y = y;
+		this.moving = { left: true, right: false, up: false, down: false };
+	}
+}
 
 export default class Game {
 	width;
@@ -110,13 +127,13 @@ export default class Game {
 		if (this.paused) return;
 		const random = Math.random();
 		if (random < 0.01) {
-			const ennemy = {
-				x: this.width,
+			let ennemy = new EnnemyData({
+				x: this.width - 1,
 				y: Math.random() * this.height,
 				width: 246,
 				height: 406,
 				moving: { left: true, right: false, up: false, down: false },
-			};
+			});
 			this.addEnnemy(ennemy);
 			console.log('Ennemy generated');
 			console.log(this.ennemies);
@@ -220,7 +237,7 @@ export default class Game {
 					//playSound(SFX.PUNCH_1);
 				}
 			});
-			if (isOutOfScreen({ width: this.width, height: this.height }, child)) {
+			if (isLeftOfScreen(child)) {
 				this.removeEnnemy(child);
 			}
 			if (child.moving.left) {
