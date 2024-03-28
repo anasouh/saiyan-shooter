@@ -91,7 +91,7 @@ export default class GameView extends View {
 	set currentPlayer(player) {
 		this.#currentPlayer = player;
 		// this.game.addPlayer(player);
-		// this.#lifeBar.player = player;
+		this.#lifeBar.player = player;
 		// this.#ultBar.player = player;
 		// player.onShoot = projectile => {
 		// 	this.game.addProjectile(projectile);
