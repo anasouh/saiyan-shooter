@@ -47,6 +47,16 @@ class History {
 			})),
 		});
 	}
+
+	/**
+	 * Retourne les scores individuels des joueurs triés par score décroissant
+	 * @returns {Array<{username: string, score: number}>}
+	 */
+	getScores() {
+		const scores = [];
+		this.games.map(game => game.players.map(player => scores.push(player)));
+		return scores.sort((a, b) => b.score - a.score);
+	}
 }
 const history = new History();
 
@@ -71,14 +81,13 @@ httpServer.listen(port, () => {
 });
 
 app.get('/api/scores', (req, res) => {
-	res.json(history.games);
+	res.json(history.getScores());
 });
 
 const io = new IOServer(httpServer);
 const game = new Game(1920, 1080);
 game.onEnd = () => {
 	history.add(game);
-	console.log(history);
 };
 
 io.on('connection', socket => {
