@@ -106,17 +106,19 @@ export default class Game {
 	}
 
 	shoot(player) {
-		const projectile = {
-			x: player.x + player.width - 10,
-			y: player.y + player.height / 2,
-			width: 720 * 0.07,
-			height: 445 * 0.07,
-			moving: { left: false, right: true, up: false, down: false },
-			from: player.id,
-			characterId: player.characterId,
-			ulti: false,
-		};
-		this.addProjectile(projectile);
+		if (player.alive) {
+			const projectile = {
+				x: player.x + player.width - 10,
+				y: player.y + player.height / 2,
+				width: 720 * 0.07,
+				height: 445 * 0.07,
+				moving: { left: false, right: true, up: false, down: false },
+				from: player.id,
+				characterId: player.characterId,
+				ulti: false,
+			};
+			this.addProjectile(projectile);
+		}
 	}
 
 	clear() {
@@ -174,60 +176,62 @@ export default class Game {
 	#tickEvent() {
 		if (this.paused) return;
 		this.generateEnnemy();
-		this.players.forEach(child => {
-			if (child.moving.left) {
-				this.movePlayer(child, -5, 0);
+		this.players.forEach(player => {
+			if (player.moving.left) {
+				this.movePlayer(player, -5, 0);
 			}
-			if (child.moving.right) {
-				this.movePlayer(child, 5, 0);
+			if (player.moving.right) {
+				this.movePlayer(player, 5, 0);
 			}
-			if (child.moving.up) {
-				this.movePlayer(child, 0, -5);
+			if (player.moving.up) {
+				this.movePlayer(player, 0, -5);
 			}
-			if (child.moving.down) {
-				this.movePlayer(child, 0, 5);
+			if (player.moving.down) {
+				this.movePlayer(player, 0, 5);
 			}
 		});
-		this.projectiles.forEach(child => {
-			if (isOutOfScreen({ width: this.width, height: this.height }, child)) {
-				this.removeProjectile(child);
+		this.projectiles.forEach(projectile => {
+			if (
+				isOutOfScreen({ width: this.width, height: this.height }, projectile)
+			) {
+				this.removeProjectile(projectile);
 				return;
 			}
-			if (child.moving.left) {
-				child.x -= 5;
+			if (projectile.moving.left) {
+				projectile.x -= 5;
 			}
-			if (child.moving.right) {
-				child.x += 5;
+			if (projectile.moving.right) {
+				projectile.x += 5;
 			}
-			if (child.moving.up) {
-				child.y -= 5;
+			if (projectile.moving.up) {
+				projectile.y -= 5;
 			}
-			if (child.moving.down) {
-				child.y += 5;
+			if (projectile.moving.down) {
+				projectile.y += 5;
 			}
 		});
-		this.ennemies.forEach(child => {
+		this.ennemies.forEach(ennemy => {
 			this.players.forEach(player => {
-				if (areColliding(child, player) && child.isAlive) {
-					this.removeEnnemy(child);
+				if (areColliding(ennemy, player) && ennemy.isAlive && player.alive) {
+					this.removeEnnemy(ennemy);
 					player.decrementLife();
 					//playSound(SFX.PUNCH_1);
 				}
 			});
-			if (isLeftOfScreen(child)) {
-				this.removeEnnemy(child);
+			if (isLeftOfScreen(ennemy)) {
+				this.removeEnnemy(ennemy);
 			}
-			if (child.moving.left) {
-				child.x -= 5;
+			if (ennemy.moving.left) {
+				ennemy.x -= 5;
 			}
-			if (child.moving.right) {
-				child.x += 5;
+			if (ennemy.moving.right) {
+				ennemy.x += 5;
 			}
-			if (child.moving.up) {
-				child.y -= 5;
+			if (ennemy.moving.up) {
+				ennemy.y -= 5;
 			}
-			if (child.moving.down) {
-				child.y += 5;
+			if (ennemy.moving.down) {
+				ennemy.y += 5;
 			}
 		});
 		this.items.forEach(child => {

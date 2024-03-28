@@ -104,7 +104,7 @@ loadTextures().then(() => {
 				gameView.currentPlayer = player;
 			}
 			player.position.set(p.x, p.y);
-			player.life = p.life;
+			player.setLife(p.life);
 			player.score = p.score;
 			player.setMoving(p.moving);
 			player.setSprites(p.characterId);

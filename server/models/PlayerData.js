@@ -26,6 +26,10 @@ export default class PlayerData {
 		this.height *= scale;
 	}
 
+	get alive() {
+		return this.life > 0;
+	}
+
 	decrementLife() {
 		this.life--;
 	}
