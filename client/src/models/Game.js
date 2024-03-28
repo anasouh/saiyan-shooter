@@ -76,7 +76,7 @@ export default class Game {
 	}
 
 	/**
-	 * Ajoute un ennemi.
+	 * Retire un ennemi.
 	 * @param {Ennemy} ennemy
 	 */
 	removeEnnemy(ennemy) {
