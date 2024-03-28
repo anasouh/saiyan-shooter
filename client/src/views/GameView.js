@@ -105,6 +105,10 @@ export default class GameView extends View {
 
 	update() {
 		this.#score.innerText = this.#currentPlayer.score;
+		if (this.game.lost) {
+			this.element.classList.add('gameOver');
+			this.#app.ticker.stop();
+		}
 	}
 
 	/**

@@ -35,6 +35,17 @@ export default class Game {
 		];
 	}
 
+	get lost() {
+		let result = true;
+		this.players.forEach(player => {
+			if (player.alive) {
+				result = false;
+				return;
+			}
+		});
+		return result;
+	}
+
 	/* Child management */
 
 	/**
