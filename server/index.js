@@ -24,6 +24,31 @@ class Directions {
 	}
 }
 
+class History {
+	#games;
+
+	constructor() {
+		this.#games = [];
+	}
+
+	/**
+	 * Ajouter une partie à l'historique
+	 * @param {Game} game
+	 */
+	add(game) {
+		let score = 0;
+		game.players.forEach(player => (score += player.score));
+		this.#games.push({
+			score,
+			duration: game.duration,
+			players: game.players.map(player => ({
+				username: player.username,
+				score: player.score,
+			})),
+		});
+	}
+}
+
 const routesPaths = ['/guide', '/game', '/credits'];
 
 const app = express();
@@ -46,7 +71,10 @@ httpServer.listen(port, () => {
 
 const io = new IOServer(httpServer);
 const game = new Game(1920, 1080);
-game.start();
+const history = new History();
+game.onLost = () => {
+	history.add(game);
+};
 
 io.on('connection', socket => {
 	console.log(`Nouvelle connexion du client ${socket.id}`);
@@ -56,12 +84,20 @@ io.on('connection', socket => {
 		characterId: 'goku',
 		id: socket.id,
 	});
-	game.addPlayer(player);
 
 	io.emit('game', game);
 	game.onTick = () => {
 		io.emit('game', game);
 	};
+
+	socket.on('start', () => {
+		player.reset();
+		if (game.paused) {
+			game.start();
+			game.addPlayer(player);
+			console.log(player.life);
+		}
+	});
 
 	socket.on('keydown', key => {
 		const direction = Directions.fromKey(key);
@@ -85,5 +121,8 @@ io.on('connection', socket => {
 	socket.on('disconnect', () => {
 		console.log(`Déconnexion du client ${socket.id}`);
 		game.removePlayer(player);
+		if (game.players.length === 0) {
+			game.stop();
+		}
 	});
 });

@@ -125,6 +125,7 @@ export default class Player extends Character {
 		this.life = value;
 		this.onLifeChange.forEach(callback => callback(this.life));
 		if (!this.alive) this.alpha = 0.3;
+		else this.alpha = 1;
 	}
 
 	/**

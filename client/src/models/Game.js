@@ -36,6 +36,7 @@ export default class Game {
 	}
 
 	get lost() {
+		if (this.players.length === 0) return false;
 		let result = true;
 		this.players.forEach(player => {
 			if (player.alive) {

@@ -69,6 +69,13 @@ homeView.onCharacterChange = characterId => {
 	socket.emit('character', characterId);
 };
 
+function onStart() {
+	socket.emit('start');
+}
+
+homeView.onStartPressed = onStart;
+gameView.onReplayPressed = onStart;
+
 Router.routes = routes;
 
 Router.navigate(window.location.pathname, true);

@@ -22,6 +22,7 @@ export default class GameView extends View {
 	#gameOverMenu;
 	#currentPlayer;
 	game;
+	onReplayPressed = () => {};
 
 	/**
 	 * Crée une nouvelle vue de jeu.
@@ -53,6 +54,7 @@ export default class GameView extends View {
 		this.#gameOverMenu.onReplay(() => {
 			this.#init();
 			this.resume();
+			this.onReplayPressed?.();
 		});
 		this.element.appendChild(this.#app.view);
 		// this.#app.view.onmousemove = event => this.#handleMouseMove(event);
@@ -104,7 +106,7 @@ export default class GameView extends View {
 	}
 
 	update() {
-		this.#score.innerText = this.#currentPlayer.score;
+		if (this.#currentPlayer) this.#score.innerText = this.#currentPlayer.score;
 		if (this.game.lost) {
 			this.element.classList.add('gameOver');
 			this.#app.ticker.stop();

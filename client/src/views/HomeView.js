@@ -9,6 +9,7 @@ export default class HomeView extends View {
 	#characterButtons;
 	#activeCharacter;
 	onCharacterChange = characterId => {};
+	onStartPressed = () => {};
 	isConfirmed = false;
 
 	constructor(element) {
@@ -50,6 +51,7 @@ export default class HomeView extends View {
 
 	#handleStartGame(event) {
 		event.preventDefault();
+		this.onStartPressed();
 		Router.navigate('/game');
 	}
 }

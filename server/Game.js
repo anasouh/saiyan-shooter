@@ -6,6 +6,7 @@ export default class Game {
 	height;
 	onAddChild = child => {};
 	onRemoveChild = child => {};
+	onLost = () => {};
 	ennemies = [];
 	projectiles = [];
 	items = [];
@@ -13,18 +14,29 @@ export default class Game {
 	timeStart;
 	time;
 	io;
-	paused = true;
 	#tickInterval;
 	onTick;
 
 	constructor(width, height) {
 		this.width = width;
 		this.height = height;
+		this.#tickInterval = setInterval(() => this.#tickEvent(), 1000 / 60);
 	}
 
 	set dimensions({ width, height }) {
 		this.width = width;
 		this.height = height;
+	}
+
+	get lost() {
+		let result = true;
+		this.players.forEach(player => {
+			if (player.alive) {
+				result = false;
+				return;
+			}
+		});
+		return result;
 	}
 
 	/* Child management */
@@ -140,23 +152,23 @@ export default class Game {
 		}
 	}
 
+	get paused() {
+		return this.#tickInterval === undefined;
+	}
+
 	start() {
 		this.timeStart = Date.now();
-		if (this.#tickInterval) clearInterval(this.#tickInterval);
-		this.#tickInterval = setInterval(() => this.#tickEvent(), 1000 / 60);
-		this.paused = false;
+		if (this.#tickInterval === undefined)
+			this.#tickInterval = setInterval(() => this.#tickEvent(), 1000 / 60);
 	}
 
 	stop() {
-		clearInterval(this.#tickInterval);
 		this.timeEnd();
-		this.paused = true;
+		this.#tickInterval = clearInterval(this.#tickInterval);
 	}
 
 	timeEnd() {
 		this.time = ((Date.now() - this.timeStart) / 1000).toFixed();
-
-		console.log(this.timeStart);
 	}
 
 	/**
@@ -175,6 +187,11 @@ export default class Game {
 
 	#tickEvent() {
 		if (this.paused) return;
+		if (this.players.length > 0 && this.lost) {
+			this.stop();
+			this.onLost?.();
+			return;
+		}
 		this.generateEnnemy();
 		this.players.forEach(player => {
 			if (player.moving.left) {
