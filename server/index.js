@@ -25,10 +25,10 @@ class Directions {
 }
 
 class History {
-	#games;
+	games;
 
 	constructor() {
-		this.#games = [];
+		this.games = [];
 	}
 
 	/**
@@ -38,7 +38,7 @@ class History {
 	add(game) {
 		let score = 0;
 		game.players.forEach(player => (score += player.score));
-		this.#games.push({
+		this.games.push({
 			score,
 			duration: game.duration,
 			players: game.players.map(player => ({
@@ -48,6 +48,7 @@ class History {
 		});
 	}
 }
+const history = new History();
 
 const routesPaths = ['/guide', '/game', '/credits'];
 
@@ -69,11 +70,15 @@ httpServer.listen(port, () => {
 	console.log(`Server running at http://localhost:${port}/`);
 });
 
+app.get('/api/scores', (req, res) => {
+	res.json(history.games);
+});
+
 const io = new IOServer(httpServer);
 const game = new Game(1920, 1080);
-const history = new History();
-game.onLost = () => {
+game.onEnd = () => {
 	history.add(game);
+	console.log(history);
 };
 
 io.on('connection', socket => {
@@ -90,7 +95,8 @@ io.on('connection', socket => {
 		io.emit('game', game);
 	};
 
-	socket.on('start', () => {
+	socket.on('start', username => {
+		player.username = username;
 		player.reset();
 		player.position = { x: 50, y: game.height / 2 };
 		if (game.paused) {

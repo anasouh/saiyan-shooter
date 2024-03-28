@@ -70,7 +70,7 @@ homeView.onCharacterChange = characterId => {
 };
 
 function onStart() {
-	socket.emit('start');
+	socket.emit('start', homeView.username);
 }
 
 homeView.onStartPressed = onStart;

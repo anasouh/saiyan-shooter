@@ -28,6 +28,7 @@ export default class HomeView extends View {
 			this.username = event.currentTarget.value;
 			localStorage.setItem('username', this.username);
 		});
+		this.username = this.#usernameField.value;
 		this.#characterButtons = element.querySelectorAll(
 			'.characterChoice button'
 		);

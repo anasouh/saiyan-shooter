@@ -15,6 +15,7 @@ export default class PlayerData {
 	characterId;
 	id;
 	invicibility = false;
+	username;
 
 	constructor({ x, y, characterId, id }) {
 		this.x = x;

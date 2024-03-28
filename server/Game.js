@@ -6,7 +6,7 @@ export default class Game {
 	height;
 	onAddChild = child => {};
 	onRemoveChild = child => {};
-	onLost = () => {};
+	onEnd = () => {};
 	ennemies = [];
 	projectiles = [];
 	items = [];
@@ -188,7 +188,7 @@ export default class Game {
 		if (this.paused) return;
 		if (this.players.length > 0 && this.lost) {
 			this.stop();
-			this.onLost?.();
+			this.onEnd?.();
 			return;
 		}
 		this.generateEnnemy();
