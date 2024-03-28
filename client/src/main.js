@@ -65,6 +65,10 @@ document.addEventListener('keyup', event => {
 	}
 });
 
+homeView.onCharacterChange = characterId => {
+	socket.emit('character', characterId);
+};
+
 Router.routes = routes;
 
 Router.navigate(window.location.pathname, true);
@@ -99,6 +103,7 @@ loadTextures().then(() => {
 			player.position.set(p.x, p.y);
 			player.life = p.life;
 			player.setMoving(p.moving);
+			player.setSprites(p.characterId);
 			return player;
 		});
 		game.ennemies = ennemies.map(e => {

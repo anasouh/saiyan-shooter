@@ -77,6 +77,11 @@ io.on('connection', socket => {
 		game.shoot(player);
 	});
 
+	socket.on('character', characterId => {
+		console.log(characterId);
+		player.characterId = characterId;
+	});
+
 	socket.on('disconnect', () => {
 		console.log(`Déconnexion du client ${socket.id}`);
 		game.removePlayer(player);
