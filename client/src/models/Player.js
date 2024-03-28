@@ -13,7 +13,7 @@ export const KILL_FOR_ULTI = 5;
  * Représente un joueur.
  */
 export default class Player extends Character {
-	#score = SCORE;
+	score = SCORE;
 	life;
 	#moving = { up: false, down: false, left: false, right: false };
 	onShoot;
@@ -110,14 +110,6 @@ export default class Player extends Character {
 	}
 
 	/**
-	 * Retourne le score du joueur.
-	 * @returns {number} Le score du joueur.
-	 */
-	getScore() {
-		return this.#score;
-	}
-
-	/**
 	 * Retourne la vie du joueur.
 	 * @returns {number} La vie du joueur.
 	 */
@@ -152,8 +144,8 @@ export default class Player extends Character {
 	 * Incrémente le score du joueur.
 	 */
 	incrementScore() {
-		this.#score++;
-		this.onScoreChange.forEach(callback => callback(this.#score));
+		this.score++;
+		this.onScoreChange.forEach(callback => callback(this.score));
 	}
 
 	/**
@@ -172,10 +164,10 @@ export default class Player extends Character {
 		if (this.#characterId === 'kaioken' || this.#characterId === 'ssj')
 			this.#characterId = 'goku';
 		this.texture = PIXI.Assets.get(`${this.#characterId}/player.png`);
-		this.#score = SCORE;
+		this.score = SCORE;
 		this.life = LIFE;
 		this.kills = 0;
-		this.onScoreChange.forEach(callback => callback(this.#score));
+		this.onScoreChange.forEach(callback => callback(this.score));
 		this.onLifeChange.forEach(callback => callback(this.life));
 	}
 

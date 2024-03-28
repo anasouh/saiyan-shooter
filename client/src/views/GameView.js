@@ -90,17 +90,21 @@ export default class GameView extends View {
 	 */
 	set currentPlayer(player) {
 		this.#currentPlayer = player;
-		this.game.addPlayer(player);
-		this.#lifeBar.player = player;
-		this.#ultBar.player = player;
-		player.onShoot = projectile => {
-			this.game.addProjectile(projectile);
-		};
-		player.addEventListener('lifeChange', life => this.#onLifeChange(life));
-		player.addEventListener('scoreChange', score => {
-			this.#score.innerText = score;
-		});
-		this.#app.view.onmousedown = () => player.reload();
+		// this.game.addPlayer(player);
+		// this.#lifeBar.player = player;
+		// this.#ultBar.player = player;
+		// player.onShoot = projectile => {
+		// 	this.game.addProjectile(projectile);
+		// };
+		// player.addEventListener('lifeChange', life => this.#onLifeChange(life));
+		// player.addEventListener('scoreChange', score => {
+		// 	this.#score.innerText = score;
+		// });
+		// this.#app.view.onmousedown = () => player.reload();
+	}
+
+	update() {
+		this.#score.innerText = this.#currentPlayer.score;
 	}
 
 	/**

@@ -100,8 +100,12 @@ loadTextures().then(() => {
 				player.dimensions = { width: p.width, height: p.height };
 				player.id = p.id;
 			}
+			if (p.id == socket.id) {
+				gameView.currentPlayer = player;
+			}
 			player.position.set(p.x, p.y);
 			player.life = p.life;
+			player.score = p.score;
 			player.setMoving(p.moving);
 			player.setSprites(p.characterId);
 			return player;
@@ -124,5 +128,6 @@ loadTextures().then(() => {
 			return projectile;
 		});
 		gameView.children = game.children;
+		gameView.update();
 	});
 });
