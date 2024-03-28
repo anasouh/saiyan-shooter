@@ -1,3 +1,5 @@
+const INVICIBILITY_TIME = 1000;
+
 export default class PlayerData {
 	static DEFAULT_LIFE = 3;
 	static DEFAULT_SCORE = 0;
@@ -12,6 +14,7 @@ export default class PlayerData {
 	height = 406;
 	characterId;
 	id;
+	invicibility = false;
 
 	constructor({ x, y, characterId, id }) {
 		this.x = x;
@@ -26,12 +29,20 @@ export default class PlayerData {
 		this.height *= scale;
 	}
 
+	set position({ x, y }) {
+		this.x = x;
+		this.y = y;
+	}
+
 	get alive() {
 		return this.life > 0;
 	}
 
 	decrementLife() {
-		this.life--;
+		if (!this.invicibility) {
+			this.life--;
+			this.invicible();
+		}
 	}
 
 	incrementScore() {
@@ -50,5 +61,12 @@ export default class PlayerData {
 		this.life = PlayerData.DEFAULT_LIFE;
 		this.score = PlayerData.DEFAULT_SCORE;
 		this.ult = 0;
+	}
+
+	invicible() {
+		this.invicibility = true;
+		setTimeout(() => {
+			this.invicibility = false;
+		}, INVICIBILITY_TIME);
 	}
 }

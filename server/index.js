@@ -92,11 +92,12 @@ io.on('connection', socket => {
 
 	socket.on('start', () => {
 		player.reset();
+		player.position = { x: 50, y: game.height / 2 };
 		if (game.paused) {
 			game.start();
-			game.addPlayer(player);
-			console.log(player.life);
 		}
+		player.invicible();
+		game.addPlayer(player);
 	});
 
 	socket.on('keydown', key => {

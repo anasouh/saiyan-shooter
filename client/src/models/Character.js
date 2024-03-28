@@ -9,7 +9,7 @@ PIXI.Assets.load('https://pixijs.com/assets/spritesheet/mc.json').then(() => {
 	}
 });
 
-export const ANIMATION_TIME = 200;
+export const ANIMATION_TIME = 1000;
 
 export default class Character extends PIXI.AnimatedSprite {
 	#redFilter;
@@ -37,9 +37,9 @@ export default class Character extends PIXI.AnimatedSprite {
 	/**
 	 * Rend le personnage rouge pendant un court instant.
 	 */
-	hitAnimation() {
+	hitAnimation(time = ANIMATION_TIME) {
 		this.#redFilter.enabled = true;
-		setTimeout(() => (this.#redFilter.enabled = false), ANIMATION_TIME);
+		setTimeout(() => (this.#redFilter.enabled = false), time);
 	}
 
 	explodeAnimation() {

@@ -115,6 +115,7 @@ loadTextures().then(() => {
 			player.score = p.score;
 			player.setMoving(p.moving);
 			player.setSprites(p.characterId);
+			player.invicibility = p.invicibility;
 			return player;
 		});
 		game.ennemies = ennemies.map(e => {

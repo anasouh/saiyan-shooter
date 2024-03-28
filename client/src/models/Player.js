@@ -23,6 +23,7 @@ export default class Player extends Character {
 	#characterId;
 	#kills;
 	id;
+	#invicibility = false;
 
 	constructor(characterId) {
 		super(PIXI.Assets.get(`${characterId}/player.png`));
@@ -51,6 +52,18 @@ export default class Player extends Character {
 		this.scaleValue = width / this.width;
 		this.width = width;
 		this.height = height;
+	}
+
+	get invicibility() {
+		return this.#invicibility;
+	}
+
+	set invicibility(value) {
+		if (value === this.#invicibility) return;
+		this.#invicibility = value;
+		if (value) {
+			this.hitAnimation();
+		}
 	}
 
 	/**

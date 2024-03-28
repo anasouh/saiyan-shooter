@@ -11,6 +11,7 @@ export default class Game {
 	projectiles = [];
 	items = [];
 	players = [];
+	paused = true;
 	timeStart;
 	time;
 	io;
@@ -20,7 +21,9 @@ export default class Game {
 	constructor(width, height) {
 		this.width = width;
 		this.height = height;
-		this.#tickInterval = setInterval(() => this.#tickEvent(), 1000 / 60);
+		this.#tickInterval = setInterval(() => {
+			this.#tickEvent();
+		}, 1000 / 60);
 	}
 
 	set dimensions({ width, height }) {
@@ -104,6 +107,7 @@ export default class Game {
 	/* Players management */
 
 	addPlayer(player) {
+		if (this.getPlayerById(player.id)) return;
 		this.players.push(player);
 		this.onAddChild(player);
 	}
@@ -152,19 +156,14 @@ export default class Game {
 		}
 	}
 
-	get paused() {
-		return this.#tickInterval === undefined;
-	}
-
 	start() {
 		this.timeStart = Date.now();
-		if (this.#tickInterval === undefined)
-			this.#tickInterval = setInterval(() => this.#tickEvent(), 1000 / 60);
+		this.paused = false;
 	}
 
 	stop() {
 		this.timeEnd();
-		this.#tickInterval = clearInterval(this.#tickInterval);
+		this.paused = true;
 	}
 
 	timeEnd() {
@@ -229,7 +228,12 @@ export default class Game {
 		});
 		this.ennemies.forEach(ennemy => {
 			this.players.forEach(player => {
-				if (areColliding(ennemy, player) && ennemy.isAlive && player.alive) {
+				if (
+					areColliding(ennemy, player) &&
+					ennemy.isAlive &&
+					player.alive &&
+					!player.invicibility
+				) {
 					this.removeEnnemy(ennemy);
 					player.decrementLife();
 					//playSound(SFX.PUNCH_1);
