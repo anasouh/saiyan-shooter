@@ -1,20 +1,11 @@
-export default class EnnemyData {
-	width = 246;
-	height = 406;
-	x;
-	y;
-	moving;
+import Entity from './Entity.js';
+
+export default class EnnemyData extends Entity {
 	isAlive = true;
 
 	constructor({ x, y }) {
-		this.x = x;
-		this.y = y;
+		super({ x, y, width: 246, height: 406 });
 		this.moving = { left: true, right: false, up: false, down: false };
 		this.scale = 0.25;
-	}
-
-	set scale(scale) {
-		this.width *= scale;
-		this.height *= scale;
 	}
 }

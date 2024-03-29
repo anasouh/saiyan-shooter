@@ -1,5 +1,6 @@
 import { areColliding, isLeftOfScreen, isOutOfScreen } from './utils.js';
 import EnnemyData from './models/EnnemyData.js';
+import ProjectileData from './models/ProjectileData.js';
 
 export default class Game {
 	width;
@@ -12,8 +13,8 @@ export default class Game {
 	items = [];
 	players = [];
 	paused = true;
-	timeStart;
-	time;
+	#startTime;
+	#endTime;
 	io;
 	#tickInterval;
 	onTick;
@@ -107,7 +108,7 @@ export default class Game {
 	/* Players management */
 
 	addPlayer(player) {
-		if (this.getPlayerById(player.id)) return;
+		if (this.findPlayerById(player.id)) return;
 		this.players.push(player);
 		this.onAddChild(player);
 	}
@@ -117,22 +118,20 @@ export default class Game {
 		this.onRemoveChild(player);
 	}
 
-	getPlayerById(id) {
+	findPlayerById(id) {
 		return this.players.find(p => p.id === id);
 	}
 
 	shoot(player) {
 		if (player.alive) {
-			const projectile = {
+			const projectile = new ProjectileData({
 				x: player.x + player.width - 10,
 				y: player.y + player.height / 2,
-				width: 720 * 0.07,
-				height: 445 * 0.07,
-				moving: { left: false, right: true, up: false, down: false },
 				from: player.id,
 				characterId: player.characterId,
 				ulti: false,
-			};
+			});
+			projectile.moving.right = true;
 			this.addProjectile(projectile);
 		}
 	}
@@ -157,17 +156,17 @@ export default class Game {
 	}
 
 	start() {
-		this.timeStart = Date.now();
+		this.#startTime = Date.now();
 		this.paused = false;
 	}
 
 	stop() {
-		this.timeEnd();
+		this.#endTime = Date.now();
 		this.paused = true;
 	}
 
-	timeEnd() {
-		this.time = ((Date.now() - this.timeStart) / 1000).toFixed();
+	get duration() {
+		return (this.#endTime - this.#startTime).toFixed() / 1000;
 	}
 
 	/**
@@ -270,7 +269,7 @@ export default class Game {
 					// ennemy.explode();
 					/* A REMPLACER */
 					this.removeEnnemy(ennemy);
-					const player = this.getPlayerById(projectile.from);
+					const player = this.findPlayerById(projectile.from);
 					if (player) {
 						player.incrementScore();
 						player.incrementUlt();
@@ -288,5 +287,12 @@ export default class Game {
 			});
 		});
 		this.onTick?.();
+	}
+
+	/**
+	 * Arrête complètement le jeu.
+	 */
+	destroy() {
+		clearInterval(this.#tickInterval);
 	}
 }
