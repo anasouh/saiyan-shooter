@@ -92,17 +92,7 @@ export default class GameView extends View {
 	 */
 	set currentPlayer(player) {
 		this.#currentPlayer = player;
-		// this.game.addPlayer(player);
 		this.#lifeBar.player = player;
-		// this.#ultBar.player = player;
-		// player.onShoot = projectile => {
-		// 	this.game.addProjectile(projectile);
-		// };
-		// player.addEventListener('lifeChange', life => this.#onLifeChange(life));
-		// player.addEventListener('scoreChange', score => {
-		// 	this.#score.innerText = score;
-		// });
-		// this.#app.view.onmousedown = () => player.reload();
 	}
 
 	update() {
@@ -141,10 +131,6 @@ export default class GameView extends View {
 		super.hide();
 		this.pause();
 		this.game.stop();
-	}
-
-	#resize() {
-		this.#app.renderer.resize(window.innerWidth, window.innerHeight);
 	}
 
 	#clear() {
@@ -205,59 +191,10 @@ export default class GameView extends View {
 	togglePause() {
 		if (this.#app.ticker.started) {
 			this.pause();
-			this.#pauseButton.innerText = 'Reprendre';
 		} else {
 			this.resume();
-			this.#pauseButton.innerText = 'Pause';
 		}
 	}
-
-	/**
-	 * Déplace le joueur dans la scène, en vérifiant que le joueur ne
-	 * dépasse pas les bords de la scène.
-	 * @param {Player} player
-	 * @param {number} x
-	 * @param {number} y
-	 */
-	movePlayer(player, x, y) {
-		const playerHalfWidth = player.width / 2;
-		const playerHalfHeight = player.height / 2;
-
-		let newX = player.position.x + x;
-		let newY = player.position.y + y;
-
-		if (
-			newX - playerHalfWidth > 0 &&
-			newX + playerHalfWidth < this.#app.screen.width
-		) {
-			player.position.x = newX;
-		} else {
-			if (newX - playerHalfWidth <= 0) {
-				player.position.x = playerHalfWidth;
-			} else {
-				player.position.x = this.#app.screen.width - playerHalfWidth;
-			}
-		}
-
-		if (
-			newY - playerHalfHeight > 0 &&
-			newY + playerHalfHeight < this.#app.screen.height
-		) {
-			player.position.y = newY;
-		} else {
-			if (newY - playerHalfHeight <= 0) {
-				player.position.y = playerHalfHeight;
-			} else {
-				player.position.y = this.#app.screen.height - playerHalfHeight;
-			}
-		}
-	}
-
-	// #handleMouseMove(event) {
-	// 	const { clientX, clientY } = event;
-	// 	this.#currentPlayer.x = clientX;
-	// 	this.#currentPlayer.y = clientY;
-	// }
 
 	leave() {
 		this.#clear();
