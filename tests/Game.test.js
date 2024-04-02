@@ -154,4 +154,40 @@ describe('Game', () => {
 		game.stop();
 		game.destroy();
 	});
+
+	it('should move the player', async () => {
+		const game = new Game(1000, 1000);
+		const player = new PlayerData({ x: 0, y: 0 });
+		game.addPlayer(player);
+		player.moving.right = true;
+		game.start();
+		await new Promise(resolve => setTimeout(resolve, 1000 / 60));
+		assert(player.x > 0);
+		game.stop();
+		game.destroy();
+	});
+
+	it('should move the ennemy', async () => {
+		const game = new Game(1000, 1000);
+		const ennemy = new EnnemyData({ x: 900, y: 500 });
+		game.addEnnemy(ennemy);
+		ennemy.moving.left = true;
+		game.start();
+		await new Promise(resolve => setTimeout(resolve, 1000 / 60));
+		assert(ennemy.x < 900);
+		game.stop();
+		game.destroy();
+	});
+
+	it('should move the projectile', async () => {
+		const game = new Game(1000, 1000);
+		const projectile = new ProjectileData({ x: 100, y: 500 });
+		game.addProjectile(projectile);
+		projectile.moving.right = true;
+		game.start();
+		await new Promise(resolve => setTimeout(resolve, 1000 / 60));
+		assert(projectile.x > 100);
+		game.stop();
+		game.destroy();
+	});
 });
