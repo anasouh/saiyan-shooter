@@ -121,4 +121,37 @@ describe('Game', () => {
 		assert(game.duration === 1);
 		game.destroy();
 	});
+
+	it('should hit the player on ennemy collision', async () => {
+		const game = new Game();
+		const player = new PlayerData({ x: 0, y: 0 });
+		const ennemy = new EnnemyData({ x: 0, y: 0 });
+		const life = player.life;
+		game.addPlayer(player);
+		game.addEnnemy(ennemy);
+		game.start();
+		await new Promise(resolve => setTimeout(resolve, 100));
+		assert(player.life < life);
+		game.stop();
+		game.destroy();
+	});
+
+	it('should hit the ennemy on projectile collision', async () => {
+		const game = new Game(1000, 1000);
+		const player = new PlayerData({ x: 0, y: 0 });
+		const ennemy = new EnnemyData({ x: 500, y: 500 });
+		const projectile = new ProjectileData({
+			x: 500,
+			y: 500,
+			radius: 10,
+			from: player.id,
+		});
+		game.addEnnemy(ennemy);
+		game.addProjectile(projectile);
+		game.start();
+		await new Promise(resolve => setTimeout(resolve, 1000));
+		assert(ennemy.isAlive === false);
+		game.stop();
+		game.destroy();
+	});
 });

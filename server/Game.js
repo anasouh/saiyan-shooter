@@ -263,6 +263,7 @@ export default class Game {
 		this.projectiles.forEach(projectile => {
 			this.ennemies.forEach(ennemy => {
 				if (areColliding(projectile, ennemy) && ennemy.isAlive) {
+					ennemy.isAlive = false;
 					this.removeProjectile(projectile);
 					/* A IMPLEMENTER */
 					// this.spawnItem(ennemy.position);
