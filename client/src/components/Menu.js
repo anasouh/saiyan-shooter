@@ -5,6 +5,7 @@ export default class Menu extends View {
 	#mainMenuButton;
 	#creditsButton;
 	#replayButton;
+	#scoresButton;
 
 	constructor(element) {
 		super(element);
@@ -12,6 +13,7 @@ export default class Menu extends View {
 		this.#mainMenuButton = element.querySelector('button#mainMenu');
 		this.#creditsButton = element.querySelector('button#credits');
 		this.#replayButton = element.querySelector('button#replay');
+		this.#scoresButton = element.querySelector('button#scores');
 	}
 
 	onMainMenu(callback) {
@@ -32,5 +34,10 @@ export default class Menu extends View {
 	onReplay(callback) {
 		if (!this.#replayButton) return;
 		this.#replayButton.addEventListener('click', callback);
+	}
+
+	onScores(callback) {
+		if (!this.#scoresButton) return;
+		this.#scoresButton.addEventListener('click', callback);
 	}
 }

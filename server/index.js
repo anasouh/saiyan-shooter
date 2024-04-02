@@ -60,7 +60,7 @@ class History {
 }
 const history = new History();
 
-const routesPaths = ['/guide', '/game', '/credits'];
+const routesPaths = ['/guide', '/game', '/credits', '/scores'];
 
 const app = express();
 addWebpackMiddleware(app);

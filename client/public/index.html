@@ -27,10 +27,17 @@
 							<button class="btn blue font" id="startGame">JOUER</button>
 							<button class="btn font" id="guide">?</button>
 						</div>
+						<div class="flex gap-10">
+							<a href="/scores">Tableau des scores</a>•
+							<a href="/credits">Crédits</a>
+						</div>
 					</div>
 				</div>
 			</div>
 			<div class="scores flex-column justify-center align-center">
+				<div
+					class="menu"
+				>
 				<table>
 					<thead>
 						<tr>
@@ -39,12 +46,15 @@
 							</th>
 							<th>Score</th>
 						</tr>
-						<tbody id="scoreView"> 
+						<tbody> 
 							
 						</tbody>
 					</thead>
 				</table>
-			
+				<div class="flex gap-10">
+					<button class="btn small" id="backToHome">Retour au menu</button>
+				</div>
+				</div>
 			</div>
 			<div class="guide flex-column justify-center align-center">
 				<div
@@ -81,8 +91,10 @@
 						<h1>Game Over</h1>
 						<p></p>
 						<div class="flex-column gap-10">
-							<button class="btn small" id="mainMenu">Retour au menu</button>
 							<button class="btn small" id="replay">Rejouer</button>
+							<button class="btn small" id="scores">Tableau des scores</button>
+							<button class="btn small" id="credits">Crédits</button>
+							<button class="btn small" id="mainMenu">Retour au menu</button>
 						</div>
 					</div>
 				</div>

@@ -2,6 +2,7 @@ import HomeView from './views/HomeView.js';
 import Router from './Router.js';
 import View from './views/View.js';
 import GameView from './views/GameView.js';
+import ScoreView from './views/ScoreView.js';
 import Player from './models/Player.js';
 import { CONTROL_KEYS, PAUSE_KEYS, SHOOT_KEYS } from './settings/keys.js';
 import GuideView from './views/GuideView.js';
@@ -19,12 +20,14 @@ const game = new Game(window.screen.width, window.screen.height);
 const homeView = new HomeView(document.querySelector('.home'));
 const guideView = new GuideView(document.querySelector('.guide'));
 const gameView = new GameView(game, document.querySelector('.game'));
+const scoreView = new ScoreView(document.querySelector('.scores'));
 const creditsView = new View(document.querySelector('.credits'));
 
 const routes = [
 	{ path: '/', view: homeView, title: 'Accueil' },
 	{ path: '/guide', view: guideView, title: 'Guide' },
 	{ path: '/game', view: gameView, title: 'Jeu' },
+	{ path: '/scores', view: scoreView, title: 'Tableau des scores' },
 	{ path: '/credits', view: creditsView, title: 'Crédits' },
 ];
 
@@ -77,9 +80,16 @@ homeView.onStartPressed = onStart;
 gameView.onReplayPressed = onStart;
 
 Router.routes = routes;
+const anchors = document.querySelectorAll('a');
 
 Router.navigate(window.location.pathname, true);
 window.onpopstate = () => Router.navigate(document.location.pathname, true);
+anchors.forEach(a => {
+	a.addEventListener('click', event => {
+		event.preventDefault();
+		Router.navigate(a.getAttribute('href'));
+	});
+});
 
 gameView.setLoading(true);
 loadTextures().then(() => {

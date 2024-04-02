@@ -1,22 +1,34 @@
+import Router from '../Router.js';
 import View from './View.js';
 
 export default class ScoreView extends View {
+	#tbody;
+	#backToHomeButton;
+
 	constructor(element) {
 		super(element);
+		this.#tbody = element.querySelector('tbody');
+		this.#backToHomeButton = element.querySelector('button#backToHome');
+		this.#backToHomeButton.addEventListener('click', () =>
+			Router.navigate('/')
+		);
 	}
 
-	#scores;
+	show() {
+		this.renderScores();
+		super.show();
+	}
 
-	tableScore = document.querySelector('.scores');
+	renderScores() {
+		fetch('/api/scores')
+			.then(response => response.json())
+			.then(scores => {
+				let html = '';
+				scores.slice(0, 10).forEach(({ username, score }) => {
+					html += `<tr><td> ${username}</td> <td> ${score}</td> </tr>`;
+				});
 
-	renderScores(scores) {
-		contenue = ``;
-		scores.slice(0, 10).forEach(score => {
-			pseudo = score.pseudo;
-			sc = score.score;
-			contenue += `<tr><td> ${pseudo}</td> <td> ${sc}</td> </tr>`;
-		});
-
-		this.tableScore.innerHTML(contenue);
+				this.#tbody.innerHTML = html;
+			});
 	}
 }

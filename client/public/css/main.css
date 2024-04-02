@@ -24,6 +24,16 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Press Start 2p';
 }
 
+a {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    color: var(--primary-color);
+} 
+
+a:hover {
+  text-decoration-style: solid;
+}
+
 .viewContainer {
   height: 100vh;
   display: flex;

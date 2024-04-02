@@ -56,6 +56,8 @@ export default class GameView extends View {
 			this.resume();
 			this.onReplayPressed?.();
 		});
+		this.#gameOverMenu.onCredits(() => Router.navigate('/credits'));
+		this.#gameOverMenu.onScores(() => Router.navigate('/scores'));
 		this.element.appendChild(this.#app.view);
 		// this.#app.view.onmousemove = event => this.#handleMouseMove(event);
 		this.#init();
