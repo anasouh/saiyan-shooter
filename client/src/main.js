@@ -126,6 +126,7 @@ loadTextures().then(() => {
 			player.setMoving(p.moving);
 			player.setSprites(p.characterId);
 			player.invicibility = p.invicibility;
+			player.kills = p.kills;
 			return player;
 		});
 		game.ennemies = ennemies.map(e => {
@@ -146,6 +147,7 @@ loadTextures().then(() => {
 			return projectile;
 		});
 		gameView.children = game.children;
+		game.duration = gameData.duration;
 		gameView.update();
 	});
 });

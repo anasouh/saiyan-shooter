@@ -60,7 +60,8 @@ class History {
 }
 const history = new History();
 
-const routesPaths = ['/guide', '/game', '/credits', '/scores'];
+const routesPaths = ['/guide', '/credits', '/scores'];
+const redirectPaths = ['/game'];
 
 const app = express();
 addWebpackMiddleware(app);
@@ -73,6 +74,12 @@ app.use(express.static('client/public'));
 routesPaths.forEach(path => {
 	app.get(path, (req, res) => {
 		res.sendFile('client/public/index.html', fileOptions);
+	});
+});
+
+redirectPaths.forEach(path => {
+	app.get(path, (req, res) => {
+		res.redirect('/');
 	});
 });
 

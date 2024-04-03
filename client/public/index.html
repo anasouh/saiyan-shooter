@@ -82,6 +82,7 @@
 				<div class="overlay">
 					<div class="menu" id="pause">
 						<h1>Pause</h1>
+						<div class="content"></div>
 						<div class="flex-column gap-10">
 							<button class="btn small" id="resumeGame">Reprendre</button>
 							<button class="btn small" id="mainMenu">Retour au menu</button>
@@ -89,7 +90,7 @@
 					</div>
 					<div class="menu" id="gameOver">
 						<h1>Game Over</h1>
-						<p></p>
+						<div class="content"></div>
 						<div class="flex-column gap-10">
 							<button class="btn small" id="replay">Rejouer</button>
 							<button class="btn small" id="scores">Tableau des scores</button>
@@ -101,6 +102,7 @@
 				<div class="ath active">
 					<button class="btn small" id="pauseGame">Pause</button>
 					<div class="flex gap-20">
+						<span class="duration font">Temps : <span id="durationVal"></span> </span>
 						<span class="score font">Score : <span id="scoreVal"></span> </span>
 						<div class="bar-container">
 							<div class="bar" id="life"></div>

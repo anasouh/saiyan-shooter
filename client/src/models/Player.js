@@ -15,6 +15,7 @@ export const KILL_FOR_ULTI = 5;
 export default class Player extends Character {
 	score = SCORE;
 	life;
+	kills;
 	#moving = { up: false, down: false, left: false, right: false };
 	onShoot;
 	onScoreChange = [];

@@ -9,6 +9,7 @@ const ITEM_SPAWN_PROBABILITY = 0.1;
 export default class Game {
 	width;
 	height;
+	duration;
 	onAddChild = child => {};
 	onRemoveChild = child => {};
 	onEnd = () => {};
@@ -91,13 +92,13 @@ export default class Game {
 	 * @param {number} delay
 	 */
 	spawnItem({ x, y }, delay = 450) {
-		setTimeout(() => {
-			if (Math.random() < ITEM_SPAWN_PROBABILITY) {
+		if (Math.random() < ITEM_SPAWN_PROBABILITY) {
+			setTimeout(() => {
 				const item = ItemData.randomItem({ x, y });
 				this.items.push(item);
 				this.onAddChild(item);
-			}
-		}, delay);
+			}, delay);
+		}
 	}
 
 	/**
@@ -161,6 +162,7 @@ export default class Game {
 
 	start() {
 		this.#startTime = Date.now();
+		this.#endTime = undefined;
 		this.paused = false;
 	}
 
@@ -169,8 +171,14 @@ export default class Game {
 		this.paused = true;
 	}
 
-	get duration() {
-		return (this.#endTime - this.#startTime).toFixed() / 1000;
+	#updateDuration() {
+		if (this.#startTime && !this.#endTime) {
+			this.duration = ((Date.now() - this.#startTime) / 1000).toFixed();
+		} else if (this.#startTime && this.#endTime) {
+			this.duration = ((this.#endTime - this.#startTime) / 1000).toFixed();
+		} else {
+			this.duration = 0;
+		}
 	}
 
 	/**
@@ -189,6 +197,7 @@ export default class Game {
 
 	#tickEvent() {
 		if (this.paused) return;
+		this.#updateDuration();
 		if (this.players.length > 0 && this.lost) {
 			this.stop();
 			this.onEnd?.();

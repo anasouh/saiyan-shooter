@@ -5,6 +5,7 @@ import Item, { ITEM_SPAWN_PROBABILITY } from './Item.js';
 export default class Game {
 	width;
 	height;
+	#duration;
 	onAddChild = child => {};
 	onRemoveChild = child => {};
 	ennemies = [];
@@ -45,6 +46,16 @@ export default class Game {
 			}
 		});
 		return result;
+	}
+
+	get duration() {
+		const minutes = Math.floor(this.#duration / 60);
+		const seconds = this.#duration % 60;
+		return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+	}
+
+	set duration(value) {
+		this.#duration = value;
 	}
 
 	/* Child management */

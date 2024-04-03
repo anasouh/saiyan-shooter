@@ -18,6 +18,7 @@ export default class GameView extends View {
 	#lifeBar;
 	#ultBar;
 	#score;
+	#duration;
 	#pauseMenu;
 	#gameOverMenu;
 	#currentPlayer;
@@ -45,6 +46,7 @@ export default class GameView extends View {
 		this.#lifeBar = new LifeBar(ath.querySelector('.bar#life'));
 		this.#ultBar = new UltBar(ath.querySelector('.bar#ult'));
 		this.#score = ath.querySelector('#scoreVal');
+		this.#duration = ath.querySelector('#durationVal');
 		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
 		this.#pauseMenu.onResume(() => this.togglePause());
 		this.#pauseMenu.onMainMenu(() => this.leave());
@@ -68,26 +70,6 @@ export default class GameView extends View {
 		children.forEach(child => this.#app.stage.addChild(child));
 	}
 
-	#onLifeChange(life) {
-		if (life <= 0) {
-			this.#currentPlayer.fallAnimation().then(() => {
-				this.#app.ticker.stop();
-			});
-			this.element.classList.add('gameOver');
-			this.game.timeEnd();
-			this.element.querySelector('.menu#gameOver p').innerHTML =
-				'temps : ' +
-				this.game.time +
-				's' +
-				'<br>' +
-				'kills : ' +
-				this.#currentPlayer.kills +
-				'<br>' +
-				'score : ' +
-				this.#currentPlayer.getScore();
-		}
-	}
-
 	/**
 	 * Ajoute le joueur contrôlé à la scène.
 	 * @param {Player} player
@@ -99,8 +81,14 @@ export default class GameView extends View {
 
 	update() {
 		if (this.#currentPlayer) this.#score.innerText = this.#currentPlayer.score;
+		this.#duration.innerText = this.game.duration;
 		if (this.game.lost) {
 			this.element.classList.add('gameOver');
+			this.#gameOverMenu.content = `
+				<p>Temps : ${this.game.duration}</p>
+				<p>Kills : ${this.#currentPlayer.kills}</p>
+				<p>Score : ${this.#currentPlayer.score}</p>
+			`;
 			this.#app.ticker.stop();
 		}
 	}

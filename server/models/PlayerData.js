@@ -8,6 +8,7 @@ export default class PlayerData extends Entity {
 	score = PlayerData.DEFAULT_SCORE;
 	life = PlayerData.DEFAULT_LIFE;
 	ult = 0;
+	kills = 0;
 	id;
 	characterId;
 	id;
@@ -38,6 +39,10 @@ export default class PlayerData extends Entity {
 
 	incrementUlt() {
 		this.ult++;
+	}
+
+	incrementKills() {
+		this.kills++;
 	}
 
 	resetUlt() {
