@@ -45,9 +45,13 @@ export default class PlayerData extends Entity {
 	}
 
 	reset() {
-		this.life = PlayerData.DEFAULT_LIFE;
+		this.resetLife();
 		this.score = PlayerData.DEFAULT_SCORE;
 		this.ult = 0;
+	}
+
+	resetLife() {
+		this.life = PlayerData.DEFAULT_LIFE;
 	}
 
 	invicible() {

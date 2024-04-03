@@ -91,7 +91,7 @@ anchors.forEach(a => {
 	});
 });
 
-gameView.setLoading(true);
+homeView.setLoading(true);
 loadTextures().then(() => {
 	// const player = new Player(homeView.characterId);
 	// homeView.onCharacterChange = characterId => {
@@ -105,7 +105,7 @@ loadTextures().then(() => {
 	// 	event.preventDefault();
 	// 	player.ulti();
 	// };
-	gameView.setLoading(false);
+	homeView.setLoading(false);
 
 	socket.on('game', gameData => {
 		const { width, height, players, items, projectiles, ennemies } = gameData;

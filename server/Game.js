@@ -1,6 +1,10 @@
 import { areColliding, isLeftOfScreen, isOutOfScreen } from './utils.js';
 import EnnemyData from './models/EnnemyData.js';
 import ProjectileData from './models/ProjectileData.js';
+import ItemData from './models/ItemData.js';
+
+const ENNEMY_SPAWN_PROBABILITY = 0.01;
+const ITEM_SPAWN_PROBABILITY = 0.1;
 
 export default class Game {
 	width;
@@ -89,7 +93,7 @@ export default class Game {
 	spawnItem({ x, y }, delay = 450) {
 		setTimeout(() => {
 			if (Math.random() < ITEM_SPAWN_PROBABILITY) {
-				const item = { x, y, width: 246, height: 406 };
+				const item = ItemData.randomItem({ x, y });
 				this.items.push(item);
 				this.onAddChild(item);
 			}
@@ -145,7 +149,7 @@ export default class Game {
 	generateEnnemy() {
 		if (this.paused) return;
 		const random = Math.random();
-		if (random < 0.01) {
+		if (random < ENNEMY_SPAWN_PROBABILITY) {
 			const ennemy = new EnnemyData({
 				x: this.width - 1,
 				y: Math.random() * this.height,
@@ -266,7 +270,7 @@ export default class Game {
 					ennemy.isAlive = false;
 					this.removeProjectile(projectile);
 					/* A IMPLEMENTER */
-					// this.spawnItem(ennemy.position);
+					this.spawnItem(ennemy.position);
 					// ennemy.explode();
 					/* A REMPLACER */
 					this.removeEnnemy(ennemy);
