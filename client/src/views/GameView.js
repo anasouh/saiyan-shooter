@@ -18,6 +18,7 @@ export default class GameView extends View {
 	#lifeBar;
 	#ultBar;
 	#score;
+	#kills;
 	#duration;
 	#pauseMenu;
 	#gameOverMenu;
@@ -46,6 +47,7 @@ export default class GameView extends View {
 		this.#lifeBar = new LifeBar(ath.querySelector('.bar#life'));
 		this.#ultBar = new UltBar(ath.querySelector('.bar#ult'));
 		this.#score = ath.querySelector('#scoreVal');
+		this.#kills = ath.querySelector('#killsVal');
 		this.#duration = ath.querySelector('#durationVal');
 		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
 		this.#pauseMenu.onResume(() => this.togglePause());
@@ -80,7 +82,10 @@ export default class GameView extends View {
 	}
 
 	update() {
-		if (this.#currentPlayer) this.#score.innerText = this.#currentPlayer.score;
+		if (this.#currentPlayer) {
+			this.#score.innerText = this.#currentPlayer.score;
+			this.#kills.innerText = this.#currentPlayer.kills;
+		}
 		this.#duration.innerText = this.game.duration;
 		if (this.game.lost) {
 			this.element.classList.add('gameOver');

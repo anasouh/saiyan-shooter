@@ -33,16 +33,13 @@ export default class PlayerData extends Entity {
 		}
 	}
 
-	incrementScore() {
-		this.score++;
-	}
-
-	incrementUlt() {
-		this.ult++;
+	incrementScore(value) {
+		this.score += value;
 	}
 
 	incrementKills() {
 		this.kills++;
+		this.ult++;
 	}
 
 	resetUlt() {

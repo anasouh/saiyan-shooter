@@ -2,6 +2,7 @@ import { areColliding, isLeftOfScreen, isOutOfScreen } from './utils.js';
 import EnnemyData from './models/EnnemyData.js';
 import ProjectileData from './models/ProjectileData.js';
 import ItemData from './models/ItemData.js';
+import PlayerData from './models/PlayerData.js';
 
 const ENNEMY_SPAWN_PROBABILITY = 0.01;
 const ITEM_SPAWN_PROBABILITY = 0.1;
@@ -123,6 +124,11 @@ export default class Game {
 		this.onRemoveChild(player);
 	}
 
+	/**
+	 * Trouve un joueur par son identifiant.
+	 * @param {number} id
+	 * @returns {PlayerData}
+	 */
 	findPlayerById(id) {
 		return this.players.find(p => p.id === id);
 	}
@@ -285,8 +291,8 @@ export default class Game {
 					this.removeEnnemy(ennemy);
 					const player = this.findPlayerById(projectile.from);
 					if (player) {
-						player.incrementScore();
-						player.incrementUlt();
+						player.incrementScore(ennemy.value);
+						player.incrementKills();
 					}
 				}
 			});
