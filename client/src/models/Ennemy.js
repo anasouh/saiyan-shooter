@@ -2,37 +2,61 @@ import * as PIXI from 'pixi.js';
 import Character from './Character.js';
 import * as SFX from '../consts/sfx.js';
 import { playSound } from '../utils.js';
-import { FREEZER, FREEZER_LEFT } from '../consts/sprites.js';
 
 export default class Ennemy extends Character {
+	name;
+	#status = 'idle';
 	#moving = { up: false, down: false, left: false, right: false };
 	isAlive = true;
 
 	/**
 	 * Crée un nouvel ennemi.
 	 */
-	constructor() {
-		super(FREEZER);
+	constructor(name) {
+		super(PIXI.Texture.from(`/assets/sprites/enemy/${name}/idle.png`));
+		this.name = name;
 	}
 
 	get moving() {
 		return this.#moving;
 	}
 
+	/**
+	 * Définit le statut de l'ennemi.
+	 * @param {string} status Le statut de l'ennemi.
+	 */
+	set status(status) {
+		this.#status = status;
+		this.updateSprite();
+	}
+
+	setSprites(name) {
+		this.texture = PIXI.Texture.from(
+			`/assets/sprites/enemy/${name}/${this.#status}.png`
+		);
+	}
+
+	updateSprite() {
+		this.setSprites(this.name);
+	}
+
 	move(direction) {
 		switch (direction) {
 			case 'up':
 				this.#moving.up = true;
+				this.status = 'up';
 				break;
 			case 'down':
 				this.#moving.down = true;
+				this.status = 'down';
 				break;
 			case 'left':
 				this.#moving.left = true;
-				this.texture = FREEZER_LEFT;
+				this.status = 'left';
 				break;
 			case 'right':
 				this.#moving.right = true;
+				this.status = 'right';
 				break;
 		}
 	}
@@ -51,6 +75,9 @@ export default class Ennemy extends Character {
 			case 'right':
 				this.#moving.right = false;
 				break;
+		}
+		if (this.status === direction) {
+			this.status = 'idle';
 		}
 	}
 

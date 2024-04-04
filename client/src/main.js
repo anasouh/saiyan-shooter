@@ -130,9 +130,10 @@ loadTextures().then(() => {
 			return player;
 		});
 		game.ennemies = ennemies.map(e => {
-			const ennemy = new Ennemy();
+			const ennemy = new Ennemy(e.name);
 			ennemy.position.set(e.x, e.y);
 			ennemy.dimensions = { width: e.width, height: e.height };
+			ennemy.status = e.status;
 			return ennemy;
 		});
 		game.items = items.map(i => {
