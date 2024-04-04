@@ -162,7 +162,6 @@ export default class Game {
 				y: Math.random() * this.height,
 				name: 'freezer',
 			});
-			ennemy.move('left');
 			this.addEnnemy(ennemy);
 		}
 	}
@@ -202,6 +201,59 @@ export default class Game {
 		player.y += y;
 	}
 
+	#updateEnemyMovementAndAttack() {
+		this.ennemies.forEach(ennemy => {
+			const closestPlayer = this.findClosestPlayer(ennemy);
+			if (closestPlayer) {
+				const dx = closestPlayer.x - ennemy.x;
+				const dy = closestPlayer.y - ennemy.y;
+				const distance = Math.sqrt(dx * dx + dy * dy);
+				const speed = ennemy.kamikaze ? 8 : 5;
+				const vx = (dx / distance) * speed;
+				const vy = (dy / distance) * speed;
+				ennemy.x += vx;
+				ennemy.y += vy;
+			}
+
+			if (ennemy.canShoot && this.duration % 3 === 0) {
+				this.spawnProjectileFromEnemy(ennemy);
+			}
+		});
+	}
+
+	findClosestPlayer(ennemy) {
+		let closestPlayer = null;
+		let closestDistance = Infinity;
+		this.players.forEach(player => {
+			if (player.alive) {
+				const distance = Math.sqrt(
+					(ennemy.x - player.x) ** 2 + (ennemy.y - player.y) ** 2
+				);
+				if (distance < closestDistance) {
+					closestPlayer = player;
+					closestDistance = distance;
+				}
+			}
+		});
+		return closestPlayer;
+	}
+
+	spawnProjectileFromEnemy(ennemy) {
+		const closestPlayer = this.findClosestPlayer(ennemy);
+		if (closestPlayer) {
+			const dx = closestPlayer.x - ennemy.x;
+			const dy = closestPlayer.y - ennemy.y;
+			const angle = Math.atan2(dy, dx);
+			const projectile = new ProjectileData({
+				x: ennemy.x,
+				y: ennemy.y,
+				enemy: true,
+			});
+			projectile.moving.left = true;
+			this.projectiles.push(projectile);
+		}
+	}
+
 	#tickEvent() {
 		if (this.paused) return;
 		this.#updateDuration();
@@ -210,6 +262,7 @@ export default class Game {
 			this.onEnd?.();
 			return;
 		}
+		this.#updateEnemyMovementAndAttack();
 		this.generateEnnemy();
 		this.players.forEach(player => {
 			if (player.moving.left) {
@@ -260,18 +313,6 @@ export default class Game {
 			});
 			if (isLeftOfScreen(ennemy)) {
 				this.removeEnnemy(ennemy);
-			}
-			if (ennemy.moving.left) {
-				ennemy.x -= 5;
-			}
-			if (ennemy.moving.right) {
-				ennemy.x += 5;
-			}
-			if (ennemy.moving.up) {
-				ennemy.y -= 5;
-			}
-			if (ennemy.moving.down) {
-				ennemy.y += 5;
 			}
 		});
 		this.items.forEach(child => {
