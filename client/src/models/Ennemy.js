@@ -23,10 +23,10 @@ export default class Ennemy extends Character {
 
 	/**
 	 * Définit le statut de l'ennemi.
-	 * @param {string} status Le statut de l'ennemi.
+	 * @param {string} value Le statut de l'ennemi.
 	 */
-	set status(status) {
-		this.#status = status;
+	set status(value) {
+		this.#status = value;
 		this.updateSprite();
 	}
 

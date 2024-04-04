@@ -160,7 +160,7 @@ export default class Game {
 			const ennemy = new EnnemyData({
 				x: this.width - 1,
 				y: Math.random() * this.height,
-				name: 'freezer_final',
+				name: 'freezer',
 			});
 			ennemy.move('left');
 			this.addEnnemy(ennemy);

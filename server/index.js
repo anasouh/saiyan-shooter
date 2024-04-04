@@ -4,64 +4,16 @@ import addWebpackMiddleware from './middlewares/addWebpackMiddleware.js';
 import { Server as IOServer } from 'socket.io';
 import Game from './Game.js';
 import PlayerData from './models/PlayerData.js';
+import Directions from './Directions.js';
+import History from './History.js';
+import { loadSprites } from './sprites.js';
 
-class Directions {
-	static fromKey(key) {
-		switch (key) {
-			case 'ARROWUP':
-			case 'Z':
-				return 'up';
-			case 'ARROWDOWN':
-			case 'S':
-				return 'down';
-			case 'ARROWLEFT':
-			case 'Q':
-				return 'left';
-			case 'ARROWRIGHT':
-			case 'D':
-				return 'right';
-		}
-	}
-}
-
-class History {
-	games;
-
-	constructor() {
-		this.games = [];
-	}
-
-	/**
-	 * Ajouter une partie à l'historique
-	 * @param {Game} game
-	 */
-	add(game) {
-		let score = 0;
-		game.players.forEach(player => (score += player.score));
-		this.games.push({
-			score,
-			duration: game.duration,
-			players: game.players.map(player => ({
-				username: player.username,
-				score: player.score,
-			})),
-		});
-	}
-
-	/**
-	 * Retourne les scores individuels des joueurs triés par score décroissant
-	 * @returns {Array<{username: string, score: number}>}
-	 */
-	getScores() {
-		const scores = [];
-		this.games.map(game => game.players.map(player => scores.push(player)));
-		return scores.sort((a, b) => b.score - a.score);
-	}
-}
 const history = new History();
 
 const routesPaths = ['/guide', '/credits', '/scores'];
 const redirectPaths = ['/game'];
+
+await loadSprites();
 
 const app = express();
 addWebpackMiddleware(app);
