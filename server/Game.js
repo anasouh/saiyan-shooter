@@ -141,6 +141,7 @@ export default class Game {
 				from: player.id,
 				characterId: player.characterId,
 				ulti: false,
+				enemy: false,
 			});
 			projectile.moving.right = true;
 			this.addProjectile(projectile);
@@ -160,7 +161,7 @@ export default class Game {
 			const ennemy = new EnnemyData({
 				x: this.width - 1,
 				y: Math.random() * this.height,
-				name: 'freezer',
+				name: 'freezer' + (Math.random() <= 0.3 ? '_final' : ''),
 			});
 			this.addEnnemy(ennemy);
 		}
@@ -211,12 +212,21 @@ export default class Game {
 				const speed = ennemy.kamikaze ? 8 : 5;
 				const vx = (dx / distance) * speed;
 				const vy = (dy / distance) * speed;
+				const direction =
+					Math.abs(dx) > Math.abs(dy)
+						? dx > 0
+							? 'right'
+							: 'left'
+						: dy > 0
+							? 'down'
+							: 'up';
+				ennemy.move(direction);
 				ennemy.x += vx;
 				ennemy.y += vy;
 			}
 
 			if (ennemy.canShoot && this.duration % 3 === 0) {
-				this.spawnProjectileFromEnemy(ennemy);
+				this.enemyShoot(ennemy);
 			}
 		});
 	}
@@ -238,19 +248,25 @@ export default class Game {
 		return closestPlayer;
 	}
 
-	spawnProjectileFromEnemy(ennemy) {
-		const closestPlayer = this.findClosestPlayer(ennemy);
+	enemyShoot(enemy) {
+		if (enemy.cooldown) return;
+		const closestPlayer = this.findClosestPlayer(enemy);
 		if (closestPlayer) {
-			const dx = closestPlayer.x - ennemy.x;
-			const dy = closestPlayer.y - ennemy.y;
+			const dx = closestPlayer.x - enemy.x;
+			const dy = closestPlayer.y - enemy.y;
 			const angle = Math.atan2(dy, dx);
 			const projectile = new ProjectileData({
-				x: ennemy.x,
-				y: ennemy.y,
+				characterId: enemy.name,
+				x: enemy.x,
+				y: enemy.y,
 				enemy: true,
 			});
 			projectile.moving.left = true;
 			this.projectiles.push(projectile);
+			enemy.cooldown = true;
+			setTimeout(() => {
+				enemy.cooldown = false;
+			}, EnnemyData.COOLDOWN);
 		}
 	}
 
@@ -258,6 +274,7 @@ export default class Game {
 		if (this.paused) return;
 		this.#updateDuration();
 		if (this.players.length > 0 && this.lost) {
+			this.clear();
 			this.stop();
 			this.onEnd?.();
 			return;
@@ -323,18 +340,32 @@ export default class Game {
 
 		this.projectiles.forEach(projectile => {
 			this.ennemies.forEach(ennemy => {
-				if (areColliding(projectile, ennemy) && ennemy.isAlive) {
-					ennemy.isAlive = false;
-					this.removeProjectile(projectile);
-					/* A IMPLEMENTER */
-					this.spawnItem(ennemy.position);
-					// ennemy.explode();
-					/* A REMPLACER */
-					this.removeEnnemy(ennemy);
-					const player = this.findPlayerById(projectile.from);
-					if (player) {
-						player.incrementScore(ennemy.value);
-						player.incrementKills();
+				if (projectile.enemy) {
+					this.players.forEach(player => {
+						if (
+							areColliding(projectile, player) &&
+							player.alive &&
+							!player.invicibility
+						) {
+							this.removeProjectile(projectile);
+							player.decrementLife();
+							//playSound(SFX.PUNCH_1);
+						}
+					});
+				} else {
+					if (areColliding(projectile, ennemy) && ennemy.isAlive) {
+						ennemy.isAlive = false;
+						this.removeProjectile(projectile);
+						/* A IMPLEMENTER */
+						this.spawnItem(ennemy.position);
+						// ennemy.explode();
+						/* A REMPLACER */
+						this.removeEnnemy(ennemy);
+						const player = this.findPlayerById(projectile.from);
+						if (player) {
+							player.incrementScore(ennemy.value);
+							player.incrementKills();
+						}
 					}
 				}
 			});

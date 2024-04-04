@@ -11,11 +11,17 @@ export default class Projectile extends PIXI.AnimatedSprite {
 	constructor(charcterId, ultime = false) {
 		if (ultime && charcterId === 'vegeta') {
 			super([
-				PIXI.Assets.get(`${charcterId}/ult/01.png`),
-				PIXI.Assets.get(`${charcterId}/ult/02.png`),
+				PIXI.Texture.from(
+					`/assets/sprites/projectiles/${charcterId}/ult/01.png`
+				),
+				PIXI.Texture.from(
+					`/assets/sprites/projectiles/${charcterId}/ult/02.png`
+				),
 			]);
 		} else {
-			super([PIXI.Assets.get(`${charcterId}/01.png`)]);
+			super([
+				PIXI.Texture.from(`/assets/sprites/projectiles/${charcterId}/01.png`),
+			]);
 		}
 		this.animationSpeed = 0.3;
 		if (this.textures.length) this.play();

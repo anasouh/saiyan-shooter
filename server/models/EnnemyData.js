@@ -7,6 +7,8 @@ const ennemies = {
 		height: 720,
 		scale: 0.15,
 		value: 10,
+		canShoot: false,
+		kamikaze: true,
 	},
 
 	freezer_final: {
@@ -14,12 +16,17 @@ const ennemies = {
 		height: 406,
 		scale: 0.125,
 		value: 20,
+		canShoot: true,
+		kamikaze: false,
 	},
 };
 
 export default class EnnemyData extends Entity {
+	static COOLDOWN = 1000;
 	name;
 	value;
+	canShoot;
+	cooldown = false;
 	status = 'idle';
 	isAlive = true;
 
@@ -34,6 +41,7 @@ export default class EnnemyData extends Entity {
 		this.scale = ennemies[name].scale;
 		this.name = name;
 		this.value = ennemies[name].value;
+		this.canShoot = ennemies[name].canShoot;
 	}
 
 	setStatus(status) {
