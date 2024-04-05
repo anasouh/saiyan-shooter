@@ -120,13 +120,17 @@ loadTextures().then(() => {
 			if (p.id == socket.id) {
 				gameView.currentPlayer = player;
 			}
-			player.position.set(p.x, p.y);
-			player.setLife(p.life);
-			player.score = p.score;
 			player.setMoving(p.moving);
 			player.setSprites(p.characterId);
-			player.invicibility = p.invicibility;
+			player.position.set(p.x, p.y);
+			player.score = p.score;
 			player.kills = p.kills;
+			if (p.life < player.life) {
+				player.hitAnimation();
+			} else {
+				player.invicibility = p.invicibility;
+			}
+			player.setLife(p.life);
 			return player;
 		});
 		game.ennemies = ennemies.map(e => {

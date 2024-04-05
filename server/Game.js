@@ -5,7 +5,7 @@ import ItemData from './models/ItemData.js';
 import PlayerData from './models/PlayerData.js';
 
 const ENNEMY_SPAWN_PROBABILITY = 0.01;
-const ITEM_SPAWN_PROBABILITY = 0.01;
+const ITEM_SPAWN_PROBABILITY = 0.1;
 
 export default class Game {
 	width;
@@ -300,17 +300,36 @@ export default class Game {
 		this.generateEnnemy();
 		this.players.forEach(player => {
 			if (player.moving.left) {
-				this.movePlayer(player, -5, 0);
+				player.vx -= PlayerData.ACCELERATION;
 			}
 			if (player.moving.right) {
-				this.movePlayer(player, 5, 0);
+				player.vx += PlayerData.ACCELERATION;
 			}
 			if (player.moving.up) {
-				this.movePlayer(player, 0, -5);
+				player.vy -= PlayerData.ACCELERATION;
 			}
 			if (player.moving.down) {
-				this.movePlayer(player, 0, 5);
+				player.vy += PlayerData.ACCELERATION;
 			}
+
+			player.vx = Math.min(
+				Math.max(player.vx, -PlayerData.MAX_SPEED),
+				PlayerData.MAX_SPEED
+			);
+			player.vy = Math.min(
+				Math.max(player.vy, -PlayerData.MAX_SPEED),
+				PlayerData.MAX_SPEED
+			);
+
+			if (!player.moving.left && !player.moving.right) {
+				player.vx *= PlayerData.DECELERATION_X; // Facteur de décélération arbitraire
+			}
+			if (!player.moving.up && !player.moving.down) {
+				player.vy *= PlayerData.DECELERATION_Y; // Facteur de décélération arbitraire
+			}
+
+			player.x += player.vx;
+			player.y += player.vy;
 		});
 		this.projectiles.forEach(projectile => {
 			if (
@@ -334,14 +353,9 @@ export default class Game {
 		});
 		this.ennemies.forEach(ennemy => {
 			this.players.forEach(player => {
-				if (
-					areColliding(ennemy, player) &&
-					ennemy.isAlive &&
-					player.alive &&
-					!player.invicibility
-				) {
+				if (areColliding(ennemy, player) && ennemy.isAlive && player.alive) {
 					this.removeEnnemy(ennemy);
-					player.decrementLife();
+					if (!player.invicibility) player.decrementLife();
 					//playSound(SFX.PUNCH_1);
 				}
 			});

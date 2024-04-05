@@ -60,8 +60,10 @@ export default class Player extends Character {
 	}
 
 	set invicibility(value) {
-		this.#invicibility = value;
-		this.greenFilter.enabled = value;
+		if (!this.redFilter.enabled) {
+			this.#invicibility = value;
+			this.greenFilter.enabled = value;
+		}
 	}
 
 	/**
