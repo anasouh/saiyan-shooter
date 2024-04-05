@@ -5,7 +5,7 @@ import ItemData from './models/ItemData.js';
 import PlayerData from './models/PlayerData.js';
 
 const ENNEMY_SPAWN_PROBABILITY = 0.01;
-const ITEM_SPAWN_PROBABILITY = 1;
+const ITEM_SPAWN_PROBABILITY = 0.01;
 
 export default class Game {
 	width;
