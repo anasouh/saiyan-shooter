@@ -133,18 +133,35 @@ export default class Game {
 		return this.players.find(p => p.id === id);
 	}
 
+	/**
+	 * Fait tirer un joueur.
+	 * @param {PlayerData} player
+	 */
 	shoot(player) {
 		if (player.alive) {
-			const projectile = new ProjectileData({
+			const data = {
 				x: player.x + player.width - 10,
 				y: player.y + player.height / 2,
 				from: player.id,
 				characterId: player.characterId,
 				ulti: false,
 				enemy: false,
-			});
+			};
+			const projectile = new ProjectileData(data);
 			projectile.moving.right = true;
 			this.addProjectile(projectile);
+			if (player.tripleShoot) {
+				const projectile_up = new ProjectileData(data);
+				projectile_up.moving.up = true;
+				projectile_up.moving.right = true;
+				projectile_up.angle = -Math.PI / 4;
+				this.addProjectile(projectile_up);
+				const projectile_down = new ProjectileData(data);
+				projectile_down.moving.down = true;
+				projectile_down.moving.right = true;
+				projectile_down.angle = Math.PI / 4;
+				this.addProjectile(projectile_down);
+			}
 		}
 	}
 
@@ -309,10 +326,10 @@ export default class Game {
 				projectile.x += 10;
 			}
 			if (projectile.moving.up) {
-				projectile.y -= 10;
+				projectile.y -= 2;
 			}
 			if (projectile.moving.down) {
-				projectile.y += 10;
+				projectile.y += 2;
 			}
 		});
 		this.ennemies.forEach(ennemy => {

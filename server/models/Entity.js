@@ -4,6 +4,7 @@ export default class Entity {
 	width;
 	height;
 	moving = { left: false, right: false, up: false, down: false };
+	angle = 0;
 
 	constructor({ x, y, width, height }) {
 		this.x = x;

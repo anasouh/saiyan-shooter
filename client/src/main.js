@@ -140,7 +140,7 @@ loadTextures().then(() => {
 			const item = new Item(i.name, i.lifetime);
 			item.position.set(i.x, i.y);
 			item.dimensions = { width: i.width, height: i.height };
-			item.dimensions = { width: i.width, height: i.height };
+			item.angle = i.angle;
 			return item;
 		});
 		game.projectiles = projectiles.map(p => {
