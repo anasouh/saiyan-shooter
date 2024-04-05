@@ -5,7 +5,7 @@ import ItemData from './models/ItemData.js';
 import PlayerData from './models/PlayerData.js';
 
 const ENNEMY_SPAWN_PROBABILITY = 0.01;
-const ITEM_SPAWN_PROBABILITY = 0.1;
+const ITEM_SPAWN_PROBABILITY = 1;
 
 export default class Game {
 	width;
@@ -303,16 +303,16 @@ export default class Game {
 				return;
 			}
 			if (projectile.moving.left) {
-				projectile.x -= 5;
+				projectile.x -= 10;
 			}
 			if (projectile.moving.right) {
-				projectile.x += 5;
+				projectile.x += 10;
 			}
 			if (projectile.moving.up) {
-				projectile.y -= 5;
+				projectile.y -= 10;
 			}
 			if (projectile.moving.down) {
-				projectile.y += 5;
+				projectile.y += 10;
 			}
 		});
 		this.ennemies.forEach(ennemy => {

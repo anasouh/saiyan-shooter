@@ -1,3 +1,4 @@
+import { spritesData } from '../sprites.js';
 import Entity from './Entity.js';
 
 const items = [
@@ -7,6 +8,25 @@ const items = [
 		lifetime: 5 * 1000,
 		scale: 0.05,
 		use: player => player.resetLife(),
+	},
+	{
+		name: 'triple_shoot',
+		probability: 0.2,
+		lifetime: 5 * 1000,
+		scale: 0.2,
+		use: player => {
+			player.tripleShoot = true;
+			setTimeout(() => (player.tripleShoot = false), 5000);
+		},
+	},
+	{
+		name: 'invicibility',
+		probability: 0.3,
+		lifetime: 5 * 1000,
+		scale: 0.25,
+		use: player => {
+			player.invicible(5000);
+		},
 	},
 ];
 
@@ -30,8 +50,15 @@ export default class ItemData extends Entity {
 	visible;
 
 	constructor({ x, y, name, lifetime }) {
-		super({ x, y, width: 30, height: 30 });
+		super({
+			x,
+			y,
+			width: spritesData[name].item.width,
+			height: spritesData[name].item.height,
+		});
 		this.name = name;
+		this.scale = this.properties.scale;
+		console.log(this.dimensions);
 		this.lifetime = lifetime;
 		this.visible = true;
 		this.#spawnTime = Date.now();

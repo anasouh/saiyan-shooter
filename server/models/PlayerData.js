@@ -13,6 +13,7 @@ export default class PlayerData extends Entity {
 	characterId;
 	id;
 	invicibility = false;
+	tripleShoot = false;
 	username;
 
 	constructor({ x, y, characterId, id }) {
@@ -56,10 +57,10 @@ export default class PlayerData extends Entity {
 		this.life = PlayerData.DEFAULT_LIFE;
 	}
 
-	invicible() {
+	invicible(duration = INVICIBILITY_TIME) {
 		this.invicibility = true;
 		setTimeout(() => {
 			this.invicibility = false;
-		}, INVICIBILITY_TIME);
+		}, duration);
 	}
 }

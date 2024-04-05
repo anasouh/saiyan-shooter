@@ -12,7 +12,8 @@ PIXI.Assets.load('https://pixijs.com/assets/spritesheet/mc.json').then(() => {
 export const ANIMATION_TIME = 1000;
 
 export default class Character extends PIXI.AnimatedSprite {
-	#redFilter;
+	redFilter;
+	greenFilter;
 
 	constructor(texture) {
 		if (texture instanceof Array) {
@@ -20,9 +21,11 @@ export default class Character extends PIXI.AnimatedSprite {
 		} else {
 			super([texture]);
 		}
-		this.#redFilter = new ColorOverlayFilter(0xff0000, 0.5);
-		this.#redFilter.enabled = false;
-		this.filters = [this.#redFilter];
+		this.redFilter = new ColorOverlayFilter(0xff0000, 0.5);
+		this.redFilter.enabled = false;
+		this.greenFilter = new ColorOverlayFilter(0x00ff00, 0.5);
+		this.greenFilter.enabled = false;
+		this.filters = [this.redFilter, this.greenFilter];
 	}
 
 	/**
@@ -38,8 +41,8 @@ export default class Character extends PIXI.AnimatedSprite {
 	 * Rend le personnage rouge pendant un court instant.
 	 */
 	hitAnimation(time = ANIMATION_TIME) {
-		this.#redFilter.enabled = true;
-		setTimeout(() => (this.#redFilter.enabled = false), time);
+		this.redFilter.enabled = true;
+		setTimeout(() => (this.redFilter.enabled = false), time);
 	}
 
 	explodeAnimation() {

@@ -137,8 +137,10 @@ loadTextures().then(() => {
 			return ennemy;
 		});
 		game.items = items.map(i => {
-			const item = new Item();
+			const item = new Item(i.name, i.lifetime);
 			item.position.set(i.x, i.y);
+			item.dimensions = { width: i.width, height: i.height };
+			item.dimensions = { width: i.width, height: i.height };
 			return item;
 		});
 		game.projectiles = projectiles.map(p => {
