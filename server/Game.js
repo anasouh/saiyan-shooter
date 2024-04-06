@@ -71,7 +71,7 @@ export default class Game {
 
 	/**
 	 * Ajoute un ennemi.
-	 * @param {Ennemy} ennemy
+	 * @param {EnnemyData} ennemy
 	 */
 	addEnnemy(ennemy) {
 		this.ennemies.push(ennemy);
@@ -80,7 +80,7 @@ export default class Game {
 
 	/**
 	 * Ajoute un ennemi.
-	 * @param {Ennemy} ennemy
+	 * @param {EnnemyData} ennemy
 	 */
 	removeEnnemy(ennemy) {
 		this.ennemies = this.ennemies.filter(e => e !== ennemy);
@@ -180,6 +180,9 @@ export default class Game {
 				y: Math.random() * this.height,
 				name: 'freezer' + (Math.random() <= 0.3 ? '_final' : ''),
 			});
+			ennemy.onDeath = () => {
+				this.removeEnnemy(ennemy);
+			};
 			this.addEnnemy(ennemy);
 		}
 	}
@@ -355,7 +358,9 @@ export default class Game {
 			this.players.forEach(player => {
 				if (areColliding(ennemy, player) && ennemy.isAlive && player.alive) {
 					this.removeEnnemy(ennemy);
-					if (!player.invicibility) player.decrementLife();
+					if (!player.invicibility) {
+						player.decrementLife(2);
+					}
 					//playSound(SFX.PUNCH_1);
 				}
 			});
@@ -385,13 +390,12 @@ export default class Game {
 					});
 				} else {
 					if (areColliding(projectile, ennemy) && ennemy.isAlive) {
-						ennemy.isAlive = false;
 						this.removeProjectile(projectile);
 						/* A IMPLEMENTER */
 						this.spawnItem(ennemy.position);
 						// ennemy.explode();
 						/* A REMPLACER */
-						this.removeEnnemy(ennemy);
+						ennemy.decrementLife();
 						const player = this.findPlayerById(projectile.from);
 						if (player) {
 							player.incrementScore(ennemy.value);

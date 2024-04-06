@@ -7,6 +7,7 @@ const ennemies = {
 		height: 720,
 		scale: 0.15,
 		value: 10,
+		life: 2,
 		canShoot: false,
 		kamikaze: true,
 	},
@@ -16,6 +17,7 @@ const ennemies = {
 		height: 406,
 		scale: 0.125,
 		value: 20,
+		life: 4,
 		canShoot: true,
 		kamikaze: false,
 	},
@@ -23,12 +25,16 @@ const ennemies = {
 
 export default class EnnemyData extends Entity {
 	static COOLDOWN = 1000;
+	static #lastId = 0;
+	id;
 	name;
 	value;
+	life;
 	canShoot;
 	cooldown = false;
 	status = 'idle';
 	isAlive = true;
+	onDeath = () => {};
 
 	constructor({ x, y, name }) {
 		super({
@@ -37,10 +43,12 @@ export default class EnnemyData extends Entity {
 			width: spritesData[name].idle.width,
 			height: spritesData[name].idle.height,
 		});
+		this.id = EnnemyData.#lastId++;
 		this.moving = { left: false, right: false, up: false, down: false };
 		this.scale = ennemies[name].scale;
 		this.name = name;
 		this.value = ennemies[name].value;
+		this.life = ennemies[name].life;
 		this.canShoot = ennemies[name].canShoot;
 	}
 
@@ -89,6 +97,14 @@ export default class EnnemyData extends Entity {
 		}
 		if (this.status === direction) {
 			this.setStatus('idle');
+		}
+	}
+
+	decrementLife() {
+		this.life--;
+		if (this.life <= 0) {
+			this.isAlive = false;
+			this.onDeath();
 		}
 	}
 }

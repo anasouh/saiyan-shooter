@@ -31,9 +31,9 @@ export default class PlayerData extends Entity {
 		return this.life > 0;
 	}
 
-	decrementLife() {
+	decrementLife(value = 1) {
 		if (!this.invicibility) {
-			this.life--;
+			this.life -= value;
 			this.invicible();
 		}
 	}

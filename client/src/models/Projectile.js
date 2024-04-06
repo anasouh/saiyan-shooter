@@ -9,15 +9,23 @@ export default class Projectile extends PIXI.AnimatedSprite {
 	 * @param {boolean} ultime - Si le projectile est un ultime.
 	 */
 	constructor(charcterId, ultime = false) {
-		if (ultime && charcterId === 'vegeta') {
-			super([
-				PIXI.Texture.from(
-					`/assets/sprites/projectiles/${charcterId}/ult/01.png`
-				),
-				PIXI.Texture.from(
-					`/assets/sprites/projectiles/${charcterId}/ult/02.png`
-				),
-			]);
+		if (ultime) {
+			if (charcterId === 'vegeta') {
+				super([
+					PIXI.Texture.from(
+						`/assets/sprites/projectiles/${charcterId}/ult/01.png`
+					),
+					PIXI.Texture.from(
+						`/assets/sprites/projectiles/${charcterId}/ult/02.png`
+					),
+				]);
+			} else {
+				super([
+					PIXI.Texture.from(
+						`/assets/sprites/projectiles/${charcterId}/ult/01.png`
+					),
+				]);
+			}
 		} else {
 			super([
 				PIXI.Texture.from(`/assets/sprites/projectiles/${charcterId}/01.png`),

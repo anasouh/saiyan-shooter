@@ -58,7 +58,6 @@ export default class ItemData extends Entity {
 		});
 		this.name = name;
 		this.scale = this.properties.scale;
-		console.log(this.dimensions);
 		this.lifetime = lifetime;
 		this.visible = true;
 		this.#spawnTime = Date.now();

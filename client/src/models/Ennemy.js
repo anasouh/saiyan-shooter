@@ -4,7 +4,9 @@ import * as SFX from '../consts/sfx.js';
 import { playSound } from '../utils.js';
 
 export default class Ennemy extends Character {
+	id;
 	name;
+	life;
 	#status = 'idle';
 	#moving = { up: false, down: false, left: false, right: false };
 	isAlive = true;

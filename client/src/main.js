@@ -134,10 +134,18 @@ loadTextures().then(() => {
 			return player;
 		});
 		game.ennemies = ennemies.map(e => {
-			const ennemy = new Ennemy(e.name);
+			let ennemy = game.findEnnemyById(e.id);
+			if (!ennemy) {
+				ennemy = new Ennemy(e.name);
+				ennemy.id = e.id;
+			}
 			ennemy.position.set(e.x, e.y);
 			ennemy.dimensions = { width: e.width, height: e.height };
 			ennemy.status = e.status;
+			if (e.life < ennemy.life) {
+				ennemy.hitAnimation(500);
+			}
+			ennemy.life = e.life;
 			return ennemy;
 		});
 		game.items = items.map(i => {

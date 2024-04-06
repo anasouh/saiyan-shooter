@@ -1,6 +1,7 @@
 import { areColliding, isOutOfScreen } from '../utils.js';
 import Ennemy from './Ennemy.js';
 import Item, { ITEM_SPAWN_PROBABILITY } from './Item.js';
+import Player from './Player.js';
 
 export default class Game {
 	width;
@@ -139,8 +140,22 @@ export default class Game {
 		}
 	}
 
+	/**
+	 * Trouve un joueur par son identifiant.
+	 * @param {number} id
+	 * @returns {Player}
+	 */
 	findPlayerById(id) {
 		return this.players.find(p => p.id === id);
+	}
+
+	/**
+	 * Trouve un ennemi par son identifiant.
+	 * @param {number} id
+	 * @returns {Ennemy}
+	 */
+	findEnnemyById(id) {
+		return this.ennemies.find(e => e.id === id);
 	}
 
 	clear() {
@@ -176,8 +191,6 @@ export default class Game {
 
 	timeEnd() {
 		this.time = ((Date.now() - this.timeStart) / 1000).toFixed();
-
-		console.log(this.timeStart);
 	}
 
 	/**
