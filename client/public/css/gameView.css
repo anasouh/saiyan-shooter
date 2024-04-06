@@ -86,3 +86,25 @@
 .bar.orange {
     background: #e2b728;
 }
+
+.difficulty {
+    display: flex;
+    border: 3px solid var(--primary-color);
+    border-radius: 3px;
+    padding: 5px;
+    gap: 10px;
+}
+
+.difficulty > button {
+    font-family: 'Press Start 2p';
+    font-size: .8em;
+    padding: 5px 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.difficulty > button.active, .difficulty > button:hover {
+    background: var(--primary-color);
+    color: var(--surface-color);
+}

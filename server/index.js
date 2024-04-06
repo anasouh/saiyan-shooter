@@ -94,6 +94,11 @@ io.on('connection', socket => {
 		player.characterId = characterId;
 	});
 
+	socket.on('difficulty', difficulty => {
+		console.log(difficulty);
+		game.difficulty = difficulty;
+	});
+
 	socket.on('disconnect', () => {
 		console.log(`Déconnexion du client ${socket.id}`);
 		game.removePlayer(player);

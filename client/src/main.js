@@ -106,6 +106,9 @@ loadTextures().then(() => {
 	// 	player.ulti();
 	// };
 	homeView.setLoading(false);
+	homeView.onDifficultyClick = difficulty => {
+		socket.emit('difficulty', difficulty);
+	};
 
 	socket.on('game', gameData => {
 		const { width, height, players, items, projectiles, ennemies } = gameData;
@@ -113,6 +116,7 @@ loadTextures().then(() => {
 		game.maxEnemies = gameData.maxEnemies;
 		game.currentWave = gameData.currentWave;
 		game.nbKillsInWave = gameData.nbKillsInWave;
+		homeView.difficulty = gameData.difficulty;
 		game.players = players.map(p => {
 			let player = game.findPlayerById(p.id);
 			if (!player) {

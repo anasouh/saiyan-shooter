@@ -1,4 +1,5 @@
 import Router from '../Router.js';
+import DifficultySelect from '../components/DifficultySelect.js';
 import View from './View.js';
 
 export default class HomeView extends View {
@@ -8,6 +9,7 @@ export default class HomeView extends View {
 	username;
 	#characterButtons;
 	#activeCharacter;
+	#difficultySelect;
 	onCharacterChange = characterId => {};
 	onStartPressed = () => {};
 	isConfirmed = false;
@@ -44,6 +46,23 @@ export default class HomeView extends View {
 				this.onCharacterChange(this.characterId);
 			});
 		});
+		this.#difficultySelect = new DifficultySelect(
+			element.querySelector('.difficulty')
+		);
+	}
+
+	/**
+	 * @param {string} difficulty
+	 */
+	set difficulty(difficulty) {
+		this.#difficultySelect.current = difficulty;
+	}
+
+	/**
+	 * @param {Function} callback
+	 */
+	set onDifficultyClick(callback) {
+		this.#difficultySelect.onClick = callback;
 	}
 
 	get characterId() {
