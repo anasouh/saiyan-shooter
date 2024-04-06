@@ -41,9 +41,9 @@
 				<table>
 					<thead>
 						<tr>
-							<th>
-								Pseudo
-							</th>
+							<th>Pseudo</th>
+							<th>Manches</th>
+							<th>Temps</th>
 							<th>Score</th>
 						</tr>
 						<tbody> 
@@ -99,7 +99,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="ath active">
+				<div class="ath top active">
 					<button class="btn small" id="pauseGame">Pause</button>
 					<div class="flex gap-20">
 						<span class="duration font">Temps : <span id="durationVal"></span> </span>
@@ -111,6 +111,13 @@
 						<div class="bar-container">
 							<div class="bar orange" id="ult"></div>
 						</div>
+					</div>
+				</div>
+				<div class="ath bottom active">
+					<div></div>
+					<div class="flex gap-20">
+						<span class="rounds font">Manche : <span id="roundsVal"></span> </span>
+						<span class="enemies font">Ennemis : <span id="enemiesVal"></span> </span>
 					</div>
 				</div>
 			</div>

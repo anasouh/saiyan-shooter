@@ -15,6 +15,8 @@ export default class History {
 		this.games.push({
 			score,
 			duration: game.duration,
+			currentWave: game.currentWave,
+			date: new Date().toLocaleDateString('fr'),
 			players: game.players.map(player => ({
 				username: player.username,
 				score: player.score,
@@ -28,7 +30,16 @@ export default class History {
 	 */
 	getScores() {
 		const scores = [];
-		this.games.map(game => game.players.map(player => scores.push(player)));
+		this.games.map(game =>
+			game.players.map(player =>
+				scores.push({
+					...player,
+					waves: game.currentWave,
+					duration: game.duration,
+					date: game.date,
+				})
+			)
+		);
 		return scores.sort((a, b) => b.score - a.score);
 	}
 }

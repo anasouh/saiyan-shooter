@@ -36,6 +36,7 @@
     display: none;
     padding: 20px;
     gap: 0;
+    left: 0;
     background-color: var(--surface-color);
     border-radius: var(--border-radius);
     text-align: center;
@@ -44,8 +45,6 @@
 
 .viewContainer > .game .ath {
     position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;

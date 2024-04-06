@@ -110,6 +110,9 @@ loadTextures().then(() => {
 	socket.on('game', gameData => {
 		const { width, height, players, items, projectiles, ennemies } = gameData;
 		game.dimensions = { width, height };
+		game.maxEnemies = gameData.maxEnemies;
+		game.currentWave = gameData.currentWave;
+		game.nbKillsInWave = gameData.nbKillsInWave;
 		game.players = players.map(p => {
 			let player = game.findPlayerById(p.id);
 			if (!player) {

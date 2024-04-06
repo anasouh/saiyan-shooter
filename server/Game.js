@@ -24,6 +24,18 @@ export default class Game {
 	io;
 	#tickInterval;
 	onTick;
+	difficulty = 'hard';
+	currentWave = 0;
+	enemiesPerWave = {
+		easy: 5,
+		normal: 10,
+		hard: 15,
+	};
+	maxEnemies;
+	nbKillsInWave = 0;
+	spawnDelay = 2000;
+	waveDelay = 5000;
+	#spawnTimeout;
 
 	constructor(width, height) {
 		this.width = width;
@@ -84,6 +96,7 @@ export default class Game {
 	 */
 	removeEnnemy(ennemy) {
 		this.ennemies = this.ennemies.filter(e => e !== ennemy);
+		this.nbKillsInWave++;
 		this.onRemoveChild(ennemy);
 	}
 
@@ -166,31 +179,54 @@ export default class Game {
 	}
 
 	clear() {
+		clearTimeout(this.#spawnTimeout);
+		this.currentWave = 0;
+		this.nbKillsInWave = 0;
 		this.ennemies = [];
 		this.projectiles = [];
 		this.items = [];
 	}
 
 	generateEnnemy() {
-		if (this.paused) return;
-		const random = Math.random();
-		if (random < ENNEMY_SPAWN_PROBABILITY) {
-			const ennemy = new EnnemyData({
-				x: this.width - 1,
-				y: Math.random() * this.height,
-				name: 'freezer' + (Math.random() <= 0.3 ? '_final' : ''),
-			});
-			ennemy.onDeath = () => {
-				this.removeEnnemy(ennemy);
-			};
-			this.addEnnemy(ennemy);
-		}
+		if (this.paused || this.ennemies.length > 0) return;
+
+		this.maxEnemies =
+			this.enemiesPerWave[this.difficulty] *
+			((this.currentWave + 1) / 2).toFixed();
+		this.nbKillsInWave = 0;
+		let spawnIndex = 0;
+
+		const spawnNextEnemy = () => {
+			if (spawnIndex < this.maxEnemies) {
+				const enemy = new EnnemyData({
+					x: this.width - 1,
+					y: Math.random() * this.height,
+					name: 'freezer' + (Math.random() <= 0.3 ? '_final' : ''),
+				});
+				enemy.onDeath = () => {
+					this.removeEnnemy(enemy);
+					if (this.ennemies.length === 0) {
+						this.#spawnTimeout = setTimeout(() => {
+							this.currentWave++;
+							this.generateEnnemy();
+						}, this.waveDelay);
+					}
+				};
+				this.addEnnemy(enemy);
+				spawnIndex++;
+				const nextSpawnDelay = Math.random() * this.spawnDelay;
+				this.#spawnTimeout = setTimeout(spawnNextEnemy, nextSpawnDelay);
+			}
+		};
+
+		spawnNextEnemy();
 	}
 
 	start() {
 		this.#startTime = Date.now();
 		this.#endTime = undefined;
 		this.paused = false;
+		this.generateEnnemy();
 	}
 
 	stop() {
@@ -294,13 +330,11 @@ export default class Game {
 		if (this.paused) return;
 		this.#updateDuration();
 		if (this.players.length > 0 && this.lost) {
-			this.clear();
 			this.stop();
 			this.onEnd?.();
 			return;
 		}
 		this.#updateEnemyMovementAndAttack();
-		this.generateEnnemy();
 		this.players.forEach(player => {
 			if (player.moving.left) {
 				player.vx -= PlayerData.ACCELERATION;

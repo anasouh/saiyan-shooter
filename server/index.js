@@ -47,6 +47,7 @@ const io = new IOServer(httpServer);
 const game = new Game(1920, 1080);
 game.onEnd = () => {
 	history.add(game);
+	game.clear();
 };
 
 io.on('connection', socket => {

@@ -1,4 +1,5 @@
 import Router from '../Router.js';
+import { formatDuration } from '../utils.js';
 import View from './View.js';
 
 export default class ScoreView extends View {
@@ -24,8 +25,8 @@ export default class ScoreView extends View {
 			.then(response => response.json())
 			.then(scores => {
 				let html = '';
-				scores.slice(0, 10).forEach(({ username, score }) => {
-					html += `<tr><td> ${username}</td> <td> ${score}</td> </tr>`;
+				scores.slice(0, 10).forEach(({ username, score, waves, duration }) => {
+					html += `<tr><td> ${username}</td> <td>${waves}</td> <td>${formatDuration(duration)}</td> <td>${score}</td> </tr>`;
 				});
 
 				this.#tbody.innerHTML = html;

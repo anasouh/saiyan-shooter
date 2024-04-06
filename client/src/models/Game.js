@@ -1,4 +1,4 @@
-import { areColliding, isOutOfScreen } from '../utils.js';
+import { areColliding, formatDuration, isOutOfScreen } from '../utils.js';
 import Ennemy from './Ennemy.js';
 import Item, { ITEM_SPAWN_PROBABILITY } from './Item.js';
 import Player from './Player.js';
@@ -15,6 +15,7 @@ export default class Game {
 	players = [];
 	timeStart;
 	time;
+	maxEnemies;
 	paused = true;
 	// #tickInterval;
 
@@ -50,9 +51,7 @@ export default class Game {
 	}
 
 	get duration() {
-		const minutes = Math.floor(this.#duration / 60);
-		const seconds = this.#duration % 60;
-		return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+		return formatDuration(this.#duration);
 	}
 
 	set duration(value) {

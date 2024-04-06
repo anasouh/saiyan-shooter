@@ -20,6 +20,8 @@ export default class GameView extends View {
 	#score;
 	#kills;
 	#duration;
+	#rounds;
+	#enemies;
 	#pauseMenu;
 	#gameOverMenu;
 	#currentPlayer;
@@ -41,14 +43,17 @@ export default class GameView extends View {
 		this.game.onAddChild = child => this.#app.stage.addChild(child);
 		this.game.onRemoveChild = child => this.#app.stage.removeChild(child);
 		this.#app.stage.eventMode = 'auto';
-		const ath = element.querySelector('.ath');
-		this.#pauseButton = ath.querySelector('button#pauseGame');
+		const athTop = element.querySelector('.ath.top');
+		this.#pauseButton = athTop.querySelector('button#pauseGame');
 		this.#pauseButton.addEventListener('click', () => this.togglePause());
-		this.#lifeBar = new LifeBar(ath.querySelector('.bar#life'));
-		this.#ultBar = new UltBar(ath.querySelector('.bar#ult'));
-		this.#score = ath.querySelector('#scoreVal');
-		this.#kills = ath.querySelector('#killsVal');
-		this.#duration = ath.querySelector('#durationVal');
+		this.#lifeBar = new LifeBar(athTop.querySelector('.bar#life'));
+		this.#ultBar = new UltBar(athTop.querySelector('.bar#ult'));
+		this.#score = athTop.querySelector('#scoreVal');
+		this.#kills = athTop.querySelector('#killsVal');
+		this.#duration = athTop.querySelector('#durationVal');
+		const athBottom = element.querySelector('.ath.bottom');
+		this.#rounds = athBottom.querySelector('#roundsVal');
+		this.#enemies = athBottom.querySelector('#enemiesVal');
 		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
 		this.#pauseMenu.onResume(() => this.togglePause());
 		this.#pauseMenu.onMainMenu(() => this.leave());
@@ -86,11 +91,14 @@ export default class GameView extends View {
 			this.#score.innerText = this.#currentPlayer.score;
 			this.#kills.innerText = this.#currentPlayer.kills;
 		}
+		this.#rounds.innerText = this.game.currentWave;
+		this.#enemies.innerText = `${this.game.nbKillsInWave}/${this.game.maxEnemies}`;
 		this.#duration.innerText = this.game.duration;
 		if (this.game.lost) {
 			this.element.classList.add('gameOver');
 			this.#gameOverMenu.content = `
 				<p>Temps : ${this.game.duration}</p>
+				<p>Manches : ${this.game.currentWave}</p>
 				<p>Kills : ${this.#currentPlayer.kills}</p>
 				<p>Score : ${this.#currentPlayer.score}</p>
 			`;
