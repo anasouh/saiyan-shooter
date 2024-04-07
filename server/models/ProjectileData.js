@@ -29,14 +29,42 @@ export default class ProjectileData extends Entity {
 			spritesData[this.characterId][this.ulti ? 'ult' : 'projectile'];
 		const sprite = sprites[this.index.toString().padStart(2, '0')];
 		if (sprite) {
-			this.width = sprite.width;
-			this.height = sprite.height;
-			this.scale = 0.07 * this.index;
+			this.#transitionDimension({
+				width: sprite.width * (0.07 * this.index),
+				height: sprite.height * (0.07 * this.index),
+			});
 		} else {
 			this.index--;
 		}
 		setTimeout(() => {
 			this.#nextSprite();
 		}, ProjectileData.ANIMATION_SPEED);
+	}
+
+	/**
+	 * Change progressivement la taille du projectile
+	 * @param {Object} param0
+	 * @param {number} param0.width
+	 * @param {number} param0.height
+	 */
+	#transitionDimension({ width, height }) {
+		const frames = ProjectileData.ANIMATION_SPEED / 10;
+		const widthIncrement = (width - this.width) / frames;
+		const heightIncrement = (height - this.height) / frames;
+		const xIncrement = widthIncrement / 2;
+		const yIncrement = heightIncrement / 2;
+		let frameCount = 0;
+
+		const interval = setInterval(() => {
+			if (frameCount < frames) {
+				this.width += widthIncrement;
+				this.height += heightIncrement;
+				this.x -= xIncrement;
+				this.y -= yIncrement;
+				frameCount++;
+			} else {
+				clearInterval(interval);
+			}
+		}, 10);
 	}
 }
