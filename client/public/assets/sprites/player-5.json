@@ -27,7 +27,7 @@
 	"sourceSize": {"w":636,"h":812},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/detransfo_2.png":
+"goku_ssj/detransfo_2.png":
 {
 	"frame": {"x":1502,"y":0,"w":445,"h":745},
 	"rotated": false,
@@ -36,7 +36,7 @@
 	"sourceSize": {"w":512,"h":812},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/detransfo_3.png":
+"goku_ssj/detransfo_3.png":
 {
 	"frame": {"x":0,"y":748,"w":445,"h":745},
 	"rotated": false,
@@ -45,7 +45,7 @@
 	"sourceSize": {"w":512,"h":812},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/transfo_9.png":
+"goku_ssj/transfo_9.png":
 {
 	"frame": {"x":445,"y":748,"w":631,"h":745},
 	"rotated": false,
@@ -54,7 +54,7 @@
 	"sourceSize": {"w":698,"h":812},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/up.png":
+"goku_ssj/up.png":
 {
 	"frame": {"x":1076,"y":748,"w":445,"h":745},
 	"rotated": false,

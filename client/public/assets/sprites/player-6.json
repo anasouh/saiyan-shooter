@@ -27,7 +27,7 @@
 	"sourceSize": {"w":628,"h":812},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/detransfo_1.png":
+"goku_ssj/detransfo_1.png":
 {
 	"frame": {"x":1047,"y":0,"w":369,"h":748},
 	"rotated": false,
@@ -36,7 +36,7 @@
 	"sourceSize": {"w":433,"h":812},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/down.png":
+"goku_ssj/down.png":
 {
 	"frame": {"x":334,"y":0,"w":351,"h":751},
 	"rotated": false,
@@ -45,7 +45,7 @@
 	"sourceSize": {"w":412,"h":812},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/player.png":
+"goku_ssj/player.png":
 {
 	"frame": {"x":1416,"y":0,"w":369,"h":748},
 	"rotated": false,
@@ -54,7 +54,7 @@
 	"sourceSize": {"w":433,"h":812},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/reloading.png":
+"goku_ssj/reloading.png":
 {
 	"frame": {"x":852,"y":753,"w":436,"h":751},
 	"rotated": false,

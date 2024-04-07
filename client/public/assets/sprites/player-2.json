@@ -9,7 +9,7 @@
 	"sourceSize": {"w":720,"h":790},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/transfo_4.png":
+"goku_ssj/transfo_4.png":
 {
 	"frame": {"x":1288,"y":706,"w":441,"h":716},
 	"rotated": false,
@@ -18,7 +18,7 @@
 	"sourceSize": {"w":549,"h":812},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/transfo_6.png":
+"goku_ssj/transfo_6.png":
 {
 	"frame": {"x":641,"y":0,"w":362,"h":693},
 	"rotated": false,

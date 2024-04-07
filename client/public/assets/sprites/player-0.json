@@ -18,7 +18,7 @@
 	"sourceSize": {"w":720,"h":646},
 	"anchor": {"x":0,"y":0}
 },
-"kaioken/hit2.png":
+"goku_kaioken/hit2.png":
 {
 	"frame": {"x":1294,"y":693,"w":604,"h":550},
 	"rotated": false,
@@ -27,7 +27,7 @@
 	"sourceSize": {"w":720,"h":581},
 	"anchor": {"x":0,"y":0}
 },
-"kaioken/ko.png":
+"goku_kaioken/ko.png":
 {
 	"frame": {"x":661,"y":0,"w":645,"h":341},
 	"rotated": false,
@@ -36,7 +36,7 @@
 	"sourceSize": {"w":720,"h":355},
 	"anchor": {"x":0,"y":0}
 },
-"kaioken/right.png":
+"goku_kaioken/right.png":
 {
 	"frame": {"x":0,"y":693,"w":632,"h":498},
 	"rotated": false,
@@ -45,7 +45,7 @@
 	"sourceSize": {"w":720,"h":505},
 	"anchor": {"x":0,"y":0}
 },
-"kaioken/transfo_3.png":
+"goku_kaioken/transfo_3.png":
 {
 	"frame": {"x":0,"y":1243,"w":651,"h":566},
 	"rotated": false,
@@ -54,7 +54,7 @@
 	"sourceSize": {"w":720,"h":566},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/ko.png":
+"goku_ssj/ko.png":
 {
 	"frame": {"x":0,"y":341,"w":665,"h":346},
 	"rotated": false,
@@ -63,7 +63,7 @@
 	"sourceSize": {"w":720,"h":401},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/right.png":
+"goku_ssj/right.png":
 {
 	"frame": {"x":632,"y":693,"w":662,"h":500},
 	"rotated": false,
@@ -72,7 +72,7 @@
 	"sourceSize": {"w":720,"h":558},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/transfo_5.png":
+"goku_ssj/transfo_5.png":
 {
 	"frame": {"x":1314,"y":1243,"w":466,"h":608},
 	"rotated": false,
@@ -92,11 +92,11 @@
 }},
 "animations": {
 	"goku/hit": ["goku/hit1.png","goku/hit2.png"],
-	"kaioken/hit": ["kaioken/hit1.png","kaioken/hit2.png"],
-	"kaioken/transfo": ["kaioken/transfo_1.png","kaioken/transfo_2.png","kaioken/transfo_3.png","kaioken/transfo_4.png","kaioken/transfo_5.png"],
-	"ssj/detransfo": ["ssj/detransfo_1.png","ssj/detransfo_2.png","ssj/detransfo_3.png"],
-	"ssj/hit": ["ssj/hit1.png","ssj/hit2.png"],
-	"ssj/transfo": ["ssj/transfo_1.png","ssj/transfo_2.png","ssj/transfo_3.png","ssj/transfo_4.png","ssj/transfo_5.png","ssj/transfo_6.png","ssj/transfo_7.png","ssj/transfo_8.png","ssj/transfo_9.png","ssj/transfo_10.png"],
+	"goku_kaioken/hit": ["goku_kaioken/hit1.png","goku_kaioken/hit2.png"],
+	"goku_kaioken/transfo": ["goku_kaioken/transfo_1.png","goku_kaioken/transfo_2.png","goku_kaioken/transfo_3.png","goku_kaioken/transfo_4.png","goku_kaioken/transfo_5.png"],
+	"goku_ssj/detransfo": ["goku_ssj/detransfo_1.png","goku_ssj/detransfo_2.png","goku_ssj/detransfo_3.png"],
+	"goku_ssj/hit": ["goku_ssj/hit1.png","goku_ssj/hit2.png"],
+	"goku_ssj/transfo": ["goku_ssj/transfo_1.png","goku_ssj/transfo_2.png","goku_ssj/transfo_3.png","goku_ssj/transfo_4.png","goku_ssj/transfo_5.png","goku_ssj/transfo_6.png","goku_ssj/transfo_7.png","goku_ssj/transfo_8.png","goku_ssj/transfo_9.png","goku_ssj/transfo_10.png"],
 	"vegeta/hit": ["vegeta/hit1.png","vegeta/hit2.png"],
 	"vegeta/ult": ["vegeta/ult_1.png","vegeta/ult_2.png","vegeta/ult_3.png","vegeta/ult_4.png"]
 },

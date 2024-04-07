@@ -9,7 +9,7 @@
 	"sourceSize": {"w":456,"h":812},
 	"anchor": {"x":0,"y":0}
 },
-"kaioken/defending.png":
+"goku_kaioken/defending.png":
 {
 	"frame": {"x":397,"y":0,"w":610,"h":790},
 	"rotated": false,
@@ -18,7 +18,7 @@
 	"sourceSize": {"w":720,"h":794},
 	"anchor": {"x":0,"y":0}
 },
-"kaioken/img_transfo.png":
+"goku_kaioken/img_transfo.png":
 {
 	"frame": {"x":1007,"y":0,"w":566,"h":792},
 	"rotated": false,
@@ -27,7 +27,7 @@
 	"sourceSize": {"w":711,"h":890},
 	"anchor": {"x":0,"y":0}
 },
-"kaioken/transfo_4.png":
+"goku_kaioken/transfo_4.png":
 {
 	"frame": {"x":0,"y":792,"w":632,"h":782},
 	"rotated": false,
@@ -36,7 +36,7 @@
 	"sourceSize": {"w":644,"h":787},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/transfo_7.png":
+"goku_ssj/transfo_7.png":
 {
 	"frame": {"x":632,"y":792,"w":531,"h":774},
 	"rotated": false,
@@ -45,7 +45,7 @@
 	"sourceSize": {"w":569,"h":812},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/transfo_8.png":
+"goku_ssj/transfo_8.png":
 {
 	"frame": {"x":1163,"y":792,"w":517,"h":778},
 	"rotated": false,

@@ -10,6 +10,7 @@ export default class PlayerData extends Entity {
 	static DECELERATION_Y = 0.9;
 	static ACCELERATION = 0.5;
 	static MAX_SPEED = 5;
+	static SSJ_SCORE = 500;
 	score = PlayerData.DEFAULT_SCORE;
 	life = PlayerData.DEFAULT_LIFE;
 	ult = 0;
@@ -42,12 +43,8 @@ export default class PlayerData extends Entity {
 	incrementScore(value) {
 		const oldScore = this.score;
 		this.score += value;
-		if (this.characterId === 'goku' && oldScore < 200 && this.score >= 200) {
-			this.characterId = 'kaioken';
-			const { width, height } = spritesData.kaioken.player;
-			this.width = width;
-			this.height = height;
-			this.scale = 0.18;
+		if (oldScore < PlayerData.SSJ_SCORE && this.score >= PlayerData.SSJ_SCORE) {
+			this.ssj();
 		}
 	}
 
@@ -64,6 +61,10 @@ export default class PlayerData extends Entity {
 		this.resetLife();
 		this.score = PlayerData.DEFAULT_SCORE;
 		this.ult = 0;
+		this.kills = 0;
+		if (this.characterId.includes('_')) {
+			this.characterId = this.characterId.split('_')[0];
+		}
 	}
 
 	resetLife() {
@@ -75,5 +76,13 @@ export default class PlayerData extends Entity {
 		setTimeout(() => {
 			this.invicibility = false;
 		}, duration);
+	}
+
+	ssj() {
+		this.characterId = `${this.characterId}_ssj`;
+		const { width, height } = spritesData[this.characterId].player;
+		this.width = width;
+		this.height = height;
+		this.scale = 0.18;
 	}
 }

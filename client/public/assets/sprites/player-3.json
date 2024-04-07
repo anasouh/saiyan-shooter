@@ -1,6 +1,6 @@
 {"frames": {
 
-"ssj/hit1.png":
+"goku_ssj/hit1.png":
 {
 	"frame": {"x":0,"y":0,"w":509,"h":739},
 	"rotated": false,
@@ -9,7 +9,7 @@
 	"sourceSize": {"w":582,"h":812},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/hit2.png":
+"goku_ssj/hit2.png":
 {
 	"frame": {"x":509,"y":0,"w":651,"h":724},
 	"rotated": false,
@@ -18,7 +18,7 @@
 	"sourceSize": {"w":720,"h":793},
 	"anchor": {"x":0,"y":0}
 },
-"ssj/shooting.png":
+"goku_ssj/shooting.png":
 {
 	"frame": {"x":1160,"y":0,"w":597,"h":738},
 	"rotated": false,

@@ -28,13 +28,9 @@ export default class Player extends Character {
 	#invicibility = false;
 
 	constructor(characterId) {
-		super(PIXI.Assets.get(`${characterId}/player.png`));
+		super(PIXI.Texture.from(`${SPRITES_PATH}player/${characterId}/player.png`));
 		this.characterId = characterId;
 		this.#kills = 0;
-		this.addEventListener('scoreChange', score => {
-			if (this.characterId === 'goku' && score == 20)
-				this.setSprites('kaioken');
-		});
 	}
 
 	incrementNbKill() {
@@ -99,15 +95,17 @@ export default class Player extends Character {
 		Object.keys(this.#moving).forEach(direction => {
 			if (moves[direction]) {
 				this.#moving[direction] = true;
-				const path = `${this.characterId}/${direction}.png`;
-				const texture = PIXI.Assets.get(path);
+				const path = `${SPRITES_PATH}player/${this.characterId}/${direction}.png`;
+				const texture = PIXI.Texture.from(path);
 				this.texture = texture;
 				this.scale.set(this.scaleValue);
 				nbDirection++;
 			}
 		});
 		if (nbDirection === 0) {
-			this.texture = PIXI.Assets.get(`${this.characterId}/player.png`);
+			this.texture = PIXI.Texture.from(
+				`${SPRITES_PATH}player/${this.characterId}/player.png`
+			);
 		}
 	}
 
@@ -149,12 +147,12 @@ export default class Player extends Character {
 	 */
 	setSprites(spritesName) {
 		this.characterId = spritesName;
-		if (spritesName === 'kaioken') {
-			const spritesNames = Object.keys(spritesData.kaioken).filter(name =>
+		if (spritesName !== 'goku' && spritesName !== 'vegeta') {
+			const spritesNames = Object.keys(spritesData[spritesName]).filter(name =>
 				name.startsWith('transfo_')
 			);
 			this.textures = spritesNames.map(name =>
-				PIXI.Assets.get(`kaioken/${name}.png`)
+				PIXI.Texture.from(`${SPRITES_PATH}player/${spritesName}/${name}.png`)
 			);
 			this.loop = false;
 			this.animationSpeed = 0.1;
@@ -185,7 +183,9 @@ export default class Player extends Character {
 	reset() {
 		if (this.characterId === 'kaioken' || this.characterId === 'ssj')
 			this.characterId = 'goku';
-		this.texture = PIXI.Assets.get(`${this.characterId}/player.png`);
+		this.texture = PIXI.Texture.from(
+			`${SPRITES_PATH}player/${this.characterId}/player.png`
+		);
 		this.score = SCORE;
 		this.life = LIFE;
 		this.kills = 0;
@@ -212,12 +212,17 @@ export default class Player extends Character {
 		projectile.position = this.position;
 		projectile.move('right');
 		playSound(SFX.PROJECTILE);
-		this.texture = PIXI.Assets.get(`${this.characterId}/shooting.png`);
+		this.texture = PIXI.Texture.from(
+			`${SPRITES_PATH}player/${this.characterId}/shooting.png`
+		);
 		if (this.onShoot) {
 			this.onShoot(projectile);
 		}
 		setTimeout(
-			() => (this.texture = PIXI.Assets.get(`${this.characterId}/player.png`)),
+			() =>
+				(this.texture = PIXI.Texture.from(
+					`${SPRITES_PATH}player/${this.characterId}/player.png`
+				)),
 			ANIMATION_TIME
 		);
 	}

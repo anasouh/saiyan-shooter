@@ -8,7 +8,7 @@
 	"spriteSourceSize": {"x":49,"y":49,"w":639,"h":364},
 	"sourceSize": {"w":720,"h":445}
 },
-"kaioken/01.png":
+"goku_kaioken/01.png":
 {
 	"frame": {"x":1,"y":367,"w":604,"h":353},
 	"rotated": false,
@@ -16,7 +16,7 @@
 	"spriteSourceSize": {"x":37,"y":111,"w":604,"h":353},
 	"sourceSize": {"w":720,"h":556}
 },
-"ssj/01.png":
+"goku_ssj/01.png":
 {
 	"frame": {"x":1,"y":722,"w":617,"h":264},
 	"rotated": false,

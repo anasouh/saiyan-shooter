@@ -140,7 +140,12 @@ loadTextures().then(() => {
 			player.setLife(p.life);
 			if (p.characterId !== player.characterId) {
 				player.setSprites(p.characterId);
+				player.dimensions = { width: p.width, height: p.height };
 			}
+			if (p.width !== player.width || p.height !== player.height) {
+				player.dimensions = { width: p.width, height: p.height };
+			}
+			console.log(player.width, player.height);
 			return player;
 		});
 		game.ennemies = ennemies.map(e => {
