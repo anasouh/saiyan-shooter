@@ -103,11 +103,16 @@ io.on('connection', socket => {
 		game.difficulty = difficulty;
 	});
 
-	socket.on('disconnect', () => {
-		console.log(`Déconnexion du client ${socket.id}`);
+	socket.on('leave', () => {
+		console.log(`${player.username} a quitté la partie`);
 		game.removePlayer(player);
 		if (game.players.length === 0) {
 			game.stop();
 		}
+	});
+
+	socket.on('disconnect', () => {
+		console.log(`Déconnexion du client ${socket.id}`);
+		socket.listeners('leave')[0]();
 	});
 });

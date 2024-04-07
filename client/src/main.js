@@ -79,6 +79,9 @@ function onStart() {
 
 homeView.onStartPressed = onStart;
 gameView.onReplayPressed = onStart;
+gameView.onHide = () => {
+	socket.emit('leave');
+};
 
 Router.routes = routes;
 const links = document.querySelectorAll('a, button[href]');

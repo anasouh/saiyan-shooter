@@ -7,6 +7,11 @@ export default class View {
 	 * Balise HTML associée à la vue
 	 */
 	element;
+	/**
+	 * Fonction appelée lors du masquage de la vue
+	 * @type {function}
+	 */
+	onHide;
 
 	constructor(element) {
 		this.element = element;
@@ -22,6 +27,7 @@ export default class View {
 	 */
 	hide() {
 		this.element.classList.remove('active');
+		this.onHide?.();
 	}
 	/**
 	 * Affiche un indicateur de chargement.
