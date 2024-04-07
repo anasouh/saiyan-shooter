@@ -104,6 +104,21 @@ export default class GameView extends View {
 			`;
 			this.#app.ticker.stop();
 		}
+		this.game.players.forEach(player => {
+			const label = new PIXI.Text(player.username, {
+				fill: 0xffffff,
+				fontSize: 15,
+				fontFamily: 'Press Start 2P',
+				stroke: 0x000000,
+				strokeThickness: 2,
+			});
+			label.anchor.set(0.5);
+			label.position.set(
+				player.position.x + player.width / 2,
+				player.position.y - 20
+			);
+			this.addChild(label);
+		});
 	}
 
 	/**
@@ -153,6 +168,10 @@ export default class GameView extends View {
 		}
 		if (this.game.secondPlayer)
 			this.#app.stage.addChild(this.game.secondPlayer);
+	}
+
+	addChild(child) {
+		this.#app.stage.addChild(child);
 	}
 
 	/**

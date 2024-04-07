@@ -17,6 +17,7 @@ export default class Player extends Character {
 	score = SCORE;
 	life;
 	kills;
+	username;
 	#moving = { up: false, down: false, left: false, right: false };
 	onShoot;
 	onScoreChange = [];

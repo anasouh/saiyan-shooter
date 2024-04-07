@@ -10,7 +10,7 @@ import { io } from 'socket.io-client';
 import Ennemy from './models/Ennemy.js';
 import Item from './models/Item.js';
 import Projectile from './models/Projectile.js';
-import { Assets, Texture } from 'pixi.js';
+import { Assets, Text, Texture } from 'pixi.js';
 import { loadSprites, spritesData } from './sprites.js';
 
 const socket = io();
@@ -131,6 +131,7 @@ loadTextures().then(() => {
 			if (p.id == socket.id) {
 				gameView.currentPlayer = player;
 			}
+			player.username = p.username;
 			player.setMoving(p.moving);
 			player.position.set(p.x, p.y);
 			player.score = p.score;
@@ -148,7 +149,6 @@ loadTextures().then(() => {
 			if (p.width !== player.width || p.height !== player.height) {
 				player.dimensions = { width: p.width, height: p.height };
 			}
-			console.log(player.width, player.height);
 			return player;
 		});
 		game.ennemies = ennemies.map(e => {
