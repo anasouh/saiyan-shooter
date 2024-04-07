@@ -5,7 +5,6 @@ import GameView from './views/GameView.js';
 import ScoreView from './views/ScoreView.js';
 import Player from './models/Player.js';
 import { CONTROL_KEYS, PAUSE_KEYS, SHOOT_KEYS } from './settings/keys.js';
-import GuideView from './views/GuideView.js';
 import Game from './models/Game.js';
 import { io } from 'socket.io-client';
 import Ennemy from './models/Ennemy.js';
@@ -18,7 +17,7 @@ const socket = io();
 const game = new Game(window.screen.width, window.screen.height);
 
 const homeView = new HomeView(document.querySelector('.home'));
-const guideView = new GuideView(document.querySelector('.guide'));
+const guideView = new View(document.querySelector('.guide'));
 const gameView = new GameView(game, document.querySelector('.game'));
 const scoreView = new ScoreView(document.querySelector('.scores'));
 const creditsView = new View(document.querySelector('.credits'));
@@ -80,11 +79,11 @@ homeView.onStartPressed = onStart;
 gameView.onReplayPressed = onStart;
 
 Router.routes = routes;
-const anchors = document.querySelectorAll('a');
+const links = document.querySelectorAll('a, button[href]');
 
 Router.navigate(window.location.pathname, true);
 window.onpopstate = () => Router.navigate(document.location.pathname, true);
-anchors.forEach(a => {
+links.forEach(a => {
 	a.addEventListener('click', event => {
 		event.preventDefault();
 		Router.navigate(a.getAttribute('href'));

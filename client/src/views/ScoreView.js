@@ -4,15 +4,10 @@ import View from './View.js';
 
 export default class ScoreView extends View {
 	#tbody;
-	#backToHomeButton;
 
 	constructor(element) {
 		super(element);
 		this.#tbody = element.querySelector('tbody');
-		this.#backToHomeButton = element.querySelector('button#backToHome');
-		this.#backToHomeButton.addEventListener('click', () =>
-			Router.navigate('/')
-		);
 	}
 
 	show() {
