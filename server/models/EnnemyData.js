@@ -25,6 +25,7 @@ const ennemies = {
 
 export default class EnnemyData extends Entity {
 	static COOLDOWN = 1000;
+	static ULTIMATE_PROBA = 0.1;
 	static #lastId = 0;
 	id;
 	name;

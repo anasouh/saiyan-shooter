@@ -6,7 +6,7 @@ import Game from './Game.js';
 import PlayerData from './models/PlayerData.js';
 import Directions from './Directions.js';
 import History from './History.js';
-import { loadSprites } from './sprites.js';
+import { loadSprites, spritesData } from './sprites.js';
 
 const history = new History();
 
@@ -41,6 +41,10 @@ httpServer.listen(port, () => {
 
 app.get('/api/scores', (req, res) => {
 	res.json(history.getScores());
+});
+
+app.get('/api/sprites', (req, res) => {
+	res.json(spritesData);
 });
 
 const io = new IOServer(httpServer);

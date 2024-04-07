@@ -162,7 +162,7 @@ loadTextures().then(() => {
 			return item;
 		});
 		game.projectiles = projectiles.map(p => {
-			const projectile = new Projectile(p.characterId, p.ulti);
+			const projectile = new Projectile(p.characterId, p.ulti, p.index);
 			projectile.position.set(p.x, p.y);
 			projectile.dimensions = { width: p.width, height: p.height };
 			return projectile;

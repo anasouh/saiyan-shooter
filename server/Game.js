@@ -316,6 +316,7 @@ export default class Game {
 				x: enemy.x,
 				y: enemy.y,
 				enemy: true,
+				ulti: EnnemyData.ULTIMATE_PROBA >= Math.random(),
 			});
 			projectile.moving.left = true;
 			this.projectiles.push(projectile);

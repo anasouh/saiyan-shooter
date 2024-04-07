@@ -8,27 +8,18 @@ export default class Projectile extends PIXI.AnimatedSprite {
 	 * @param {string} charcterId - L'identifiant du personnage.
 	 * @param {boolean} ultime - Si le projectile est un ultime.
 	 */
-	constructor(charcterId, ultime = false) {
+	constructor(charcterId, ultime = false, index = 1) {
 		if (ultime) {
-			if (charcterId === 'vegeta') {
-				super([
-					PIXI.Texture.from(
-						`/assets/sprites/projectiles/${charcterId}/ult/01.png`
-					),
-					PIXI.Texture.from(
-						`/assets/sprites/projectiles/${charcterId}/ult/02.png`
-					),
-				]);
-			} else {
-				super([
-					PIXI.Texture.from(
-						`/assets/sprites/projectiles/${charcterId}/ult/01.png`
-					),
-				]);
-			}
+			super([
+				PIXI.Texture.from(
+					`/assets/sprites/projectiles/${charcterId}/ult/${index.toString().padStart(2, '0')}.png`
+				),
+			]);
 		} else {
 			super([
-				PIXI.Texture.from(`/assets/sprites/projectiles/${charcterId}/01.png`),
+				PIXI.Texture.from(
+					`/assets/sprites/projectiles/${charcterId}/${index.toString().padStart(2, '0')}.png`
+				),
 			]);
 		}
 		this.animationSpeed = 0.3;
