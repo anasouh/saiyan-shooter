@@ -5,6 +5,7 @@ export default class Entity {
 	vy;
 	width;
 	height;
+	_scale;
 	moving = { left: false, right: false, up: false, down: false };
 	angle = 0;
 
@@ -24,6 +25,7 @@ export default class Entity {
 	set scale(scale) {
 		this.width *= scale;
 		this.height *= scale;
+		this._scale = scale;
 	}
 
 	/**

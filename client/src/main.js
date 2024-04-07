@@ -11,6 +11,7 @@ import Ennemy from './models/Ennemy.js';
 import Item from './models/Item.js';
 import Projectile from './models/Projectile.js';
 import { Assets, Texture } from 'pixi.js';
+import { loadSprites, spritesData } from './sprites.js';
 
 const socket = io();
 
@@ -36,6 +37,7 @@ async function loadTextures() {
 		await Assets.load(path);
 	}
 	await Assets.load('/assets/sprites/projectile-0.json');
+	await loadSprites();
 }
 
 const keysDown = new Set();
@@ -127,7 +129,6 @@ loadTextures().then(() => {
 				gameView.currentPlayer = player;
 			}
 			player.setMoving(p.moving);
-			player.setSprites(p.characterId);
 			player.position.set(p.x, p.y);
 			player.score = p.score;
 			player.kills = p.kills;
@@ -137,6 +138,9 @@ loadTextures().then(() => {
 				player.invicibility = p.invicibility;
 			}
 			player.setLife(p.life);
+			if (p.characterId !== player.characterId) {
+				player.setSprites(p.characterId);
+			}
 			return player;
 		});
 		game.ennemies = ennemies.map(e => {

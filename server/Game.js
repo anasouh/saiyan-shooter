@@ -14,6 +14,7 @@ export default class Game {
 	onAddChild = child => {};
 	onRemoveChild = child => {};
 	onEnd = () => {};
+	onScoreChange = (player, score) => {};
 	ennemies = [];
 	projectiles = [];
 	items = [];
@@ -126,9 +127,17 @@ export default class Game {
 
 	/* Players management */
 
+	/**
+	 * Ajoute un joueur au jeu.
+	 * @param {PlayerData} player
+	 * @returns
+	 */
 	addPlayer(player) {
 		if (this.findPlayerById(player.id)) return;
 		this.players.push(player);
+		player.onScoreChange = score => {
+			this.onScoreChange?.(player, score);
+		};
 		this.onAddChild(player);
 	}
 

@@ -1,3 +1,4 @@
+import { spritesData } from '../sprites.js';
 import Entity from './Entity.js';
 
 const INVICIBILITY_TIME = 1000;
@@ -39,7 +40,15 @@ export default class PlayerData extends Entity {
 	}
 
 	incrementScore(value) {
+		const oldScore = this.score;
 		this.score += value;
+		if (this.characterId === 'goku' && oldScore < 200 && this.score >= 200) {
+			this.characterId = 'kaioken';
+			const { width, height } = spritesData.kaioken.player;
+			this.width = width;
+			this.height = height;
+			this.scale = 0.18;
+		}
 	}
 
 	incrementKills() {
