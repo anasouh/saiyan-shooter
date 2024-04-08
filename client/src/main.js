@@ -17,6 +17,7 @@ import Item from './models/Item.js';
 import Projectile from './models/Projectile.js';
 import { Assets, Text, Texture } from 'pixi.js';
 import { loadSprites, spritesData } from './sprites.js';
+import { playSound } from './utils.js';
 
 const socket = io();
 
@@ -80,6 +81,10 @@ document.addEventListener('keyup', event => {
 });
 
 socket.on('difficulty', difficulty => (homeView.difficulty = difficulty));
+
+socket.on('sfx', sfx => {
+	playSound(`/assets/sfx/${sfx}`);
+});
 
 homeView.onCharacterChange = characterId => {
 	socket.emit('character', characterId);

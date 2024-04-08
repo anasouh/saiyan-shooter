@@ -69,6 +69,9 @@ function newGame(difficulty) {
 	game.onTick = () => {
 		io.to(id).emit('game', game);
 	};
+	game.onSFX = sound => {
+		io.to(id).emit('sfx', sound);
+	};
 	rooms.set(id, game);
 	return game;
 }

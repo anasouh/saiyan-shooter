@@ -20,6 +20,7 @@ export default class Game {
 	onRemoveChild = child => {};
 	onEnd = () => {};
 	onScoreChange = (player, score) => {};
+	onSFX = sfx => {};
 	ennemies = [];
 	projectiles = [];
 	items = [];
@@ -180,6 +181,7 @@ export default class Game {
 			const projectile = new ProjectileData(data);
 			projectile.moving.right = !projectile.isStatic;
 			this.addProjectile(projectile);
+			this.onSFX(ulti ? 'ult.mp3' : 'projectile.wav');
 			projectile.onExpire = () => this.removeProjectile(projectile);
 			if (player.tripleShoot) {
 				const projectile_up = new ProjectileData(data);
@@ -339,6 +341,7 @@ export default class Game {
 			});
 			projectile.moving.left = true;
 			this.projectiles.push(projectile);
+			this.onSFX('projectile.wav');
 			enemy.cooldown = true;
 			setTimeout(() => {
 				enemy.cooldown = false;
@@ -435,6 +438,7 @@ export default class Game {
 		this.ennemies.forEach(ennemy => {
 			this.players.forEach(player => {
 				if (areColliding(ennemy, player) && ennemy.isAlive && player.alive) {
+					this.onSFX('punch.wav');
 					this.removeEnnemy(ennemy);
 					if (!player.invicibility) {
 						player.decrementLife(2);
@@ -463,6 +467,7 @@ export default class Game {
 						) {
 							this.removeProjectile(projectile);
 							player.decrementLife();
+							this.onSFX('hit.wav');
 							//playSound(SFX.PUNCH_1);
 						}
 					});
@@ -477,6 +482,7 @@ export default class Game {
 						// ennemy.explode();
 						/* A REMPLACER */
 						ennemy.decrementLife(projectile.damage);
+						this.onSFX('punch.wav');
 						const player = this.findPlayerById(projectile.from);
 						if (player) {
 							player.incrementScore(ennemy.value);
