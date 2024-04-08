@@ -57,9 +57,10 @@ app.get('/api/rooms/exists/:id', (req, res) => {
 
 const io = new IOServer(httpServer);
 
-function newGame() {
+function newGame(difficulty) {
 	const id = Math.random().toString(36).substring(2, 9);
 	const game = new Game(1200, 800);
+	game.difficulty = difficulty;
 	game.id = id;
 	game.onEnd = () => {
 		history.add(game);
@@ -90,9 +91,10 @@ io.on('connection', socket => {
 	});
 
 	socket.on('start', username => {
-		if ([...socket.rooms][0] !== socket.id) {
-			game = rooms.get([...socket.rooms][0]);
-		} else game = newGame();
+		if (!game)
+			if ([...socket.rooms][0] !== socket.id) {
+				game = rooms.get([...socket.rooms][0]);
+			} else game = newGame(socket.data.difficulty || 'normal');
 		socket.join(game.id);
 		player.username = username;
 		player.reset();
@@ -127,7 +129,7 @@ io.on('connection', socket => {
 	});
 
 	socket.on('difficulty', difficulty => {
-		if (game) game.difficulty = difficulty;
+		socket.data.difficulty = difficulty;
 	});
 
 	socket.on('leave', () => {

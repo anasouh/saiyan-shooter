@@ -94,7 +94,9 @@ function onStart() {
 }
 
 homeView.onStartPressed = onStart;
-gameView.onReplayPressed = onStart;
+gameView.onReplayPressed = () => {
+	socket.emit('start', homeView.username);
+};
 gameView.onHide = () => {
 	socket.emit('leave');
 };
@@ -113,18 +115,6 @@ links.forEach(a => {
 
 homeView.setLoading(true);
 loadTextures().then(() => {
-	// const player = new Player(homeView.characterId);
-	// homeView.onCharacterChange = characterId => {
-	// 	player.setSprites(characterId);
-	// };
-	// gameView.currentPlayer = player;
-	// gameView.onClick = event => {
-	// 	player.shoot();
-	// };
-	// gameView.onContextMenu = event => {
-	// 	event.preventDefault();
-	// 	player.ulti();
-	// };
 	homeView.setLoading(false);
 	homeView.onDifficultyClick = difficulty => {
 		socket.emit('difficulty', difficulty);
