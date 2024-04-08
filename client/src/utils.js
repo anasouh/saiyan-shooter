@@ -41,3 +41,8 @@ export function formatDuration(duration) {
 	const seconds = duration % 60;
 	return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
+
+export async function gameIdExists(id) {
+	const response = await fetch(`/api/rooms/exists/${id}`);
+	return response.ok;
+}

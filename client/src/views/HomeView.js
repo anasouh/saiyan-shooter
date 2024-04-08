@@ -1,5 +1,6 @@
 import Router from '../Router.js';
 import DifficultySelect from '../components/DifficultySelect.js';
+import { gameIdExists } from '../utils.js';
 import View from './View.js';
 
 export default class HomeView extends View {
@@ -80,8 +81,21 @@ export default class HomeView extends View {
 			this.#usernameField.classList.add('error');
 			return;
 		}
-		this.#usernameField.classList.remove('error');
-		this.onStartPressed();
-		Router.navigate('/game');
+		const launchGame = () => {
+			this.#gameIdField.classList.remove('error');
+			this.#usernameField.classList.remove('error');
+			this.onStartPressed();
+		};
+		if (this.#gameIdField.value.length !== 0) {
+			gameIdExists(this.#gameIdField.value).then(exists => {
+				if (exists) {
+					launchGame();
+				} else {
+					this.#gameIdField.classList.add('error');
+				}
+			});
+		} else {
+			launchGame();
+		}
 	}
 }

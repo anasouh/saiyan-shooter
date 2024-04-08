@@ -86,10 +86,11 @@ homeView.onCharacterChange = characterId => {
 };
 
 function onStart() {
-	if (homeView.gameId && homeView.gameId.length === 7) {
+	if (homeView.gameId.length !== 0) {
 		socket.emit('join', homeView.gameId);
 	}
 	socket.emit('start', homeView.username);
+	Router.navigate('/game');
 }
 
 homeView.onStartPressed = onStart;
