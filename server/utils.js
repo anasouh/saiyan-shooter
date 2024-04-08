@@ -1,8 +1,17 @@
-export function isOutOfScreen(screen, sprite) {
+export function isCompletelyOutOfScreen(screen, sprite) {
 	return (
-		sprite.x - sprite.width < 0 ||
+		sprite.x + sprite.width < 0 ||
+		sprite.x > screen.width ||
+		sprite.y + sprite.height < 0 ||
+		sprite.y > screen.height
+	);
+}
+
+export function isPartiallyOutOfScreen(screen, sprite) {
+	return (
+		sprite.x < 0 ||
 		sprite.x + sprite.width > screen.width ||
-		sprite.y - sprite.height < 0 ||
+		sprite.y < 0 ||
 		sprite.y + sprite.height > screen.height
 	);
 }

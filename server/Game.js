@@ -1,4 +1,9 @@
-import { areColliding, isLeftOfScreen, isOutOfScreen } from './utils.js';
+import {
+	areColliding,
+	isLeftOfScreen,
+	isCompletelyOutOfScreen,
+	isPartiallyOutOfScreen,
+} from './utils.js';
 import EnnemyData from './models/EnnemyData.js';
 import ProjectileData from './models/ProjectileData.js';
 import ItemData from './models/ItemData.js';
@@ -173,8 +178,9 @@ export default class Game {
 				enemy: false,
 			};
 			const projectile = new ProjectileData(data);
-			projectile.moving.right = true;
+			projectile.moving.right = !projectile.isStatic;
 			this.addProjectile(projectile);
+			projectile.onExpire = () => this.removeProjectile(projectile);
 			if (player.tripleShoot) {
 				const projectile_up = new ProjectileData(data);
 				projectile_up.moving.up = true;
@@ -386,22 +392,34 @@ export default class Game {
 		});
 		this.projectiles.forEach(projectile => {
 			if (
-				isOutOfScreen({ width: this.width, height: this.height }, projectile)
+				isCompletelyOutOfScreen(
+					{ width: this.width, height: this.height },
+					projectile
+				)
 			) {
 				this.removeProjectile(projectile);
 				return;
 			}
-			if (projectile.moving.left) {
-				projectile.x -= 10;
-			}
-			if (projectile.moving.right) {
-				projectile.x += 10;
-			}
-			if (projectile.moving.up) {
-				projectile.y -= 2;
-			}
-			if (projectile.moving.down) {
-				projectile.y += 2;
+			if (projectile.isStatic) {
+				const from = this.findPlayerById(projectile.from);
+				const { x, y } = from.position;
+				projectile.position = {
+					x: x + from.width,
+					y: y + from.height / 2 - projectile.height / 2,
+				};
+			} else {
+				if (projectile.moving.left) {
+					projectile.x -= 10;
+				}
+				if (projectile.moving.right) {
+					projectile.x += 10;
+				}
+				if (projectile.moving.up) {
+					projectile.y -= 2;
+				}
+				if (projectile.moving.down) {
+					projectile.y += 2;
+				}
 			}
 		});
 		this.ennemies.forEach(ennemy => {

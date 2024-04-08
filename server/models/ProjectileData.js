@@ -3,10 +3,12 @@ import Entity from './Entity.js';
 
 export default class ProjectileData extends Entity {
 	static ANIMATION_SPEED = 200;
+	static LIFETIME = 3000;
 	from;
 	characterId;
 	ulti;
 	enemy;
+	isStatic = false;
 	index = 1;
 	hits = 0;
 	#spriteTimeout;
@@ -24,6 +26,10 @@ export default class ProjectileData extends Entity {
 			this.#spriteTimeout = setTimeout(() => {
 				this.#nextSprite();
 			}, ProjectileData.ANIMATION_SPEED);
+		}
+		if (this.isSpecial) {
+			this.isStatic = true;
+			this.scale = 15;
 		}
 	}
 
@@ -59,6 +65,26 @@ export default class ProjectileData extends Entity {
 	}
 
 	/**
+	 * Indique si le projectile est un projectile spécial (kamehameha)
+	 * @returns {boolean}
+	 */
+	get isSpecial() {
+		return this.characterId.endsWith('ssj') && this.ulti;
+	}
+
+	/**
+	 * Appelle la fonction callback après la durée de vie du projectile
+	 * (uniquement pour les projectiles spéciaux)
+	 * @param {function} callback
+	 */
+	set onExpire(callback) {
+		if (this.isSpecial)
+			setTimeout(() => {
+				callback();
+			}, ProjectileData.LIFETIME);
+	}
+
+	/**
 	 * Incrémente le nombre de fois que le projectile a touché
 	 * @returns {void}
 	 */
@@ -72,12 +98,14 @@ export default class ProjectileData extends Entity {
 			spritesData[this.characterId][this.ulti ? 'ult' : 'projectile'];
 		const sprite = sprites[this.index.toString().padStart(2, '0')];
 		if (sprite) {
-			this.#transitionDimension({
-				width: sprite.width * (0.07 * this.index),
-				height: sprite.height * (0.07 * this.index),
-			});
+			if (!this.isSpecial)
+				this.#transitionDimension({
+					width: sprite.width * (0.07 * this.index),
+					height: sprite.height * (0.07 * this.index),
+				});
 		} else {
-			this.index--;
+			if (this.enemy) this.index--;
+			else this.index = 1;
 		}
 		this.#spriteTimeout = setTimeout(() => {
 			this.#nextSprite();
