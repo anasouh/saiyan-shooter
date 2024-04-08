@@ -70,6 +70,11 @@ export default class HomeView extends View {
 
 	#handleStartGame(event) {
 		event.preventDefault();
+		if (this.#usernameField.value.length === 0) {
+			this.#usernameField.classList.add('error');
+			return;
+		}
+		this.#usernameField.classList.remove('error');
 		this.onStartPressed();
 		Router.navigate('/game');
 	}

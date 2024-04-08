@@ -144,6 +144,7 @@
 .viewContainer > .game canvas {
     max-width: 95%;
     max-height: 95%;
+    height: 100%;
     outline: 4px solid var(--primary-color);
     outline-style: dashed;
     background: url('/assets/images/background_loop.png') no-repeat center center fixed;
