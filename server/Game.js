@@ -387,8 +387,18 @@ export default class Game {
 				player.vy *= PlayerData.DECELERATION_Y; // Facteur de décélération arbitraire
 			}
 
-			player.x += player.vx;
-			player.y += player.vy;
+			player.x = player.x + player.vx;
+			if (player.x < 0) {
+				player.x = 0;
+				player.vx = 0;
+			} else if (player.x + player.width > this.width) {
+				player.x = this.width - player.width;
+				player.vx = 0;
+			}
+			player.y = Math.max(
+				0,
+				Math.min(this.height - player.height, player.y + player.vy)
+			);
 		});
 		this.projectiles.forEach(projectile => {
 			if (
