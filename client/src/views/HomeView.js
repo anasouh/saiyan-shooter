@@ -53,6 +53,10 @@ export default class HomeView extends View {
 		this.#difficultySelect.current = difficulty;
 	}
 
+	get difficulty() {
+		return this.#difficultySelect.current;
+	}
+
 	/**
 	 * @param {Function} callback
 	 */

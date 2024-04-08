@@ -64,6 +64,7 @@ io.on('connection', socket => {
 	});
 
 	io.emit('game', game);
+	socket.emit('difficulty', game.difficulty);
 	game.onTick = () => {
 		io.emit('game', game);
 	};

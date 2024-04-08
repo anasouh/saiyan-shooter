@@ -25,7 +25,7 @@ export default class Game {
 	io;
 	#tickInterval;
 	onTick;
-	difficulty = 'hard';
+	difficulty = 'easy';
 	currentWave = 0;
 	enemiesPerWave = {
 		easy: 5,

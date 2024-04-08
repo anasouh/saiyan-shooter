@@ -69,6 +69,8 @@ document.addEventListener('keyup', event => {
 	}
 });
 
+socket.on('difficulty', difficulty => (homeView.difficulty = difficulty));
+
 homeView.onCharacterChange = characterId => {
 	socket.emit('character', characterId);
 };
