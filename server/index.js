@@ -8,7 +8,11 @@ import Directions from './Directions.js';
 import History from './History.js';
 import { loadSprites, spritesData } from './sprites.js';
 
+const DEFAULT_WIDTH = 1200;
+const DEFAULT_HEIGHT = 800;
+
 const history = new History();
+const rooms = new Map();
 
 const routesPaths = ['/guide', '/credits', '/scores'];
 const redirectPaths = ['/game'];
@@ -47,29 +51,49 @@ app.get('/api/sprites', (req, res) => {
 	res.json(spritesData);
 });
 
+app.get('/api/rooms/exists/:id', (req, res) => {
+	res.sendStatus(rooms.has(req.params.id) ? 200 : 404);
+});
+
 const io = new IOServer(httpServer);
-const game = new Game(1200, 800);
-game.onEnd = () => {
-	history.add(game);
-	game.clear();
-};
+
+function newGame() {
+	const id = Math.random().toString(36).substring(2, 9);
+	const game = new Game(1200, 800);
+	game.id = id;
+	game.onEnd = () => {
+		history.add(game);
+		game.clear();
+	};
+	game.onTick = () => {
+		io.to(id).emit('game', game);
+	};
+	rooms.set(id, game);
+	return game;
+}
 
 io.on('connection', socket => {
 	console.log(`Nouvelle connexion du client ${socket.id}`);
+	let game;
 	const player = new PlayerData({
 		x: 50,
-		y: game.height / 2,
+		y: DEFAULT_HEIGHT / 2,
 		characterId: 'goku',
 		id: socket.id,
 	});
 
-	io.emit('game', game);
-	socket.emit('difficulty', game.difficulty);
-	game.onTick = () => {
-		io.emit('game', game);
-	};
+	socket.on('join', gameId => {
+		socket.leaveAll();
+		if (rooms.has(gameId)) {
+			socket.join(gameId);
+		}
+	});
 
 	socket.on('start', username => {
+		if ([...socket.rooms][0] !== socket.id) {
+			game = rooms.get([...socket.rooms][0]);
+		} else game = newGame();
+		socket.join(game.id);
 		player.username = username;
 		player.reset();
 		player.position = { x: 50, y: game.height / 2 };
@@ -91,28 +115,30 @@ io.on('connection', socket => {
 	});
 
 	socket.on('shoot', type => {
-		game.shoot(player, type === 'ulti');
+		if (game) game.shoot(player, type === 'ulti');
 	});
 
 	socket.on('ulti', () => {
-		game.ulti(player);
+		if (game) game.ulti(player);
 	});
 
 	socket.on('character', characterId => {
-		console.log(characterId);
 		player.characterId = characterId;
 	});
 
 	socket.on('difficulty', difficulty => {
-		console.log(difficulty);
-		game.difficulty = difficulty;
+		if (game) game.difficulty = difficulty;
 	});
 
 	socket.on('leave', () => {
-		console.log(`${player.username} a quitté la partie`);
-		game.removePlayer(player);
-		if (game.players.length === 0) {
-			game.stop();
+		if (game) {
+			console.log(`${player.username} a quitté la partie`);
+			game.removePlayer(player);
+			if (game.players.length === 0) {
+				game.stop();
+				game.clear();
+				rooms.delete(game.id);
+			}
 		}
 	});
 

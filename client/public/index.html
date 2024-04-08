@@ -28,6 +28,7 @@
 							<button id="hard">Difficile</button>
 						</div>
 						<div class="flex gap-10">
+							<input type="text" name="gameId" id="gameIdField" placeholder="Code" />
 							<button class="btn blue font" id="startGame">JOUER</button>
 							<button class="btn font" href="/guide">?</button>
 						</div>
@@ -121,7 +122,7 @@
 					</div>
 				</div>
 				<div class="ath bottom active">
-					<div></div>
+					<div><span class="gameId font">Code partie : <span id="gameIdVal"></span> </span></div>
 					<div class="flex gap-20">
 						<span class="rounds font">Manche : <span id="roundsVal"></span> </span>
 						<span class="enemies font">Ennemis : <span id="enemiesVal"></span> </span>

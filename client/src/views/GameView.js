@@ -22,6 +22,7 @@ export default class GameView extends View {
 	#duration;
 	#rounds;
 	#enemies;
+	#gameId;
 	#pauseMenu;
 	#gameOverMenu;
 	#currentPlayer;
@@ -53,6 +54,7 @@ export default class GameView extends View {
 		const athBottom = element.querySelector('.ath.bottom');
 		this.#rounds = athBottom.querySelector('#roundsVal');
 		this.#enemies = athBottom.querySelector('#enemiesVal');
+		this.#gameId = athBottom.querySelector('#gameIdVal');
 		this.#pauseMenu = new Menu(element.querySelector('.menu#pause'));
 		this.#pauseMenu.onResume(() => this.togglePause());
 		this.#pauseMenu.onMainMenu(() => this.leave());
@@ -97,6 +99,7 @@ export default class GameView extends View {
 		}
 		this.#rounds.innerText = this.game.currentWave;
 		this.#enemies.innerText = `${this.game.nbKillsInWave}/${this.game.maxEnemies}`;
+		this.#gameId.innerText = this.game.id;
 		this.#duration.innerText = this.game.duration;
 		if (this.game.lost) {
 			this.element.classList.add('gameOver');

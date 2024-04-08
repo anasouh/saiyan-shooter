@@ -9,6 +9,7 @@ export default class HomeView extends View {
 	#characterButtons;
 	#activeCharacter;
 	#difficultySelect;
+	#gameIdField;
 	onCharacterChange = characterId => {};
 	onStartPressed = () => {};
 	isConfirmed = false;
@@ -44,6 +45,7 @@ export default class HomeView extends View {
 		this.#difficultySelect = new DifficultySelect(
 			element.querySelector('.difficulty')
 		);
+		this.#gameIdField = element.querySelector('input#gameIdField');
 	}
 
 	/**
@@ -55,6 +57,10 @@ export default class HomeView extends View {
 
 	get difficulty() {
 		return this.#difficultySelect.current;
+	}
+
+	get gameId() {
+		return this.#gameIdField.value;
 	}
 
 	/**

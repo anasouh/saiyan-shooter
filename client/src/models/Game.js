@@ -6,6 +6,7 @@ import Player from './Player.js';
 export default class Game {
 	width;
 	height;
+	id;
 	#duration;
 	onAddChild = child => {};
 	onRemoveChild = child => {};

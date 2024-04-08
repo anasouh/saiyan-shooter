@@ -86,6 +86,9 @@ homeView.onCharacterChange = characterId => {
 };
 
 function onStart() {
+	if (homeView.gameId && homeView.gameId.length === 7) {
+		socket.emit('join', homeView.gameId);
+	}
 	socket.emit('start', homeView.username);
 }
 
@@ -129,6 +132,7 @@ loadTextures().then(() => {
 	socket.on('game', gameData => {
 		const { width, height, players, items, projectiles, ennemies } = gameData;
 		gameView.dimensions = { width, height };
+		game.id = gameData.id;
 		game.dimensions = { width, height };
 		game.maxEnemies = gameData.maxEnemies;
 		game.currentWave = gameData.currentWave;

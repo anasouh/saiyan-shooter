@@ -27,7 +27,7 @@ export default class Game {
 	paused = true;
 	#startTime;
 	#endTime;
-	io;
+	id;
 	#tickInterval;
 	onTick;
 	difficulty = 'easy';
