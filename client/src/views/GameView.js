@@ -38,7 +38,6 @@ export default class GameView extends View {
 		this.game = game;
 		this.#app = new PIXI.Application({
 			backgroundAlpha: 0,
-			resizeTo: window,
 		});
 		this.game.onAddChild = child => this.#app.stage.addChild(child);
 		this.game.onRemoveChild = child => this.#app.stage.removeChild(child);
@@ -75,6 +74,10 @@ export default class GameView extends View {
 	set children(children) {
 		this.#app.stage.removeChildren();
 		children.forEach(child => this.#app.stage.addChild(child));
+	}
+
+	set dimensions({ width, height }) {
+		this.#app.renderer.resize(width, height);
 	}
 
 	/**

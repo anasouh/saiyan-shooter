@@ -48,7 +48,7 @@ app.get('/api/sprites', (req, res) => {
 });
 
 const io = new IOServer(httpServer);
-const game = new Game(1920, 1080);
+const game = new Game(1200, 800);
 game.onEnd = () => {
 	history.add(game);
 	game.clear();

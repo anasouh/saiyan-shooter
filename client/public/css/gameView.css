@@ -1,3 +1,10 @@
+.game {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: aqua;
+}
+
 .viewContainer > .game > button {
     position: fixed;
 }
@@ -107,4 +114,12 @@
 .difficulty > button.active, .difficulty > button:hover {
     background: var(--primary-color);
     color: var(--surface-color);
+}
+
+canvas {
+    max-width: 95%;
+    max-height: 100%;
+    outline: 4px solid var(--primary-color);
+    outline-style: dashed;
+    background: url('/assets/images/background.jpg') no-repeat center center fixed;
 }

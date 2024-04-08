@@ -1,3 +1,7 @@
+.home {
+    background: url('/assets/images/background.jpg') no-repeat center center fixed;
+}
+
 .characterChoice {
     margin-top: 20px;
 }

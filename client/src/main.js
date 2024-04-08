@@ -116,6 +116,7 @@ loadTextures().then(() => {
 
 	socket.on('game', gameData => {
 		const { width, height, players, items, projectiles, ennemies } = gameData;
+		gameView.dimensions = { width, height };
 		game.dimensions = { width, height };
 		game.maxEnemies = gameData.maxEnemies;
 		game.currentWave = gameData.currentWave;
