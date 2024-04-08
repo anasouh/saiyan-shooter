@@ -46,3 +46,26 @@ export async function gameIdExists(id) {
 	const response = await fetch(`/api/rooms/exists/${id}`);
 	return response.ok;
 }
+
+export function renderGameOverStats({ game, currentPlayer }) {
+	return `
+		<div class="flex gap-10 flex-wrap justify-center align-center">
+			<div class="ath-group">
+				<img class="ath-icon" src="/assets/images/timer.png" alt="timer" />	
+				<span>${game.duration}mn</span>
+			</div> |
+			<div class="ath-group">
+				<span><b>Manches :</b></span>
+				<span>${game.currentWave}</span>
+			</div> |
+			<div class="ath-group">
+				<img class="ath-icon" src="/assets/images/detecteur.png" alt="score" />	
+				<span>${currentPlayer.score}</span>
+			</div> |
+			<div class="ath-group">
+				<img class="ath-icon" src="/assets/images/cible.png" alt="kills" />	
+				<span>${currentPlayer.kills}</span>
+			</div>
+		</div>
+	`;
+}

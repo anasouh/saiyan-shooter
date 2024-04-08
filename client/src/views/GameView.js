@@ -3,7 +3,12 @@ import Menu from '../components/Menu.js';
 import Player, { LIFE } from '../models/Player.js';
 import Projectile from '../models/Projectile.js';
 import Router from '../Router.js';
-import { areColliding, isOutOfScreen, playSound } from '../utils.js';
+import {
+	areColliding,
+	isOutOfScreen,
+	playSound,
+	renderGameOverStats,
+} from '../utils.js';
 import View from './View.js';
 import * as PIXI from 'pixi.js';
 import * as SFX from '../consts/sfx.js';
@@ -103,12 +108,10 @@ export default class GameView extends View {
 		this.#duration.innerText = this.game.duration;
 		if (this.game.lost) {
 			this.element.classList.add('gameOver');
-			this.#gameOverMenu.content = `
-				<p>Temps : ${this.game.duration}</p>
-				<p>Manches : ${this.game.currentWave}</p>
-				<p>Kills : ${this.#currentPlayer.kills}</p>
-				<p>Score : ${this.#currentPlayer.score}</p>
-			`;
+			this.#gameOverMenu.content = renderGameOverStats({
+				game: this.game,
+				currentPlayer: this.#currentPlayer,
+			});
 			this.#app.ticker.stop();
 		}
 		this.game.players.forEach(player => {
