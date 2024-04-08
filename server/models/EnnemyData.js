@@ -102,8 +102,8 @@ export default class EnnemyData extends Entity {
 		}
 	}
 
-	decrementLife() {
-		this.life--;
+	decrementLife(value = 1) {
+		this.life -= value;
 		if (this.life <= 0) {
 			this.isAlive = false;
 			this.onDeath();

@@ -87,6 +87,7 @@ export default class GameView extends View {
 	set currentPlayer(player) {
 		this.#currentPlayer = player;
 		this.#lifeBar.player = player;
+		this.#ultBar.player = player;
 	}
 
 	update() {

@@ -4,7 +4,12 @@ import View from './views/View.js';
 import GameView from './views/GameView.js';
 import ScoreView from './views/ScoreView.js';
 import Player from './models/Player.js';
-import { CONTROL_KEYS, PAUSE_KEYS, SHOOT_KEYS } from './settings/keys.js';
+import {
+	CONTROL_KEYS,
+	PAUSE_KEYS,
+	SHOOT_KEYS,
+	ULTI_KEYS,
+} from './settings/keys.js';
 import Game from './models/Game.js';
 import { io } from 'socket.io-client';
 import Ennemy from './models/Ennemy.js';
@@ -54,7 +59,12 @@ document.addEventListener('keydown', event => {
 	} else if (SHOOT_KEYS.includes(key)) {
 		if (!keysDown.has(key)) {
 			keysDown.add(key);
-			socket.emit('shoot');
+			socket.emit('shoot', 'basic');
+		}
+	} else if (ULTI_KEYS.includes(key)) {
+		if (!keysDown.has(key)) {
+			keysDown.add(key);
+			socket.emit('shoot', 'ulti');
 		}
 	}
 });
@@ -139,6 +149,7 @@ loadTextures().then(() => {
 			player.position.set(p.x, p.y);
 			player.score = p.score;
 			player.kills = p.kills;
+			player.ult = p.ult;
 			if (p.life < player.life) {
 				player.hitAnimation();
 			} else {

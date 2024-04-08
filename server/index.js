@@ -90,8 +90,12 @@ io.on('connection', socket => {
 		if (direction) player.moving[direction] = false;
 	});
 
-	socket.on('shoot', () => {
-		game.shoot(player);
+	socket.on('shoot', type => {
+		game.shoot(player, type === 'ulti');
+	});
+
+	socket.on('ulti', () => {
+		game.ulti(player);
 	});
 
 	socket.on('character', characterId => {

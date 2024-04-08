@@ -29,7 +29,7 @@ export default class UltBar {
 	 */
 	set player(value) {
 		this.#player = value;
-		this.#player.addEventListener('killsChange', kills => {
+		this.#player.addEventListener('ultChange', ult => {
 			this.update();
 		});
 		this.update();
@@ -39,7 +39,7 @@ export default class UltBar {
 	 * Met à jour la barre de vie.
 	 */
 	update() {
-		const percent = (this.#player.kills / KILL_FOR_ULTI) * 100;
+		const percent = (this.#player.ult / KILL_FOR_ULTI) * 100;
 		this.bar.style.width = `${percent > 0 ? min(percent, 100) : 1}%`;
 	}
 }

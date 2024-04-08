@@ -161,14 +161,15 @@ export default class Game {
 	 * Fait tirer un joueur.
 	 * @param {PlayerData} player
 	 */
-	shoot(player) {
-		if (player.alive) {
+	shoot(player, ulti = false) {
+		if (player.alive && (player.canUlt || !ulti)) {
+			if (ulti) player.resetUlt();
 			const data = {
 				x: player.x + player.width - 10,
 				y: player.y + player.height / 2,
 				from: player.id,
 				characterId: player.characterId,
-				ulti: false,
+				ulti: ulti,
 				enemy: false,
 			};
 			const projectile = new ProjectileData(data);
@@ -439,12 +440,15 @@ export default class Game {
 					});
 				} else {
 					if (areColliding(projectile, ennemy) && ennemy.isAlive) {
-						this.removeProjectile(projectile);
+						projectile.incrementHits();
+						if (projectile.isDead) {
+							this.removeProjectile(projectile);
+						}
 						/* A IMPLEMENTER */
 						this.spawnItem(ennemy.position);
 						// ennemy.explode();
 						/* A REMPLACER */
-						ennemy.decrementLife();
+						ennemy.decrementLife(projectile.damage);
 						const player = this.findPlayerById(projectile.from);
 						if (player) {
 							player.incrementScore(ennemy.value);

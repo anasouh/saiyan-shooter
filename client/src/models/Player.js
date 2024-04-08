@@ -8,7 +8,7 @@ import { spritesData } from '../sprites.js';
 
 export const LIFE = 3;
 export const SCORE = 0;
-export const KILL_FOR_ULTI = 5;
+export const KILL_FOR_ULTI = 10;
 
 /**
  * Représente un joueur.
@@ -16,15 +16,17 @@ export const KILL_FOR_ULTI = 5;
 export default class Player extends Character {
 	score = SCORE;
 	life;
-	kills;
+	ult;
 	username;
 	#moving = { up: false, down: false, left: false, right: false };
 	onShoot;
 	onScoreChange = [];
 	onLifeChange = [];
 	onKillsChange = [];
+	onUltChange = [];
 	characterId;
 	#kills;
+	#ult;
 	id;
 	#invicibility = false;
 
@@ -45,6 +47,19 @@ export default class Player extends Character {
 	set kills(value) {
 		this.#kills = value;
 		this.onKillsChange.forEach(callback => callback(this.#kills));
+	}
+
+	get kills() {
+		return this.#kills;
+	}
+
+	set ult(value) {
+		this.#ult = value;
+		this.onUltChange.forEach(callback => callback(this.#ult));
+	}
+
+	get ult() {
+		return this.#ult;
 	}
 
 	set dimensions({ width, height }) {
@@ -79,6 +94,10 @@ export default class Player extends Character {
 				break;
 			case 'killsChange':
 				this.onKillsChange.push(callback);
+				break;
+			case 'ultChange':
+				this.onUltChange.push(callback);
+				break;
 		}
 	}
 

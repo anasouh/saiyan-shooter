@@ -8,6 +8,7 @@ export default class ProjectileData extends Entity {
 	ulti;
 	enemy;
 	index = 1;
+	hits = 0;
 	#spriteTimeout;
 
 	constructor({ x, y, from, characterId, ulti, enemy }) {
@@ -24,6 +25,45 @@ export default class ProjectileData extends Entity {
 				this.#nextSprite();
 			}, ProjectileData.ANIMATION_SPEED);
 		}
+	}
+
+	/**
+	 * Dégâts infligés par le projectile
+	 * @returns {number}
+	 */
+	get damage() {
+		if (this.enemy) {
+			return this.ulti ? 3 : 1;
+		} else {
+			return this.ulti ? 5 : 1;
+		}
+	}
+
+	/**
+	 * Nombre de fois que le projectile peut toucher
+	 * @returns {number}
+	 */
+	get maxHits() {
+		if (!this.enemy && this.ulti) {
+			return 3;
+		}
+		return 1;
+	}
+
+	/**
+	 * Indique si le projectile est mort
+	 * @returns {boolean}
+	 */
+	get isDead() {
+		return this.hits >= this.maxHits;
+	}
+
+	/**
+	 * Incrémente le nombre de fois que le projectile a touché
+	 * @returns {void}
+	 */
+	incrementHits() {
+		this.hits++;
 	}
 
 	#nextSprite() {

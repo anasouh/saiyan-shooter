@@ -6,6 +6,7 @@ const INVICIBILITY_TIME = 1000;
 export default class PlayerData extends Entity {
 	static DEFAULT_LIFE = 3;
 	static DEFAULT_SCORE = 0;
+	static KILL_FOR_ULTI = 10;
 	static DECELERATION_X = 0.9;
 	static DECELERATION_Y = 0.9;
 	static ACCELERATION = 0.5;
@@ -31,6 +32,10 @@ export default class PlayerData extends Entity {
 
 	get alive() {
 		return this.life > 0;
+	}
+
+	get canUlt() {
+		return this.ult >= PlayerData.KILL_FOR_ULTI;
 	}
 
 	decrementLife(value = 1) {
