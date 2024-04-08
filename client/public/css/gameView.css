@@ -2,7 +2,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: aqua;
+    background: url('/assets/images/background_blur.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
 .game.paused canvas, .game.gameOver canvas {
@@ -70,6 +71,15 @@
     justify-content: space-between;
     padding: 10px;
     box-sizing: border-box;
+}z  q
+
+.viewContainer > .game .ath span {
+    text-shadow: 
+        -2px -2px 0 #000,  
+        2px -2px 0 #000,
+        -2px 2px 0 #000,
+        2px 2px 0 #000; 
+    color: #fff;
 }
 
 .viewContainer > .game.loading .ath {
