@@ -19,9 +19,11 @@ export default class ProjectileData extends Entity {
 		this.characterId = characterId;
 		this.ulti = ulti;
 		this.enemy = enemy;
-		this.#spriteTimeout = setTimeout(() => {
-			this.#nextSprite();
-		}, ProjectileData.ANIMATION_SPEED);
+		if (Object.keys(sprites).length > 1) {
+			this.#spriteTimeout = setTimeout(() => {
+				this.#nextSprite();
+			}, ProjectileData.ANIMATION_SPEED);
+		}
 	}
 
 	#nextSprite() {
