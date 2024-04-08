@@ -33,6 +33,7 @@ export default class Game {
 		hard: 15,
 	};
 	maxEnemies;
+	enemiesMoving = true;
 	nbKillsInWave = 0;
 	spawnDelay = 2000;
 	waveDelay = 5000;
@@ -78,6 +79,7 @@ export default class Game {
 	 * @param {Projectile} projectile
 	 */
 	removeProjectile(projectile) {
+		projectile.stop();
 		this.projectiles = this.projectiles.filter(p => p !== projectile);
 		this.onRemoveChild(projectile);
 	}
@@ -189,6 +191,7 @@ export default class Game {
 
 	clear() {
 		clearTimeout(this.#spawnTimeout);
+		this.removeAllProjectiles();
 		this.currentWave = 0;
 		this.nbKillsInWave = 0;
 		this.ennemies = [];
@@ -344,7 +347,9 @@ export default class Game {
 			this.onEnd?.();
 			return;
 		}
-		this.#updateEnemyMovementAndAttack();
+		if (this.enemiesMoving) {
+			this.#updateEnemyMovementAndAttack();
+		}
 		this.players.forEach(player => {
 			if (player.moving.left) {
 				player.vx -= PlayerData.ACCELERATION;
@@ -461,10 +466,17 @@ export default class Game {
 		this.onTick?.();
 	}
 
+	removeAllProjectiles() {
+		this.projectiles.forEach(projectile => {
+			this.removeProjectile(projectile);
+		});
+	}
+
 	/**
 	 * Arrête complètement le jeu.
 	 */
 	destroy() {
+		this.clear();
 		clearInterval(this.#tickInterval);
 	}
 }

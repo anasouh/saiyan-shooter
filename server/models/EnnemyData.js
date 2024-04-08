@@ -38,11 +38,12 @@ export default class EnnemyData extends Entity {
 	onDeath = () => {};
 
 	constructor({ x, y, name }) {
+		const sprite = spritesData[name]['idle'];
 		super({
 			x,
 			y,
-			width: spritesData[name].idle.width,
-			height: spritesData[name].idle.height,
+			width: sprite.width,
+			height: sprite.height,
 		});
 		this.id = EnnemyData.#lastId++;
 		this.moving = { left: false, right: false, up: false, down: false };

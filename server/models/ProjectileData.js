@@ -8,6 +8,7 @@ export default class ProjectileData extends Entity {
 	ulti;
 	enemy;
 	index = 1;
+	#spriteTimeout;
 
 	constructor({ x, y, from, characterId, ulti, enemy }) {
 		const sprites = spritesData[characterId][ulti ? 'ult' : 'projectile'];
@@ -18,7 +19,7 @@ export default class ProjectileData extends Entity {
 		this.characterId = characterId;
 		this.ulti = ulti;
 		this.enemy = enemy;
-		setTimeout(() => {
+		this.#spriteTimeout = setTimeout(() => {
 			this.#nextSprite();
 		}, ProjectileData.ANIMATION_SPEED);
 	}
@@ -36,7 +37,7 @@ export default class ProjectileData extends Entity {
 		} else {
 			this.index--;
 		}
-		setTimeout(() => {
+		this.#spriteTimeout = setTimeout(() => {
 			this.#nextSprite();
 		}, ProjectileData.ANIMATION_SPEED);
 	}
@@ -66,5 +67,12 @@ export default class ProjectileData extends Entity {
 				clearInterval(interval);
 			}
 		}, 10);
+	}
+
+	/**
+	 * Arrête l'animation du projectile
+	 */
+	stop() {
+		clearTimeout(this.#spriteTimeout);
 	}
 }
