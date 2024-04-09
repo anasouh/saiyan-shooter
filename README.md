@@ -1,3 +1,25 @@
+# Saiyan Shooter
+
+![Saiyan Shooter](./client/public/assets/images/saiyanshooter.gif)
+
+## Démarrage
+
+Installer les dépendances du projet :
+
+```bash
+npm install
+```
+
+Démarrer le serveur de développement :
+
+```bash
+npm run server
+```
+
+Ouvrir le navigateur et accéder [au jeu](http://localhost:8000).
+
+## Aspect technique
+
 ### Diagrammes  des échanges
 
 #### 1. Connexion et démarrage d'une partie
