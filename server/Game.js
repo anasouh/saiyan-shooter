@@ -473,7 +473,7 @@ export default class Game {
 					});
 				} else {
 					if (areColliding(projectile, ennemy) && ennemy.isAlive) {
-						projectile.incrementHits();
+						if (!projectile.isSpecial) projectile.incrementHits();
 						if (projectile.isDead) {
 							this.removeProjectile(projectile);
 						}
@@ -491,6 +491,14 @@ export default class Game {
 					}
 				}
 			});
+			if (projectile.isSpecial) {
+				this.projectiles.forEach(otherProjectile => {
+					if (!otherProjectile.isSpecial) {
+						if (areColliding(projectile, otherProjectile))
+							this.removeProjectile(otherProjectile);
+					}
+				});
+			}
 		});
 
 		this.items.forEach(item => {
