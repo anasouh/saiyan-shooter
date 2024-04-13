@@ -1,10 +1,10 @@
-import * as PIXI from 'pixi.js';
 import Projectile from './Projectile.js';
 import Character, { ANIMATION_TIME } from './Character.js';
 import * as SFX from '../consts/sfx.js';
 import { playSound } from '../utils.js';
 import { SPRITES_PATH } from '../consts/sprites.js';
 import { spritesData } from '../sprites.js';
+import Texture from '../Texture.js';
 
 export const LIFE = 3;
 export const SCORE = 0;
@@ -31,7 +31,7 @@ export default class Player extends Character {
 	#invicibility = false;
 
 	constructor(characterId) {
-		super(PIXI.Texture.from(`${SPRITES_PATH}player/${characterId}/player.png`));
+		super(Texture.from(`${SPRITES_PATH}player/${characterId}/player.png`));
 		this.characterId = characterId;
 		this.#kills = 0;
 	}
@@ -116,14 +116,14 @@ export default class Player extends Character {
 			if (moves[direction]) {
 				this.#moving[direction] = true;
 				const path = `${SPRITES_PATH}player/${this.characterId}/${direction}.png`;
-				const texture = PIXI.Texture.from(path);
+				const texture = Texture.from(path);
 				this.texture = texture;
 				this.scale.set(this.scaleValue);
 				nbDirection++;
 			}
 		});
 		if (nbDirection === 0) {
-			this.texture = PIXI.Texture.from(
+			this.texture = Texture.from(
 				`${SPRITES_PATH}player/${this.characterId}/player.png`
 			);
 		}
@@ -172,10 +172,13 @@ export default class Player extends Character {
 				name.startsWith('transfo_')
 			);
 			this.textures = spritesNames.map(name =>
-				PIXI.Texture.from(`${SPRITES_PATH}player/${spritesName}/${name}.png`)
+				Texture.from(`${SPRITES_PATH}player/${spritesName}/${name}.png`)
+			);
+			this.textures.push(
+				Texture.from(`${SPRITES_PATH}player/${spritesName}/player.png`)
 			);
 			this.loop = false;
-			this.animationSpeed = 0.1;
+			this.frameDuration = 100;
 			this.play();
 		}
 	}
@@ -203,7 +206,7 @@ export default class Player extends Character {
 	reset() {
 		if (this.characterId === 'kaioken' || this.characterId === 'ssj')
 			this.characterId = 'goku';
-		this.texture = PIXI.Texture.from(
+		this.texture = Texture.from(
 			`${SPRITES_PATH}player/${this.characterId}/player.png`
 		);
 		this.score = SCORE;
@@ -221,76 +224,5 @@ export default class Player extends Character {
 	move(x, y) {
 		this.x += x;
 		this.y += y;
-	}
-
-	/**
-	 * Fait tirer le joueur.
-	 */
-	shoot() {
-		if (!this.alive) return;
-		const projectile = new Projectile(this.characterId);
-		projectile.position = this.position;
-		projectile.move('right');
-		playSound(SFX.PROJECTILE);
-		this.texture = PIXI.Texture.from(
-			`${SPRITES_PATH}player/${this.characterId}/shooting.png`
-		);
-		if (this.onShoot) {
-			this.onShoot(projectile);
-		}
-		setTimeout(
-			() =>
-				(this.texture = PIXI.Texture.from(
-					`${SPRITES_PATH}player/${this.characterId}/player.png`
-				)),
-			ANIMATION_TIME
-		);
-	}
-
-	/**
-	 * Lance une attaque ultime
-	 */
-	ulti() {
-		if (!this.alive || !this.canUlt) return;
-		this.textures = PIXI.Assets.get(`${this.characterId}/ult`);
-		this.animationSpeed = 0.25;
-		this.loop = false;
-		this.onComplete = () => {
-			const projectile = new Projectile(this.characterId, true);
-			projectile.position = this.position;
-			projectile.move('right');
-			playSound(SFX.PROJECTILE);
-			this.texture = PIXI.Assets.get(`${this.characterId}/shooting.png`);
-			if (this.onShoot) {
-				this.onShoot(projectile);
-			}
-			this.texture = PIXI.Assets.get(`${this.characterId}/player.png`);
-		};
-		this.play();
-
-		this.kills = -1;
-	}
-
-	reload() {
-		this.texture = PIXI.Assets.get(`${this.characterId}/reloading.png`);
-	}
-	/**
-	 * Fait tomber le joueur.
-	 * @returns {Promise<void>} Une promesse qui se résout lorsque l'animation est terminée.
-	 */
-	fallAnimation() {
-		// this.textures = sprites[this.#id].falling_sprites;
-		// this.loop = false;
-		// this.animationSpeed = 0.5;
-		// this.play();
-		// const initialOnComplete = this.onComplete;
-		// return new Promise(
-		// 	resolve =>
-		// 		(this.onComplete = () => {
-		// 			resolve();
-		// 			this.onComplete = initialOnComplete;
-		// 		})
-		// );
-		this.texture = PIXI.Assets.get(`${this.characterId}/ko.png`);
 	}
 }

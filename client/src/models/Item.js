@@ -1,19 +1,20 @@
-import * as PIXI from 'pixi.js';
 import Player, { LIFE } from './Player.js';
 import { playSound } from '../utils.js';
 import * as SFX from '../consts/sfx.js';
 import { SPRITES_PATH } from '../consts/sprites.js';
+import Texture from '../Texture.js';
+import Sprite from './Sprite.js';
 
 const ITEM_SPAWN_PROBABILITY = 0.1;
 
-export default class Item extends PIXI.Sprite {
+export default class Item extends Sprite {
 	name;
 	lifetime;
 	#spawnTime;
 	#blinkInterval;
 
 	constructor(name, lifetime) {
-		super(PIXI.Texture.from(`${SPRITES_PATH}items/${name}/item.png`));
+		super(Texture.from(`${SPRITES_PATH}items/${name}/item.png`));
 		this.name = name;
 		this.lifetime = lifetime;
 		this.anchor.set(0.5);

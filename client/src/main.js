@@ -15,7 +15,6 @@ import { io } from 'socket.io-client';
 import Ennemy from './models/Ennemy.js';
 import Item from './models/Item.js';
 import Projectile from './models/Projectile.js';
-import { Assets, Text, Texture } from 'pixi.js';
 import { loadSprites, spritesData } from './sprites.js';
 import { playSound } from './utils.js';
 
@@ -38,11 +37,6 @@ const routes = [
 ];
 
 async function loadTextures() {
-	for (let i = 0; i < 9; i++) {
-		const path = `/assets/sprites/player-${i}.json`;
-		await Assets.load(path);
-	}
-	await Assets.load('/assets/sprites/projectile-0.json');
 	await loadSprites();
 }
 

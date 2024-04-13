@@ -1,17 +1,9 @@
-import * as PIXI from 'pixi.js';
-import { ColorOverlayFilter } from 'pixi-filters';
-
-const explosionTextures = [];
-PIXI.Assets.load('https://pixijs.com/assets/spritesheet/mc.json').then(() => {
-	for (let i = 0; i < 26; i++) {
-		const texture = PIXI.Texture.from(`Explosion_Sequence_A ${i + 1}.png`);
-		explosionTextures.push(texture);
-	}
-});
+import { Filter } from '../Texture.js';
+import AnimatedSprite from './AnimatedSprite.js';
 
 export const ANIMATION_TIME = 1000;
 
-export default class Character extends PIXI.AnimatedSprite {
+export default class Character extends AnimatedSprite {
 	redFilter;
 	greenFilter;
 
@@ -21,9 +13,10 @@ export default class Character extends PIXI.AnimatedSprite {
 		} else {
 			super([texture]);
 		}
-		this.redFilter = new ColorOverlayFilter(0xff0000, 0.5);
+		// Use css filter to change the color of the sprite
+		this.redFilter = new Filter('rgba(255, 0, 0, 0.5)');
 		this.redFilter.enabled = false;
-		this.greenFilter = new ColorOverlayFilter(0x00ff00, 0.5);
+		this.greenFilter = new Filter('rgba(0, 255, 0, 0.5)');
 		this.greenFilter.enabled = false;
 		this.filters = [this.redFilter, this.greenFilter];
 	}

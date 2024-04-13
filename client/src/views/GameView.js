@@ -10,12 +10,13 @@ import {
 	renderGameOverStats,
 } from '../utils.js';
 import View from './View.js';
-import * as PIXI from 'pixi.js';
 import * as SFX from '../consts/sfx.js';
 import LifeBar from '../components/LifeBar.js';
 import Item from '../models/Item.js';
 import UltBar from '../components/UltBar.js';
 import Game from '../models/Game.js';
+import Application from './Application.js';
+import Text from '../models/Text.js';
 
 export default class GameView extends View {
 	#app;
@@ -42,9 +43,7 @@ export default class GameView extends View {
 	constructor(game, element) {
 		super(element);
 		this.game = game;
-		this.#app = new PIXI.Application({
-			backgroundAlpha: 0,
-		});
+		this.#app = new Application({});
 		this.game.onAddChild = child => this.#app.stage.addChild(child);
 		this.game.onRemoveChild = child => this.#app.stage.removeChild(child);
 		this.#app.stage.eventMode = 'auto';
@@ -79,12 +78,12 @@ export default class GameView extends View {
 	}
 
 	set children(children) {
-		this.#app.stage.removeChildren();
-		children.forEach(child => this.#app.stage.addChild(child));
+		this.#app.stage.children = children;
 	}
 
 	set dimensions({ width, height }) {
-		this.#app.renderer.resize(width, height);
+		if (this.#app.view.width !== width || this.#app.view.height !== height)
+			this.#app.resize(width, height);
 	}
 
 	/**
@@ -115,18 +114,12 @@ export default class GameView extends View {
 			this.#app.ticker.stop();
 		}
 		this.game.players.forEach(player => {
-			const label = new PIXI.Text(player.username, {
-				fill: 0xffffff,
-				fontSize: 15,
-				fontFamily: 'Press Start 2P',
-				stroke: 0x000000,
-				strokeThickness: 2,
-			});
-			label.anchor.set(0.5);
-			label.position.set(
+			const label = new Text(
+				player.username,
 				player.position.x + player.width / 2,
 				player.position.y - 20
 			);
+			label.x -= label.width / 2;
 			this.addChild(label);
 		});
 	}

@@ -1,7 +1,7 @@
-import * as PIXI from 'pixi.js';
 import Character from './Character.js';
 import * as SFX from '../consts/sfx.js';
 import { playSound } from '../utils.js';
+import Texture from '../Texture.js';
 
 export default class Ennemy extends Character {
 	id;
@@ -15,7 +15,7 @@ export default class Ennemy extends Character {
 	 * Crée un nouvel ennemi.
 	 */
 	constructor(name) {
-		super(PIXI.Texture.from(`/assets/sprites/enemy/${name}/idle.png`));
+		super(Texture.from(`/assets/sprites/enemy/${name}/idle.png`));
 		this.name = name;
 	}
 
@@ -33,7 +33,7 @@ export default class Ennemy extends Character {
 	}
 
 	setSprites(name) {
-		this.texture = PIXI.Texture.from(
+		this.texture = Texture.from(
 			`/assets/sprites/enemy/${name}/${this.#status}.png`
 		);
 	}
